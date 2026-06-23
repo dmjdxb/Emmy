@@ -37,13 +37,22 @@ through the AI Models gateway.
 - [x] **Decision:** models = DeepSeek **V4 Pro** (Lead/frontier) + DeepSeek **V4
       Flash** (cheap cascade workers); upstream provider = **DeepInfra** (cheaper
       than TogetherAI). Confirm exact slugs at deepinfra.com/dash/models.
-- [ ] Wire **DeepInfra** as a first-class provider (OpenAI-compatible endpoint;
-      today it's only an OpenRouter sub-provider mention) → map to the gateway tenant.
-- [ ] Add a **DeepInfra price table** to the cost optimizer (`cache_check`
-      providers, beside Together's) so $/query is metered/proven accurately.
+- [ ] Wire **DeepInfra** as a first-class provider **server-side only** (in the
+      EnergyIR gateway): endpoint `https://api.deepinfra.com/v1/openai`, auth
+      `DEEPINFRA_TOKEN`, slugs `org/model`. The Emmy client must NEVER see DeepInfra,
+      its token, or its endpoint — it talks only to `api.energyir.io`.
+- [ ] Add a **server-side, confidential DeepInfra price table** to the cost optimizer
+      (`cache_check` providers in the EnergyIR repo, beside Together's). Never ship it
+      to the client / show it. Used for (a) our COGS/margin, (b) computing the
+      user-facing **savings** (energy/tokens/usage). Needs the real DeepInfra rates.
+- [ ] Extend `brand-gate` CI to forbid the string **"DeepInfra"** (and any provider
+      host) in the shipped UI — confidentiality can't regress.
+- [ ] Subscription model: tiers ≈ **$50 / $100 / $200**/mo (flat; users never pay
+      per token). Wire billing in the portal (Stripe) — separate from this repo.
 - [ ] Route LLM calls through the **AI Models gateway** (V4 Pro Lead + V4 Flash
-      workers via the cascade); provision Emmy's gateway tenant/key on DeepInfra.
-- [ ] Metering via the gateway; the bill is inspectable.
+      workers via the cascade); provision Emmy's gateway tenant/key (DeepInfra upstream).
+- [ ] Metering via the gateway; surface **savings** (energy/tokens/usage) to the
+      user — never provider prices.
 - [ ] Preserve the zero-tooling install pipeline (CI-built backend bundle + signed app).
 - [ ] Smoke test: app launches rebranded, one chat round-trip through the gateway,
       metering recorded.

@@ -46,8 +46,9 @@ workers (same family, real cheap tier) — so it stays cheap, keeps the promise
 (every call metered), and dogfoods our own gateway. (A user's-own-key privacy mode
 can be a later toggle, not v1.)
 
-> Promise dependency: the cost optimizer must carry a **DeepInfra price table**
-> (not Together's) so $/query is metered and proven accurately — see Phase 0.
+> Promise dependency: a **server-side, confidential DeepInfra price table** (not
+> Together's; never shipped to the client) meters our COGS and computes the
+> user-facing savings. DeepInfra is never shown to users — see §6.
 
 ## 4. The mathematical reasoning engine (concrete)
 
@@ -107,6 +108,37 @@ full-frontier accuracy at ~61% cost; prompt/prefix caching ≈ 90% input-cost cu
 delta-only shared context measured at 0.316× baseline energy (EnergyIR
 `energyir_context`). Multi-agent debate ≈ 1.5–2.5× a single call (not N×) when
 early-stopped.
+
+### Business model & cost confidentiality (load-bearing)
+
+Emmy is a **flat subscription** (tiers ≈ **$50 / $100 / $200 per month**; cf. Robin
+$20 / $100). Users do **not** pay per token — DeepInfra's per-token cost is **our
+COGS**, used internally only.
+
+The model costs (DeepInfra prices) drive two things, both behind the curtain:
+1. **Our margin / COGS analysis** — are the subscription tiers profitable given
+   real usage and DeepInfra rates.
+2. **The user-facing savings demo** — we show energy / tokens / usage **saved**
+   (from the V4-Flash-vs-Pro cascade, caching, and verified-tools-not-hallucination),
+   as Emmy's efficiency. This is the "prove every Joule" promise made visible.
+
+**Hard confidentiality rules (never violate):**
+- **The provider "DeepInfra" is never shown to a user — ever.** White-labeled
+  entirely behind the EnergyIR gateway. (The *model* name "DeepSeek V4 Pro/Flash"
+  may show; the *host* DeepInfra never does.)
+- **DeepInfra's prices are never shown** and never shipped to the client.
+- **The Emmy client talks only to the EnergyIR gateway** (`api.energyir.io`) — it
+  never sees `api.deepinfra.com`, the `DEEPINFRA_TOKEN`, or any price table.
+- **The price table lives server-side** (gateway / `cache_check` cost optimizer in
+  the EnergyIR repo), confidential. The client receives only **savings metrics**
+  (relative energy/token/usage reduction), not absolute provider prices.
+- Extend the existing `brand-gate` CI to also forbid the string **"DeepInfra"** (and
+  any provider host) in the shipped UI, so it can never leak.
+
+DeepInfra integration facts (for the server-side gateway only): OpenAI-compatible
+endpoint `https://api.deepinfra.com/v1/openai`, auth `DEEPINFRA_TOKEN` (Bearer),
+model slugs `org/model` (e.g. `deepseek-ai/DeepSeek-V4-Pro`). Exact slugs + per-token
+rates: confirm from the DeepInfra dashboard (rates are not published in the docs).
 
 ## 7. The agent cast (visible, Grok-style)
 
