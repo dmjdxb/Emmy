@@ -25,17 +25,24 @@ when its gate passes. Check items off as they land.
 through the AI Models gateway.
 
 - [x] Import the Robin/Hermes frame as the fork basis (clean import, full divergence).
-- [ ] Rebrand identity (manifests first): app name, bundle id, window/title strings,
+- [x] Rebrand identity (manifests): app name, bundle id, window/title strings,
       installer + desktop `package.json`, config header → Emmy.
-- [ ] Rebrand the user-facing UI strings ("Robin" → "Emmy") across `apps/`/`web`/
-      `ui-tui` — carefully, leaving provider/auth keys (e.g. gateway key prefix) and
-      internal package paths (`robin/`) untouched.
+- [x] Rebrand the user-facing UI/display strings ("Robin" → "Emmy") — guarded pass,
+      leaving provider/auth keys, `dmjdxb/Robin` URLs, `Robin*` types, and internal
+      `robin/` paths for the build-verified pass.
+- [ ] Build-verified pass: flip `Robin*` type names, `X-Robin-Session-*` header,
+      and `dmjdxb/Robin` → Emmy URLs (under typecheck + the `brand-gate` CI).
 - [ ] Inventory what to keep (tools + chat + memory + zero-tooling install) vs
       replace; remove Robin-specific fidelity copy.
-- [ ] **Decision:** frontier model for the Lead (DeepSeek V4 Pro) + the cheap
-      worker model set (the cascade).
-- [ ] Route LLM calls through the **AI Models gateway** (frontier Lead + cheap
-      workers via the cascade); provision Emmy's gateway tenant/key.
+- [x] **Decision:** models = DeepSeek **V4 Pro** (Lead/frontier) + DeepSeek **V4
+      Flash** (cheap cascade workers); upstream provider = **DeepInfra** (cheaper
+      than TogetherAI). Confirm exact slugs at deepinfra.com/dash/models.
+- [ ] Wire **DeepInfra** as a first-class provider (OpenAI-compatible endpoint;
+      today it's only an OpenRouter sub-provider mention) → map to the gateway tenant.
+- [ ] Add a **DeepInfra price table** to the cost optimizer (`cache_check`
+      providers, beside Together's) so $/query is metered/proven accurately.
+- [ ] Route LLM calls through the **AI Models gateway** (V4 Pro Lead + V4 Flash
+      workers via the cascade); provision Emmy's gateway tenant/key on DeepInfra.
 - [ ] Metering via the gateway; the bill is inspectable.
 - [ ] Preserve the zero-tooling install pipeline (CI-built backend bundle + signed app).
 - [ ] Smoke test: app launches rebranded, one chat round-trip through the gateway,

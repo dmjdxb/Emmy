@@ -8,9 +8,14 @@
 model:
   # Default model to use (can be overridden with --model flag)
   # Both "default" and "model" work as the key name here.
-  # Emmy (by EnergyIR) routes through the EnergyIR gateway; the Lead/frontier
-  # model is DeepSeek V4 Pro, with cheaper specialist workers via the cascade.
+  # Emmy (by EnergyIR) routes through the EnergyIR gateway; the upstream provider
+  # is DeepInfra (switched from TogetherAI for cheaper per-token pricing).
+  # Two-tier DeepSeek family (the cost split):
+  #   Lead / frontier (deep math reasoning) : deepseek-ai/DeepSeek-V4-Pro
+  #   Cheap cascade workers (the bulk)       : deepseek-ai/DeepSeek-V4-Flash
+  # Confirm the exact DeepInfra slugs at https://deepinfra.com/dash/models.
   default: "deepseek-ai/DeepSeek-V4-Pro"
+  worker: "deepseek-ai/DeepSeek-V4-Flash"
   
   # Inference provider selection:
   #   "auto"         - Auto-detect from credentials (default)
@@ -40,7 +45,9 @@ model:
   #   LM Studio is first-class and uses provider: "lmstudio".
   #   It works with both no-auth and auth-enabled server modes.
   #
-  # Emmy uses the EnergyIR (together) gateway provider.
+  # Emmy routes through the EnergyIR gateway, whose Emmy tenant now proxies to
+  # DeepInfra (was TogetherAI). The exact provider/endpoint value is finalized in
+  # the Phase 0 wiring step; "together" is a placeholder for the gateway provider.
   provider: "together"
 
   # API configuration. The user's EnergyIR API key is read from TOGETHER_API_KEY

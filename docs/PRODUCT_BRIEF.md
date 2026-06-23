@@ -39,10 +39,15 @@ Emmy computes with verified tools and **shows the work + the measurement + the C
 
 Emmy is a **remake of Robin** — it reuses Robin's desktop frame (Hermes/Electron
 shell, tools + chat + memory, zero-tooling install) but flips the philosophy to
-optimization-first. Emmy **routes its LLM calls through the AI Models gateway** —
-frontier (DeepSeek V4 Pro) for the Lead, cheap workers via the cascade — so it
-stays cheap, keeps the promise (every call metered), and dogfoods our own gateway.
-(A user's-own-key privacy mode can be a later toggle, not v1.)
+optimization-first. Emmy **routes its LLM calls through the AI Models gateway**
+(upstream provider: **DeepInfra**, switched from TogetherAI for cheaper pricing) —
+**DeepSeek V4 Pro** for the Lead, **DeepSeek V4 Flash** for the cheap cascade
+workers (same family, real cheap tier) — so it stays cheap, keeps the promise
+(every call metered), and dogfoods our own gateway. (A user's-own-key privacy mode
+can be a later toggle, not v1.)
+
+> Promise dependency: the cost optimizer must carry a **DeepInfra price table**
+> (not Together's) so $/query is metered and proven accurately — see Phase 0.
 
 ## 4. The mathematical reasoning engine (concrete)
 
@@ -91,9 +96,9 @@ The economic make-or-break. Work splits three ways:
 1. **Frontier model (e.g. DeepSeek V4 Pro) only on the reasoning kernels** —
    deriving approach, planning numerics, judging correctness. Small token share,
    non-negotiable quality.
-2. **Cheap models on the bulk** — reading docs, boilerplate, running tools,
-   retrieval, formatting, routine edits. Most tokens; cascade escalates only on
-   verified failure.
+2. **Cheap model (DeepSeek V4 Flash) on the bulk** — reading docs, boilerplate,
+   running tools, retrieval, formatting, routine edits. Most tokens; the cascade
+   escalates Flash → V4 Pro only on verified failure.
 3. **Verified engines do the actual computation** — exact, signed results instead
    of expensive/hallucinated LLM "reasoning".
 
