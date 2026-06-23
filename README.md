@@ -51,7 +51,8 @@ matter.
    cost-bounded orchestration is what makes it a product people use daily.
 
 See **[docs/PRODUCT_BRIEF.md](docs/PRODUCT_BRIEF.md)** for the full architecture,
-agent cast, Skills taxonomy, verification ladder, and phased build plan.
+agent cast, Skills taxonomy, verification ladder, and phased build plan, and
+**[TODO.md](TODO.md)** for the phased build roadmap (Phase 0 → 4).
 
 ## Status
 
