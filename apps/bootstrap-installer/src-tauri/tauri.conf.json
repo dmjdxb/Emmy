@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Robin",
+  "productName": "Emmy",
   "version": "0.0.1",
-  "identifier": "com.energyir.robin.setup",
+  "identifier": "com.energyir.emmy.setup",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://127.0.0.1:5175",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Robin",
+        "title": "Emmy",
         "width": 880,
         "height": 620,
         "minWidth": 720,
@@ -34,8 +34,8 @@
   "bundle": {
     "active": true,
     "category": "DeveloperTool",
-    "shortDescription": "Robin",
-    "longDescription": "Installs Robin on your machine. Drives scripts/install.ps1 (Windows) and scripts/install.sh (macOS/Linux).",
+    "shortDescription": "Emmy",
+    "longDescription": "Installs Emmy on your machine. Drives scripts/install.ps1 (Windows) and scripts/install.sh (macOS/Linux).",
     "publisher": "EnergyIR",
     "copyright": "Copyright © 2026 EnergyIR",
     "targets": [

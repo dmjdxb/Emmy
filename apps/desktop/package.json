@@ -1,11 +1,11 @@
 {
-  "name": "robin",
-  "productName": "Robin",
+  "name": "emmy",
+  "productName": "Emmy",
   "private": true,
   "version": "1.2.12",
-  "description": "Robin — your everyday sidekick. A desktop AI agent by EnergyIR.",
+  "description": "Emmy — the scientific-computing agent that proves its work. By EnergyIR.",
   "author": "EnergyIR <hello@energyir.io>",
-  "homepage": "https://energyir.io/robin",
+  "homepage": "https://energyir.io/emmy",
   "type": "module",
   "main": "electron/main.cjs",
   "engines": {
@@ -131,10 +131,10 @@
   },
   "build": {
     "electronVersion": "40.9.3",
-    "appId": "com.energyir.robin",
-    "productName": "Robin",
-    "executableName": "Robin",
-    "artifactName": "Robin-${version}-${os}-${arch}.${ext}",
+    "appId": "com.energyir.emmy",
+    "productName": "Emmy",
+    "executableName": "Emmy",
+    "artifactName": "Emmy-${version}-${os}-${arch}.${ext}",
     "copyright": "Copyright © 2026 EnergyIR. See LICENSE for full notices.",
     "icon": "assets/icon",
     "directories": {
@@ -144,7 +144,7 @@
       {
         "provider": "github",
         "owner": "dmjdxb",
-        "repo": "Robin",
+        "repo": "Emmy",
         "releaseType": "release"
       }
     ],
@@ -183,11 +183,11 @@
       "entitlements": "electron/entitlements.mac.plist",
       "entitlementsInherit": "electron/entitlements.mac.inherit.plist",
       "extendInfo": {
-        "CFBundleDisplayName": "Robin",
-        "CFBundleExecutable": "Robin",
-        "CFBundleName": "Robin",
-        "NSAudioCaptureUsageDescription": "Robin uses audio capture for voice conversations.",
-        "NSMicrophoneUsageDescription": "Robin uses the microphone for voice input and voice conversations."
+        "CFBundleDisplayName": "Emmy",
+        "CFBundleExecutable": "Emmy",
+        "CFBundleName": "Emmy",
+        "NSAudioCaptureUsageDescription": "Emmy uses audio capture for voice conversations.",
+        "NSMicrophoneUsageDescription": "Emmy uses the microphone for voice input and voice conversations."
       },
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
@@ -197,7 +197,7 @@
       ]
     },
     "dmg": {
-      "title": "Install Robin",
+      "title": "Install Emmy",
       "backgroundColor": "#f5f5f7",
       "iconSize": 96,
       "window": {
@@ -219,7 +219,7 @@
       ]
     },
     "win": {
-      "legalTrademarks": "Robin",
+      "legalTrademarks": "Emmy",
       "target": [
         "nsis",
         "msi"
@@ -229,7 +229,7 @@
     "linux": {
       "category": "Office",
       "maintainer": "EnergyIR <hello@energyir.io>",
-      "synopsis": "Native desktop shell for Robin.",
+      "synopsis": "Native desktop shell for Emmy.",
       "target": [
         "AppImage",
         "deb",
@@ -240,8 +240,8 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "perMachine": false,
-      "shortcutName": "Robin",
-      "uninstallDisplayName": "Robin",
+      "shortcutName": "Emmy",
+      "uninstallDisplayName": "Emmy",
       "warningsAsErrors": false
     }
   }

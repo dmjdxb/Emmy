@@ -12,10 +12,8 @@ when its gate passes. Check items off as they land.
 - [ ] **Frontier model only where math demands it**; cheap models for the bulk;
       verified engines for exact computation.
 - [ ] **Grounded + cited.** Doc-derived answers cite the source at the correct version.
-- [ ] **Self-measuring.** Every model call is metered; the bill is always inspectable.
-- [ ] **Privacy-first.** A scientist's work stays on their machine / their own
-      provider by default — no prompt egress to our servers unless they opt into
-      managed mode. Cost optimization is an embedded capability, not a forced service.
+- [ ] **Self-measuring.** Every model call is metered through the gateway; the bill
+      is always inspectable.
 - [ ] **Niche discipline.** Serve scientific/numerical/ML work — do not drift into
       general-purpose coding.
 
@@ -24,26 +22,27 @@ when its gate passes. Check items off as they land.
 ## Phase 0 — Frame (fork Robin → rebrand → wire to the gateway)
 
 **Goal:** an installable Emmy desktop app, rebranded, that completes a chat call
-**direct to the provider** with the embedded cost-optimizer metering it.
+through the AI Models gateway.
 
-- [ ] Get access to the Robin repo; create the Emmy fork (separate repo).
-- [ ] Rebrand: app name, bundle id, icons, window/title strings, about box → Emmy.
+- [x] Import the Robin/Hermes frame as the fork basis (clean import, full divergence).
+- [ ] Rebrand identity (manifests first): app name, bundle id, window/title strings,
+      installer + desktop `package.json`, config header → Emmy.
+- [ ] Rebrand the user-facing UI strings ("Robin" → "Emmy") across `apps/`/`web`/
+      `ui-tui` — carefully, leaving provider/auth keys (e.g. gateway key prefix) and
+      internal package paths (`robin/`) untouched.
 - [ ] Inventory what to keep (tools + chat + memory + zero-tooling install) vs
       replace; remove Robin-specific fidelity copy.
-- [ ] **Decision:** frontier model for the Lead (DeepSeek V4 Pro candidate) + the
-      cheap worker model set.
-- [ ] **Decision:** provider-key model — user-provided (privacy-first default) vs.
-      optional managed/gateway mode.
-- [ ] Embed the cost-optimization engine (`energy.tokens` cascade/router/gate) and
-      call the provider **directly** (prompts stay on the user's machine / their
-      provider). Hosted gateway is an *optional* managed mode, not the default.
-- [ ] Local metering: record cost per call on-device; bill is inspectable.
+- [ ] **Decision:** frontier model for the Lead (DeepSeek V4 Pro) + the cheap
+      worker model set (the cascade).
+- [ ] Route LLM calls through the **AI Models gateway** (frontier Lead + cheap
+      workers via the cascade); provision Emmy's gateway tenant/key.
+- [ ] Metering via the gateway; the bill is inspectable.
 - [ ] Preserve the zero-tooling install pipeline (CI-built backend bundle + signed app).
-- [ ] Smoke test: app launches rebranded, one chat round-trip to the provider,
-      cost metered locally.
+- [ ] Smoke test: app launches rebranded, one chat round-trip through the gateway,
+      metering recorded.
 
-**Done when:** Emmy installs clean, launches as Emmy (not Robin), completes a chat
-call direct to the provider, and the cost is metered on-device (no prompt egress).
+**Done when:** Emmy installs clean, launches as Emmy (not Robin), and completes a
+chat call through the gateway with the cost recorded.
 
 ---
 
@@ -157,9 +156,7 @@ non-formalizable one degrades gracefully with an honest label.
 
 ## Open decisions (resolve as phases reach them)
 
-- [ ] Frontier model for the Lead + cheap worker set (blocks Phase 0).
-- [ ] Provider-key model — user-provided (privacy-first default) vs. managed/gateway
-      mode (blocks Phase 0).
+- [ ] Frontier model for the Lead + cheap worker set (blocks Phase 0 wiring).
 - [ ] Pricing / packaging — standalone vs. a tier alongside AI Models.
 - [ ] "Emmy" domain / handle / trademark availability + visual identity.
 - [ ] v1 Skills coverage + maintenance cadence (blocks Phase 2 scope).

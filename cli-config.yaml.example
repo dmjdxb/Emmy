@@ -8,7 +8,8 @@
 model:
   # Default model to use (can be overridden with --model flag)
   # Both "default" and "model" work as the key name here.
-  # Robin (by EnergyIR) is locked to DeepSeek V4 Pro on the EnergyIR endpoint.
+  # Emmy (by EnergyIR) routes through the EnergyIR gateway; the Lead/frontier
+  # model is DeepSeek V4 Pro, with cheaper specialist workers via the cascade.
   default: "deepseek-ai/DeepSeek-V4-Pro"
   
   # Inference provider selection:
@@ -39,14 +40,15 @@ model:
   #   LM Studio is first-class and uses provider: "lmstudio".
   #   It works with both no-auth and auth-enabled server modes.
   #
-  # Robin uses the EnergyIR (together) provider exclusively.
+  # Emmy uses the EnergyIR (together) gateway provider.
   provider: "together"
 
   # API configuration. The user's EnergyIR API key is read from TOGETHER_API_KEY
   # (set at onboarding); the endpoint is the EnergyIR inference endpoint.
-  # NOTE: this MUST be the EnergyIR gateway, NOT api.together.xyz — an eir-robin-
+  # NOTE: this MUST be the EnergyIR gateway, NOT api.together.xyz — an eir-emmy-
   # key is rejected (401) by Together directly. The gateway authenticates the
   # key, meters it, and proxies to the model with the hidden platform key.
+  # (Emmy's gateway tenant + eir-emmy- key are provisioned in the Phase 0 wiring step.)
   base_url: "https://api.energyir.io/v1"
 
   # Azure Foundry keyless auth example:

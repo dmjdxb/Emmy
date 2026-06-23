@@ -35,21 +35,14 @@ Emmy computes with verified tools and **shows the work + the measurement + the C
 |---|---|---|---|
 | **EnergyIR / AI Models** | Verified LLM-inference cost optimizer (gateway) | Optimize & meter | n/a (is the gateway) |
 | **Robin** | General fidelity desktop coworker | Fidelity, never optimized | Together direct |
-| **Emmy** | Specialised scientific coding agent | Optimization-first, verified, **privacy-first** | **Own provider direct + embedded cost-optimizer**; gateway optional |
+| **Emmy** | Specialised scientific coding agent | Optimization-first, verified | **Through the AI Models gateway** |
 
-Emmy reuses **Robin's desktop frame** (Hermes/Electron shell, tools + chat +
-memory, zero-tooling install) but is a **rebranded fork** with inverted
-philosophy.
-
-**Cost optimization is a capability, not a service dependency.** Emmy needs the
-cheap-vs-frontier cascade routing + metering — which already exists as a *library*
-inside `energy.tokens` (the `PolicyRuntime` cascade, categorizer, quality gate),
-separate from the hosted gateway. So by default Emmy **embeds that engine and calls
-the provider directly** (low latency; **prompts never leave the user's machine /
-their own provider** — essential for scientists' confidential work). Routing
-through the hosted **AI Models gateway is an optional "managed billing" mode** for
-users who'd rather not hold a provider key — not the default. This keeps the cost
-savings *and* the privacy posture, without coupling Emmy to a running service.
+Emmy is a **remake of Robin** — it reuses Robin's desktop frame (Hermes/Electron
+shell, tools + chat + memory, zero-tooling install) but flips the philosophy to
+optimization-first. Emmy **routes its LLM calls through the AI Models gateway** —
+frontier (DeepSeek V4 Pro) for the Lead, cheap workers via the cascade — so it
+stays cheap, keeps the promise (every call metered), and dogfoods our own gateway.
+(A user's-own-key privacy mode can be a later toggle, not v1.)
 
 ## 4. The mathematical reasoning engine (concrete)
 
@@ -166,9 +159,8 @@ agent cast + visible UI, the cost-bounded orchestration controller, and the rebr
 
 ## 10. Phased build (proposed)
 
-- **Phase 0 — Frame:** fork Robin's shell, rebrand to Emmy, and **embed the
-  cost-optimization engine (cheap-vs-frontier cascade) calling the provider
-  directly** (privacy-first); hosted gateway as an optional managed mode.
+- **Phase 0 — Frame:** fork Robin's shell, rebrand to Emmy, route LLM calls
+  through the AI Models gateway (frontier Lead + cheap workers via the cascade).
 - **Phase 1 — Engine + cast:** expose the verified engines as tools; **graphify
   the user's workspace into a KG agents query** (comprehension); manager +
   numerics/performance/verifier cast; visible-debate UI; empirical/combinatorial/
@@ -185,8 +177,6 @@ agent cast + visible UI, the cost-bounded orchestration controller, and the rebr
 
 - Frontier model choice for the Lead (DeepSeek V4 Pro candidate) + the cheap
   worker set.
-- **Provider-key model:** user-provided key (privacy-first default) vs. optional
-  managed/gateway mode.
 - Pricing/packaging (standalone vs. tier alongside AI Models).
 - Domain (name/handle/trademark) availability for "Emmy" + visual identity.
 - Skills maintenance cadence + which packages ship in v1.
