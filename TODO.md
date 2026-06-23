@@ -68,13 +68,21 @@ chat call through the gateway with the cost recorded.
 **Goal:** given a numerical task, Emmy writes code, runs a verified engine, and
 returns a measured win with a CI — shown in a live agent debate.
 
-- [ ] Define the agent graph on `energyir_agent.build_agent_graph`: **Lead /
-      Numerics / Performance / Verifier**.
-- [ ] Tool adapters — expose EnergyIR engines as agent-callable tools:
-  - [ ] The 7 `*-doctor` profilers (array / jit / compile / train / graph / frame / agent).
-  - [ ] Verified kernel synthesis (ε-equivalent, signed).
-  - [ ] QUBO/Ising solver + problem builders (assignment, scheduling, knapsack, …).
-  - [ ] Roofline + cost-geodesic `schedule_doctor`.
+> **Server-side spine built + TDD-verified headlessly** (EnergyIR repo, 202 tests
+> green): the cost cascade (lead→V4 Pro / worker→V4 Flash), the DeepInfra runtime
+> provider (`DeepInfraTokenProvider`, mock-tested), the verified tool surface
+> (`energy.agent_tools`), the savings engine/ledger, and the
+> **`EmmyOrchestrator`** end-to-end (task → routing → verified tool → metered
+> savings → proof). Remaining items below need the desktop/GPU/live-key envs.
+
+- [~] Agent graph: a deterministic **`EmmyOrchestrator`** (lead/worker + verified
+      tools + metering) is built & tested; the LangGraph `build_agent_graph` wiring +
+      live LLM remain (needs the agent runtime).
+- [~] Tool adapters — uniform `ToolResult` surface built; GPU-free engines wired + tested:
+  - [ ] The 7 `*-doctor` profilers (array / jit / compile / train / graph / frame / agent) — need torch/jax/GPU.
+  - [ ] Verified kernel synthesis (ε-equivalent, signed) — needs GPU.
+  - [x] QUBO/Ising solver (knapsack / vertex_cover / set_cover) — verified, tested.
+  - [x] Roofline classifier (compute/memory-bound + proxy error) — tested. (`schedule_doctor` next.)
 - [ ] Code-execution sandbox (reuse the synthesis isolation boundary) for running
       user workloads safely.
 - [ ] **Workspace understanding via graphify:** build a KG of the user's project +
