@@ -132,3 +132,5 @@ skills-cache/
 
 # uv arm/x86 test venv (local only)
 .venv-arm2/
+apps/desktop/assets/icon.iconset/
+apps/bootstrap-installer/src-tauri/icons/icon.iconset/
