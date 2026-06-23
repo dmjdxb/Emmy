@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Builds / artifacts
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Local agent/skill caches (define as the build firms up)
+.emmy/
+skills-cache/
