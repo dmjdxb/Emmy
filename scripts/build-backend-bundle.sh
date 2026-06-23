@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Build a self-contained, relocatable Robin backend bundle for the current
+# Build a self-contained, relocatable Emmy backend bundle for the current
 # platform/arch, so the desktop app can run the Python agent with ZERO developer
 # tooling on the user's machine --- no git, no compiler, no Command Line Tools, no
 # pip-at-runtime. The result is `apps/desktop/backend.tar.gz`, shipped inside the
 # signed app and extracted to ~/.robin/hermes-agent on first launch.
 #
 # Layout produced (extracted to ~/.robin/hermes-agent at runtime):
-#   hermes-agent/            -> full Robin source (the agent core + plugins)
+#   hermes-agent/            -> full Emmy source (the agent core + plugins)
 #   hermes-agent/venv/       -> a relocatable standalone CPython with ALL deps
 #                               installed into its site-packages. The desktop
 #                               runs `venv/bin/python -m robin.main dashboard`.
@@ -25,7 +25,7 @@ echo "[bundle] repo=$REPO_ROOT python=$PYVER"
 rm -rf "$BUNDLE_ROOT"
 mkdir -p "$AGENT_DIR"
 
-# 1) Copy the Robin source the backend needs (exclude the desktop/web shells,
+# 1) Copy the Emmy source the backend needs (exclude the desktop/web shells,
 #    VCS, node, caches, tests, and big non-runtime assets). The Python agent
 #    imports from this tree at runtime (cwd = hermes-agent).
 echo "[bundle] copying source via git archive..."

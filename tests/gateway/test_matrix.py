@@ -537,7 +537,7 @@ class TestMatrixReplyFallbackStripping:
 # ---------------------------------------------------------------------------
 
 class TestMatrixBangCommandAlias:
-    """Matrix clients may reserve /commands, so Robin supports !commands."""
+    """Matrix clients may reserve /commands, so Emmy supports !commands."""
 
     def setup_method(self):
         self.adapter = _make_adapter()
@@ -2452,7 +2452,7 @@ class TestMatrixSystemBridgeFilter:
         ) is False
 
     def test_bot_account_is_not_bridge(self):
-        # The Robin bot itself (no leading underscore) must not be
+        # The Emmy bot itself (no leading underscore) must not be
         # classified as a bridge — that filter is a pairing guard, not
         # a self-filter.
         assert self.adapter._is_system_or_bridge_sender(

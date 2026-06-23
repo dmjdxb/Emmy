@@ -1,4 +1,4 @@
-"""Shared helpers for attaching Robin to a local Chromium-family CDP port."""
+"""Shared helpers for attaching Emmy to a local Chromium-family CDP port."""
 
 from __future__ import annotations
 

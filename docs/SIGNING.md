@@ -1,4 +1,4 @@
-# Robin — macOS code signing & notarization (runbook)
+# Emmy — macOS code signing & notarization (runbook)
 
 You have an Apple Developer account, so this is a one-time setup: gather **5
 values** from Apple and paste them as **GitHub repository secrets**. After that,
@@ -55,7 +55,7 @@ Notarization submits the signed app to Apple's malware scan and "staples" the
 result so it opens cleanly offline.
 
 1. Go to **App Store Connect → Users and Access → Integrations → App Store Connect API**.
-2. Under **Keys**, click **+** to generate a key. Name it `Robin Notary`, give it
+2. Under **Keys**, click **+** to generate a key. Name it `Emmy Notary`, give it
    the **Developer** access role, and **Generate**.
 3. **Download the `.p8` file** — you can only download it once. Keep it safe.
 4. On that same page note:
@@ -79,7 +79,7 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The `Release Robin` workflow builds on macOS, **signs** with your Developer ID,
+The `Release Emmy` workflow builds on macOS, **signs** with your Developer ID,
 **notarizes** with your API key, and publishes the signed `Robin-<version>-mac-<arch>.dmg`
 (+ the `electron-updater` feed and SHA-256 checksums) to GitHub Releases.
 

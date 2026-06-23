@@ -203,7 +203,7 @@ export function ChatBar({
   }, [followUpPlaceholders, newSessionPlaceholders, sessionId])
 
   // When the bar is disabled it's because the gateway isn't open. Distinguish a
-  // cold start ("Starting Robin...") from a dropped connection we're trying to
+  // cold start ("Starting Emmy...") from a dropped connection we're trying to
   // restore (e.g. after the Mac slept) so the stuck state reads as recoverable.
   const placeholder = disabled
     ? gatewayState === 'closed' || gatewayState === 'error'
@@ -1069,7 +1069,7 @@ export function ChatBar({
     } else if (!hasComposerPayload && queuedPrompts.length > 0) {
       void drainNextQueued()
     } else if (draft.trim() || attachments.length > 0) {
-      // In "Ask your document" mode, prepend the focus instruction so Robin
+      // In "Ask your document" mode, prepend the focus instruction so Emmy
       // grounds the answer in the attached document and stays on task.
       const submitted = $documentMode.get() ? DOCUMENT_MODE_PREFIX + draft : draft
       triggerHaptic('submit')

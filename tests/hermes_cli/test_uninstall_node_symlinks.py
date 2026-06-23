@@ -96,7 +96,7 @@ def test_handles_missing_local_bin(fake_home):
 
 
 def test_removes_dangling_symlink_into_hermes_node(fake_home):
-    """A link into the Robin node dir is removed even if the target file is
+    """A link into the Emmy node dir is removed even if the target file is
     already gone (dangling) \u2014 the link still shadows PATH."""
     hermes_home = fake_home / ".hermes"
     node_bin = hermes_home / "node" / "bin"
@@ -114,7 +114,7 @@ def test_removes_dangling_symlink_into_hermes_node(fake_home):
 
 
 def test_only_some_links_present(fake_home):
-    """Removes the Robin links that exist; ignores the ones that don't."""
+    """Removes the Emmy links that exist; ignores the ones that don't."""
     hermes_home = fake_home / ".hermes"
     node_bin = _make_hermes_node(hermes_home)
     local_bin = fake_home / ".local" / "bin"

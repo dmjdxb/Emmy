@@ -152,7 +152,7 @@ async function getSessionToken(): Promise<string> {
     _sessionToken = injected;
     return _sessionToken;
   }
-  throw new Error("Session token not available — page must be served by the Robin dashboard server");
+  throw new Error("Session token not available — page must be served by the Emmy dashboard server");
 }
 
 /**

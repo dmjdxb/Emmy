@@ -1,8 +1,8 @@
 ---
 name: hermes-s6-container-supervision
-description: Modify, debug, or extend the s6-overlay supervision tree inside the Robin Docker image — adding new services, debugging profile gateways, understanding the Architecture B main-program pattern.
+description: Modify, debug, or extend the s6-overlay supervision tree inside the Emmy Docker image — adding new services, debugging profile gateways, understanding the Architecture B main-program pattern.
 version: 1.0.0
-author: Robin
+author: Emmy
 license: MIT
 platforms: [linux]
 environments: [s6]
@@ -12,18 +12,18 @@ metadata:
     related_skills: [hermes-agent, hermes-agent-dev]
 ---
 
-# Robin s6-overlay Container Supervision
+# Emmy s6-overlay Container Supervision
 
 ## When to use this skill
 
 Load this skill when you're working on:
-- Adding or removing a static service in the Robin Docker image (something that should be supervised at every container start, like the dashboard)
+- Adding or removing a static service in the Emmy Docker image (something that should be supervised at every container start, like the dashboard)
 - Diagnosing why a per-profile gateway isn't starting, restarting, or surviving `docker restart`
 - Understanding why the container's CMD is `/opt/hermes/docker/main-wrapper.sh` and how leading-dash args reach the user's program
 - Modifying `cont-init.d` boot scripts (UID remap, volume seeding, profile reconciliation)
 - Changing the rendered run-script for per-profile gateways (Phase 4)
 
-If you're just running the Robin and want to use Docker, see `website/docs/user-guide/docker.md` instead.
+If you're just running the Emmy and want to use Docker, see `website/docs/user-guide/docker.md` instead.
 
 ## Architecture at a glance
 

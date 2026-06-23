@@ -17,25 +17,25 @@ export const hi: Translations = {
   },
 
   boot: {
-    ready: 'Robin तैयार है',
+    ready: 'Emmy तैयार है',
     desktopBootFailedWithMessage: message => `डेस्कटॉप बूट विफल रहा: ${message}`,
     steps: {
       connectingGateway: 'लाइव डेस्कटॉप गेटवे से कनेक्ट किया जा रहा है',
-      loadingSettings: 'Robin सेटिंग्स लोड की जा रही हैं',
+      loadingSettings: 'Emmy सेटिंग्स लोड की जा रही हैं',
       loadingSessions: 'हाल की सत्र लोड की जा रही हैं',
       startingDesktopConnection: 'डेस्कटॉप कनेक्शन शुरू किया जा रहा है',
-      startingRobinDesktop: 'Robin शुरू हो रहा है…'
+      startingRobinDesktop: 'Emmy शुरू हो रहा है…'
     },
     errors: {
-      backgroundExited: 'Robin बैकग्राउंड प्रक्रिया बंद हो गई।',
-      backgroundExitedDuringStartup: 'Robin बैकग्राउंड प्रक्रिया स्टार्टअप के दौरान बंद हो गई।',
+      backgroundExited: 'Emmy बैकग्राउंड प्रक्रिया बंद हो गई।',
+      backgroundExitedDuringStartup: 'Emmy बैकग्राउंड प्रक्रिया स्टार्टअप के दौरान बंद हो गई।',
       backendStopped: 'बैकएंड रुक गया',
       desktopBootFailed: 'डेस्कटॉप बूट विफल रहा',
       gatewaySignInRequired: 'गेटवे साइन-इन आवश्यक है',
       ipcBridgeUnavailable: 'डेस्कटॉप IPC ब्रिज उपलब्ध नहीं है।'
     },
     failure: {
-      title: 'Robin शुरू नहीं हो सका',
+      title: 'Emmy शुरू नहीं हो सका',
       description:
         'बैकग्राउंड गेटवे शुरू नहीं हुआ। नीचे दिए गए रिकवरी चरणों में से किसी एक को आज़माएँ। यहाँ कुछ भी आपकी चैट या सेटिंग्स को नहीं हटाता।',
       remoteTitle: 'रिमोट गेटवे साइन-इन आवश्यक है',
@@ -72,8 +72,8 @@ export const hi: Translations = {
     copyDetailFailed: 'सूचना का विवरण कॉपी नहीं किया जा सका',
     backendOutOfDateTitle: 'बैकएंड पुराना है',
     backendOutOfDateMessage:
-      'आपका Robin बैकएंड इस डेस्कटॉप बिल्ड से पुराना है और सही तरह से काम नहीं कर सकता। उन्हें संरेखित करने के लिए अपडेट करें।',
-    updateHermes: 'Robin अपडेट करें',
+      'आपका Emmy बैकएंड इस डेस्कटॉप बिल्ड से पुराना है और सही तरह से काम नहीं कर सकता। उन्हें संरेखित करने के लिए अपडेट करें।',
+    updateHermes: 'Emmy अपडेट करें',
     updateReadyTitle: 'अपडेट तैयार है',
     updateReadyMessage: count => `${count} नया बदलाव${count === 1 ? '' : ' उपलब्ध'} उपलब्ध है।`,
     seeWhatsNew: 'नया क्या है देखें',
@@ -81,7 +81,7 @@ export const hi: Translations = {
       elevenLabsNeedsKey: 'ElevenLabs STT को ELEVENLABS_API_KEY की आवश्यकता है।',
       elevenLabsRejectedKey: 'ElevenLabs ने API key अस्वीकार कर दी (401)।',
       methodNotAllowed:
-        'डेस्कटॉप बैकएंड ने उस अनुरोध को अस्वीकार कर दिया (405 Method Not Allowed)। Robin को पुनः आरंभ करके देखें।',
+        'डेस्कटॉप बैकएंड ने उस अनुरोध को अस्वीकार कर दिया (405 Method Not Allowed)। Emmy को पुनः आरंभ करके देखें।',
       microphonePermission: 'माइक्रोफ़ोन की अनुमति अस्वीकृत कर दी गई।',
       openaiRejectedApiKey: 'OpenAI ने API key अस्वीकार कर दी।',
       openaiRejectedApiKeyWithStatus: status => `OpenAI ने API key अस्वीकार कर दी (${status} invalid_api_key)।`,
@@ -115,7 +115,7 @@ export const hi: Translations = {
     exportConfig: 'कॉन्फ़िग निर्यात करें',
     importConfig: 'कॉन्फ़िग आयात करें',
     resetToDefaults: 'डिफ़ॉल्ट पर रीसेट करें',
-    resetConfirm: 'सभी सेटिंग्स को Robin डिफ़ॉल्ट पर रीसेट करें?',
+    resetConfirm: 'सभी सेटिंग्स को Emmy डिफ़ॉल्ट पर रीसेट करें?',
     exportFailed: 'निर्यात विफल रहा',
     resetFailed: 'रीसेट विफल रहा',
     nav: {
@@ -136,7 +136,7 @@ export const hi: Translations = {
       advanced: 'उन्नत'
     },
     searchPlaceholder: {
-      about: 'Robin के बारे में',
+      about: 'Emmy के बारे में',
       config: 'सेटिंग्स खोजें...',
       gateway: 'गेटवे कनेक्शन...',
       keys: 'API कुंजियाँ खोजें...',
@@ -153,7 +153,7 @@ export const hi: Translations = {
       intro:
         'ये केवल डेस्कटॉप-संबंधी प्रदर्शन प्राथमिकताएँ हैं। मोड चमक को नियंत्रित करता है; थीम एक्सेंट पैलेट और चैट सतह की शैली को नियंत्रित करती है।',
       colorMode: 'रंग मोड',
-      colorModeDesc: 'एक निश्चित मोड चुनें या Robin को अपनी सिस्टम सेटिंग का अनुसरण करने दें।',
+      colorModeDesc: 'एक निश्चित मोड चुनें या Emmy को अपनी सिस्टम सेटिंग का अनुसरण करने दें।',
       toolViewTitle: 'टूल कॉल प्रदर्शन',
       toolViewDesc: 'प्रोडक्ट कच्चे टूल पेलोड छिपाता है; टेक्निकल पूरा इनपुट/आउटपुट दिखाता है।',
       product: 'प्रोडक्ट',
@@ -169,7 +169,7 @@ export const hi: Translations = {
     fieldLabels: FIELD_LABELS,
     fieldDescriptions: FIELD_DESCRIPTIONS,
     about: {
-      heading: 'Robin',
+      heading: 'Emmy',
       version: value => `संस्करण ${value}`,
       versionUnavailable: 'संस्करण उपलब्ध नहीं',
       updates: 'अपडेट',
@@ -187,7 +187,7 @@ export const hi: Translations = {
       justNowSuffix: ' · अभी-अभी',
       automaticUpdates: 'स्वचालित अपडेट',
       automaticUpdatesDesc:
-        'Robin बैकग्राउंड में स्वचालित रूप से अपडेट की जाँच करता है और जब कोई तैयार हो तो आपको सूचित करता है।',
+        'Emmy बैकग्राउंड में स्वचालित रूप से अपडेट की जाँच करता है और जब कोई तैयार हो तो आपको सूचित करता है।',
       branchCommit: (branch, commit) => `ब्रांच ${branch} · कमिट ${commit}`,
       never: 'कभी नहीं',
       justNow: 'अभी-अभी',
@@ -268,7 +268,7 @@ export const hi: Translations = {
     },
     nav: {
       newChat: { title: 'नया सत्र', detail: 'एक नया सत्र शुरू करें' },
-      settings: { title: 'सेटिंग्स', detail: 'Robin डेस्कटॉप कॉन्फ़िगर करें' },
+      settings: { title: 'सेटिंग्स', detail: 'Emmy डेस्कटॉप कॉन्फ़िगर करें' },
       skills: { title: 'कौशल और टूल', detail: 'कौशल, टूलसेट और प्रदाता सक्षम करें' },
       messaging: { title: 'मैसेजिंग', detail: 'Telegram, Slack, Discord और अन्य सेट अप करें' },
       artifacts: { title: 'आर्टिफ़ैक्ट', detail: 'जनरेट किए गए आउटपुट ब्राउज़ करें' }
@@ -290,9 +290,9 @@ export const hi: Translations = {
     noSessions: 'अभी तक कोई सत्र नहीं।',
     gatewayRunning: 'मैसेजिंग गेटवे चल रहा है',
     gatewayStopped: 'मैसेजिंग गेटवे रुका हुआ है',
-    hermesActiveSessions: (version, count) => `Robin ${version} · सक्रिय सत्र ${count}`,
+    hermesActiveSessions: (version, count) => `Emmy ${version} · सक्रिय सत्र ${count}`,
     restartMessaging: 'मैसेजिंग पुनः आरंभ करें',
-    updateHermes: 'Robin अपडेट करें',
+    updateHermes: 'Emmy अपडेट करें',
     actionRunning: 'चल रहा है',
     actionDone: 'पूर्ण',
     actionFailed: 'विफल',
@@ -404,7 +404,7 @@ export const hi: Translations = {
     deleteDescMid: ' हट जाएगी और इसकी ',
     deleteDescSuffix: ' निर्देशिका हट जाएगी। इसे पूर्ववत नहीं किया जा सकता।',
     deleting: 'हटाया जा रहा है...',
-    createDesc: 'प्रोफ़ाइल स्वतंत्र Robin वातावरण हैं: अलग कॉन्फ़िग, कौशल और SOUL.md।',
+    createDesc: 'प्रोफ़ाइल स्वतंत्र Emmy वातावरण हैं: अलग कॉन्फ़िग, कौशल और SOUL.md।',
     nameLabel: 'नाम',
     cloneFromDefault: 'डिफ़ॉल्ट से क्लोन करें',
     cloneFromDefaultDesc: 'अपनी डिफ़ॉल्ट प्रोफ़ाइल से कॉन्फ़िग, कौशल और SOUL.md कॉपी करें।',
@@ -492,7 +492,7 @@ export const hi: Translations = {
     newCron: 'नया क्रॉन',
     createFirst: 'पहला क्रॉन बनाएँ',
     emptyDescNew:
-      'किसी क्रॉन अभिव्यक्ति पर चलने के लिए एक प्रॉम्प्ट अनुसूचित करें। Robin इसे चलाएगा और परिणाम आपके चुने गए गंतव्य पर पहुँचाएगा।',
+      'किसी क्रॉन अभिव्यक्ति पर चलने के लिए एक प्रॉम्प्ट अनुसूचित करें। Emmy इसे चलाएगा और परिणाम आपके चुने गए गंतव्य पर पहुँचाएगा।',
     emptyDescSearch: 'एक व्यापक खोज शब्द आज़माएँ।',
     emptyTitleNew: 'अभी तक कोई अनुसूचित जॉब नहीं',
     emptyTitleSearch: 'कोई मेल नहीं',
@@ -630,12 +630,12 @@ export const hi: Translations = {
 
   composer: {
     message: 'संदेश',
-    placeholderStarting: 'Robin शुरू हो रहा है...',
-    placeholderReconnecting: 'Robin से पुनः कनेक्ट किया जा रहा है…',
+    placeholderStarting: 'Emmy शुरू हो रहा है...',
+    placeholderReconnecting: 'Emmy से पुनः कनेक्ट किया जा रहा है…',
     placeholderFollowUp: 'फ़ॉलो-अप भेजें',
     newSessionPlaceholders: [
       'हम क्या बना रहे हैं?',
-      'Robin को एक काम दें',
+      'Emmy को एक काम दें',
       'आपके मन में क्या है?',
       'बताएँ कि आपको क्या चाहिए',
       'हमें किस पर काम करना चाहिए?',
@@ -696,7 +696,7 @@ export const hi: Translations = {
       '↑ / ↓': 'पॉपओवर / इतिहास चक्रित करें'
     },
     attachUrlTitle: 'एक URL संलग्न करें',
-    attachUrlDesc: 'Robin पृष्ठ को प्राप्त करेगा और इसे इस टर्न के संदर्भ के रूप में शामिल करेगा।',
+    attachUrlDesc: 'Emmy पृष्ठ को प्राप्त करेगा और इसे इस टर्न के संदर्भ के रूप में शामिल करेगा।',
     urlPlaceholder: 'https://example.com/post',
     urlHintPre: 'पूरा URL शामिल करें, उदा. ',
     attach: 'संलग्न करें',

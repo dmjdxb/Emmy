@@ -1,6 +1,6 @@
 """
 SQLite-backed fact store with entity resolution and trust scoring.
-Single-user Robin memory store plugin.
+Single-user Emmy memory store plugin.
 """
 
 import re

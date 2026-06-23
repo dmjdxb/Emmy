@@ -1,4 +1,4 @@
-"""nemo_relay — optional Robin plugin for NeMo Relay observability."""
+"""nemo_relay — optional Emmy plugin for NeMo Relay observability."""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ class _Settings:
     atif_output_directory: str = ""
     atif_filename_template: str = "hermes-atif-{session_id}.json"
     atif_subagent_export_mode: str = "embedded"
-    atif_agent_name: str = "Robin"
+    atif_agent_name: str = "Emmy"
     atif_agent_version: str = "unknown"
     atif_model_name: str = "unknown"
 
@@ -439,7 +439,7 @@ def _load_settings() -> _Settings:
         atif_output_directory=_env("HERMES_NEMO_RELAY_ATIF_OUTPUT_DIRECTORY"),
         atif_filename_template=_env("HERMES_NEMO_RELAY_ATIF_FILENAME_TEMPLATE") or "hermes-atif-{session_id}.json",
         atif_subagent_export_mode=_atif_subagent_export_mode(),
-        atif_agent_name=_env("HERMES_NEMO_RELAY_ATIF_AGENT_NAME") or "Robin",
+        atif_agent_name=_env("HERMES_NEMO_RELAY_ATIF_AGENT_NAME") or "Emmy",
         atif_agent_version=_env("HERMES_NEMO_RELAY_ATIF_AGENT_VERSION") or "unknown",
         atif_model_name=_env("HERMES_NEMO_RELAY_ATIF_MODEL_NAME") or "unknown",
     )

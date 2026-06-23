@@ -1,4 +1,4 @@
-# Streaming LLM Response Support for Robin
+# Streaming LLM Response Support for Emmy
 
 ## Overview
 

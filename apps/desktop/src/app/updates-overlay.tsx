@@ -27,7 +27,7 @@ const STAGE_LABELS: Record<DesktopUpdateStage, string> = {
   fetch: 'Downloading…',
   pull: 'Almost there…',
   pydeps: 'Finishing up…',
-  restart: 'Restarting Robin…',
+  restart: 'Restarting Emmy…',
   manual: 'Update from your terminal',
   downloaded: 'Update downloaded',
   error: 'Update paused'
@@ -158,7 +158,7 @@ function IdleView({
   }
 
   if (!status.supported) {
-    // Packaged Robin has no in-app git self-update (a user's machine has no
+    // Packaged Emmy has no in-app git self-update (a user's machine has no
     // source checkout). That's a developer detail — never surface the raw
     // "isn't a git checkout" backend message. Present the normal up-to-date
     // resting state; new versions arrive by installing the latest build.
@@ -209,7 +209,7 @@ function IdleView({
 
         <DialogTitle className="text-center text-xl">New update available</DialogTitle>
         <DialogDescription className="text-center text-sm">
-          A new version of Robin is ready to install.
+          A new version of Emmy is ready to install.
         </DialogDescription>
       </div>
 
@@ -270,7 +270,7 @@ function ManualView({ command, onDone }: { command: string; onDone: () => void }
 
         <DialogTitle className="text-center text-xl">Update from your terminal</DialogTitle>
         <DialogDescription className="text-center text-sm">
-          You installed Robin from the command line, so updates run there too. Paste this into your terminal:
+          You installed Emmy from the command line, so updates run there too. Paste this into your terminal:
         </DialogDescription>
       </div>
 
@@ -299,7 +299,7 @@ function ManualView({ command, onDone }: { command: string; onDone: () => void }
       </button>
 
       <p className="text-center text-xs text-muted-foreground">
-        Robin will pick up the new version next time you launch it.
+        Emmy will pick up the new version next time you launch it.
       </p>
 
       <Button className="font-semibold" onClick={onDone} size="lg" variant="outline">
@@ -310,7 +310,7 @@ function ManualView({ command, onDone }: { command: string; onDone: () => void }
 }
 
 function DownloadedView({ version, onDone }: { version: string; onDone: () => void }) {
-  const v = version && /^\d/.test(version) ? `Robin ${version}` : "The new version of Robin";
+  const v = version && /^\d/.test(version) ? `Emmy ${version}` : "The new version of Emmy";
   return (
     <div className="grid gap-5 px-6 pb-6 pt-7 pr-8">
       <div className="flex flex-col items-center gap-3 text-center">
@@ -327,8 +327,8 @@ function DownloadedView({ version, onDone }: { version: string; onDone: () => vo
       <div className="rounded-xl border border-border/70 bg-muted/20 px-4 py-3 text-sm text-foreground">
         <p className="font-medium">To finish:</p>
         <ol className="mt-1.5 grid gap-1 text-xs text-muted-foreground">
-          <li>1. In the window that opened, drag <span className="font-medium text-foreground">Robin</span> onto <span className="font-medium text-foreground">Applications</span> (replace the old one).</li>
-          <li>2. Quit Robin, then reopen it from Applications.</li>
+          <li>1. In the window that opened, drag <span className="font-medium text-foreground">Emmy</span> onto <span className="font-medium text-foreground">Applications</span> (replace the old one).</li>
+          <li>2. Quit Emmy, then reopen it from Applications.</li>
         </ol>
       </div>
 
@@ -340,7 +340,7 @@ function DownloadedView({ version, onDone }: { version: string; onDone: () => vo
 }
 
 function ApplyingView({ apply }: { apply: UpdateApplyState }) {
-  const label = STAGE_LABELS[apply.stage] ?? 'Updating Robin…'
+  const label = STAGE_LABELS[apply.stage] ?? 'Updating Emmy…'
 
   const percent =
     typeof apply.percent === 'number' && Number.isFinite(apply.percent)
@@ -356,7 +356,7 @@ function ApplyingView({ apply }: { apply: UpdateApplyState }) {
 
         <DialogTitle className="text-center text-xl">{label}</DialogTitle>
         <DialogDescription className="text-center text-sm">
-          The Robin updater will take over in its own window and reopen Robin when it&rsquo;s done.
+          The Emmy updater will take over in its own window and reopen Emmy when it&rsquo;s done.
         </DialogDescription>
       </div>
 
@@ -370,7 +370,7 @@ function ApplyingView({ apply }: { apply: UpdateApplyState }) {
         />
       </div>
 
-      <p className="text-center text-xs text-muted-foreground">Robin will close to apply the update.</p>
+      <p className="text-center text-xs text-muted-foreground">Emmy will close to apply the update.</p>
     </div>
   )
 }

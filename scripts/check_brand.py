@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Robin brand gate — fail the build if user-visible "Hermes"/"Nous" strings
+"""Emmy brand gate — fail the build if user-visible "Hermes"/"Nous" strings
 survive in the shipped surfaces.
 
 This is the falsification instrument for the PRD's acceptance gate #7: "Zero
@@ -125,7 +125,7 @@ def scan() -> list[tuple[Path, int, str]]:
 # ── Skills + agent-prompt surface ──────────────────────────────────────────
 # The UI scan above never covered the SHIPPED SKILL MARKDOWN or the agent system
 # prompt — which is exactly how the `hermes-agent` skill leaked the `hermes` CLI,
-# dead robin.energyir.com URLs, and ~/.hermes paths into "what can Robin do?".
+# dead robin.energyir.com URLs, and ~/.hermes paths into "what can Emmy do?".
 # These surfaces are rendered to users at runtime, so they get their own gate.
 #
 # We scan for the leak classes that actually recur here, NOT a blanket "hermes":

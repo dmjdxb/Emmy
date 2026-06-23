@@ -1,11 +1,11 @@
 # Tool Matrix — Skills + Toolsets per Role
 
-Maps each role archetype to the Robin skills it should `always_load` and the
+Maps each role archetype to the Emmy skills it should `always_load` and the
 toolsets it needs. Only references skills that ship in the public hermes-agent
 repository (under `skills/` or `optional-skills/`). External APIs and CLIs are
 called from the terminal toolset; they don't appear in `always_load`.
 
-## Robin skills relevant to video production
+## Emmy skills relevant to video production
 
 ### Visual / rendering skills (`hermes-agent/skills/creative/`)
 
@@ -65,7 +65,7 @@ profile needs them.
 
 ## External tools (called from terminal toolset)
 
-These are **not** Robin skills but external CLIs / APIs that profiles invoke.
+These are **not** Emmy skills but external CLIs / APIs that profiles invoke.
 They don't appear in `always_load`; instead the role's terminal commands hit
 them directly.
 
@@ -82,9 +82,9 @@ them directly.
 | Manim CE (`manim`) | Math animation render (driven by `manim-video` skill's recipes) | renderer-manim |
 | Blender (`blender -b`) | 3D rendering (alternative to `blender-mcp`) | renderer-3d |
 
-## Built-in Robin tools for media review
+## Built-in Emmy tools for media review
 
-These are native Robin tools — not invoked via terminal but through their own
+These are native Emmy tools — not invoked via terminal but through their own
 toolsets. Enable them per-profile by adding the toolset to the profile config.
 
 | Tool | Toolset | What it does | Profile that uses it |
@@ -298,7 +298,7 @@ key is present in `~/.hermes/.env` (or macOS Keychain) before firing the kanban.
 | Luma | `LUMA_API_KEY` | image-to-video-generator (alternate) |
 | Suno | `SUNO_API_KEY` | music-supervisor (paired with `songwriting-and-ai-music`) |
 | Spotify | `SPOTIFY_CLIENT_ID` + `SPOTIFY_CLIENT_SECRET` | music-supervisor (paired with `spotify` skill) |
-| Anthropic | `ANTHROPIC_API_KEY` | every Robin profile (Claude) |
+| Anthropic | `ANTHROPIC_API_KEY` | every Emmy profile (Claude) |
 
 If a key is missing, prompt the user to add it. Storage methods, in order of
 preference: macOS Keychain → `~/.hermes/.env` → environment variable.

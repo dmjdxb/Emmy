@@ -1,5 +1,5 @@
 """
-Single source of truth for provider identity in Robin.
+Single source of truth for provider identity in Emmy.
 
 Two data sources, merged at runtime:
 
@@ -7,7 +7,7 @@ Two data sources, merged at runtime:
    names, and full model metadata (context, cost, capabilities).  This is
    the primary database.
 
-2. **Robin overlays** — transport type, auth patterns, aggregator flags,
+2. **Emmy overlays** — transport type, auth patterns, aggregator flags,
    and additional env vars that models.dev doesn't track.  Small dict,
    maintained here.
 
@@ -28,7 +28,7 @@ from utils import base_url_host_matches, base_url_hostname
 logger = logging.getLogger(__name__)
 
 
-# -- Robin overlay ----------------------------------------------------------
+# -- Emmy overlay ----------------------------------------------------------
 # Robin-specific metadata that models.dev doesn't provide.
 
 @dataclass(frozen=True)
@@ -406,8 +406,8 @@ def get_provider(name: str) -> Optional[ProviderDef]:
     """Look up a built-in provider by id or alias.
 
     Resolution order:
-      1. Robin overlays (for providers not in models.dev: nous, openai-codex, etc.)
-      2. models.dev catalog + Robin overlay
+      1. Emmy overlays (for providers not in models.dev: nous, openai-codex, etc.)
+      2. models.dev catalog + Emmy overlay
 
     User-defined providers from config.yaml (``providers:`` / ``custom_providers:``)
     are resolved by :func:`resolve_provider_full`, which layers ``resolve_user_provider``

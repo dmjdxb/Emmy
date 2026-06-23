@@ -1,4 +1,4 @@
-"""Shared constants for Robin.
+"""Shared constants for Emmy.
 
 Import-safe module with no dependencies — can be imported from anywhere
 without risk of circular imports.
@@ -19,7 +19,7 @@ _HERMES_HOME_OVERRIDE: ContextVar[str | object] = ContextVar(
 
 
 def set_hermes_home_override(path: str | Path | None) -> Token:
-    """Set a context-local Robin home override and return its reset token.
+    """Set a context-local Emmy home override and return its reset token.
 
     This is for in-process, per-task scoping.  It deliberately does not mutate
     ``os.environ`` because that is shared by every thread in the process.
@@ -29,12 +29,12 @@ def set_hermes_home_override(path: str | Path | None) -> Token:
 
 
 def reset_hermes_home_override(token: Token) -> None:
-    """Restore the previous context-local Robin home override."""
+    """Restore the previous context-local Emmy home override."""
     _HERMES_HOME_OVERRIDE.reset(token)
 
 
 def get_hermes_home_override() -> str | None:
-    """Return the active context-local Robin home override, if any."""
+    """Return the active context-local Emmy home override, if any."""
     override = _HERMES_HOME_OVERRIDE.get()
     if override is _UNSET or not override:
         return None
@@ -42,9 +42,9 @@ def get_hermes_home_override() -> str | None:
 
 
 def _get_platform_default_hermes_home() -> Path:
-    """Return the platform-native default Robin home path.
+    """Return the platform-native default Emmy home path.
 
-    Robin (by EnergyIR) relocates the agent's config/data directory from the
+    Emmy (by EnergyIR) relocates the agent's config/data directory from the
     upstream ``~/.hermes`` to ``~/.robin`` (``%LOCALAPPDATA%\\robin`` on
     Windows) so it leaves zero traces under the upstream name and never
     collides with a separate upstream install on the same machine. The
@@ -59,7 +59,7 @@ def _get_platform_default_hermes_home() -> Path:
 
 
 def get_hermes_home() -> Path:
-    """Return the Robin home directory (default: platform-native path).
+    """Return the Emmy home directory (default: platform-native path).
 
     Reads HERMES_HOME env var, falls back to the platform-native default.
     This is the single source of truth — all other copies should import this.
@@ -117,9 +117,9 @@ def get_hermes_home() -> Path:
 
 
 def get_default_hermes_root() -> Path:
-    """Return the root Robin directory for profile-level operations.
+    """Return the root Emmy directory for profile-level operations.
 
-    In standard deployments this is the platform-native Robin home
+    In standard deployments this is the platform-native Emmy home
     (``~/.hermes`` on POSIX, ``%LOCALAPPDATA%\\hermes`` on native Windows).
 
     In Docker or custom deployments where ``HERMES_HOME`` points outside
@@ -159,7 +159,7 @@ def get_default_hermes_root() -> Path:
 def _get_packaged_data_dir(name: str) -> Path | None:
     """Return an installed data-files directory if one exists.
 
-    Used to discover bundled skills/optional-skills when Robin is installed
+    Used to discover bundled skills/optional-skills when Emmy is installed
     from a wheel that emitted them via setuptools data_files.
     """
     candidates = []
@@ -230,7 +230,7 @@ def get_bundled_skills_dir(default: Path | None = None) -> Path:
 
 
 def get_hermes_dir(new_subpath: str, old_name: str) -> Path:
-    """Resolve a Robin subdirectory with backward compatibility.
+    """Resolve a Emmy subdirectory with backward compatibility.
 
     New installs get the consolidated layout (e.g. ``cache/images``).
     Existing installs that already have the old path (e.g. ``image_cache``)
@@ -295,7 +295,7 @@ def get_subprocess_home() -> str | None:
 
     When ``{HERMES_HOME}/home/`` exists on disk, subprocesses should use it
     as ``HOME`` so system tools (git, ssh, gh, npm …) write their configs
-    inside the Robin data directory instead of the OS-level ``/root`` or
+    inside the Emmy data directory instead of the OS-level ``/root`` or
     ``~/``.  This provides:
 
     * **Docker persistence** — tool configs land inside the persistent volume.

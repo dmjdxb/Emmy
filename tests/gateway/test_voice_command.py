@@ -811,7 +811,7 @@ class TestVoiceChannelCommands:
         mock_adapter._voice_input_callback = None
         event = self._make_discord_event()
         event.source.chat_type = "group"
-        event.source.chat_name = "Robin Server / #general"
+        event.source.chat_name = "Emmy Server / #general"
         runner.adapters[event.source.platform] = mock_adapter
         result = await runner._handle_voice_channel_join(event)
         assert "joined" in result.lower()
@@ -945,7 +945,7 @@ class TestVoiceChannelCommands:
 
         bound_source = SessionSource(
             chat_id="123",
-            chat_name="Robin Server / #general",
+            chat_name="Emmy Server / #general",
             chat_type="group",
             user_id="user1",
             user_name="user1",
@@ -967,7 +967,7 @@ class TestVoiceChannelCommands:
         event = mock_adapter.handle_message.call_args[0][0]
         assert event.source.chat_id == "123"
         assert event.source.chat_type == "group"
-        assert event.source.chat_name == "Robin Server / #general"
+        assert event.source.chat_name == "Emmy Server / #general"
         assert event.source.user_id == "42"
 
     @pytest.mark.asyncio

@@ -1,6 +1,6 @@
 # Langfuse Observability Plugin
 
-This plugin ships bundled with Robin but is **opt-in** — it only loads when
+This plugin ships bundled with Emmy but is **opt-in** — it only loads when
 you explicitly enable it.
 
 ## Enable
@@ -33,7 +33,7 @@ open.
 
 ```bash
 hermes plugins list                 # observability/langfuse should show "enabled"
-hermes chat -q "hello"              # then check Langfuse for a "Robin turn" trace
+hermes chat -q "hello"              # then check Langfuse for a "Emmy turn" trace
 ```
 
 ## Optional tuning

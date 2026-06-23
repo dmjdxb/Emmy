@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// set-exe-identity.cjs — stamp the Robin icon + version metadata onto the
-// built Robin.exe using rcedit, completely decoupled from electron-builder's
+// set-exe-identity.cjs — stamp the Emmy icon + version metadata onto the
+// built Emmy.exe using rcedit, completely decoupled from electron-builder's
 // signing path.
 //
 // WHY THIS EXISTS
@@ -13,7 +13,7 @@
 // try to extract winCodeSign.
 //
 // The cost of disabling signAndEditExecutable is that electron-builder also
-// skips rcedit, so the unpacked Robin.exe keeps the stock Electron icon and
+// skips rcedit, so the unpacked Emmy.exe keeps the stock Electron icon and
 // "Electron" taskbar name. This script restores the icon + identity by calling
 // rcedit DIRECTLY. rcedit is a pure PE resource editor: no signing, no certs,
 // no winCodeSign, no symlinks.
@@ -38,7 +38,7 @@
 const path = require('node:path')
 const fs = require('node:fs')
 
-// Stamp the Robin icon + identity onto `exe`. Resolves on success, throws on
+// Stamp the Emmy icon + identity onto `exe`. Resolves on success, throws on
 // failure. `desktopRoot` defaults to this script's package root so the icon and
 // the rcedit dependency resolve regardless of cwd.
 async function stampExeIdentity(exe, desktopRoot = path.resolve(__dirname, '..')) {
@@ -68,14 +68,14 @@ async function stampExeIdentity(exe, desktopRoot = path.resolve(__dirname, '..')
   await rcedit(exe, {
     icon,
     'version-string': {
-      ProductName: 'Robin',
-      FileDescription: 'Robin',
+      ProductName: 'Emmy',
+      FileDescription: 'Emmy',
       CompanyName: 'EnergyIR',
       LegalCopyright: 'Copyright (c) 2026 EnergyIR'
     }
   })
 
-  console.log('[set-exe-identity] done — Robin icon + identity stamped')
+  console.log('[set-exe-identity] done — Emmy icon + identity stamped')
 }
 
 module.exports = { stampExeIdentity }

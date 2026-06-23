@@ -81,10 +81,10 @@ export function ZoomableImage({ className, containerClassName, src, alt, slot, .
           notify({
             kind: 'info',
             title: 'Download started',
-            message: 'Restart Robin to use Save Image.'
+            message: 'Restart Emmy to use Save Image.'
           })
         } catch (fallbackError) {
-          notifyError(fallbackError, 'Restart Robin to save images')
+          notifyError(fallbackError, 'Restart Emmy to save images')
         }
 
         return

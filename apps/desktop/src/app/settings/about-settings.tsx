@@ -69,7 +69,7 @@ export function AboutSettings() {
   let statusTone: 'idle' | 'available' | 'error' = 'idle'
 
   if (!supported) {
-    // Packaged Robin has no in-app git self-update (there's no source checkout
+    // Packaged Emmy has no in-app git self-update (there's no source checkout
     // on a user's machine). That's a developer detail — never show the raw
     // "isn't a git checkout" message to office users. Present the normal
     // "up to date" resting state; new versions are delivered by installing the
@@ -96,9 +96,9 @@ export function AboutSettings() {
       <div className="flex flex-col items-center gap-3 pt-6 pb-2 text-center">
         <span
           className="font-['Collapse'] text-4xl font-bold uppercase leading-none tracking-[0.08em] text-primary"
-          aria-label="Robin"
+          aria-label="Emmy"
         >
-          Robin
+          Emmy
         </span>
         <p className="text-xs text-muted-foreground">
           {version?.appVersion ? a.version(version.appVersion) : a.versionUnavailable}

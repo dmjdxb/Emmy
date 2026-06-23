@@ -31,7 +31,7 @@ const DESKTOP_COMMAND_META = [
   ['/goal', 'Manage the standing goal for this session'],
   ['/help', 'Show desktop slash commands'],
   ['/new', 'Start a new desktop chat'],
-  ['/profile', 'Switch the active Robin profile'],
+  ['/profile', 'Switch the active Emmy profile'],
   ['/queue', 'Queue a prompt for the next turn'],
   ['/resume', 'Resume a saved session'],
   ['/retry', 'Retry the last user message'],
@@ -152,7 +152,7 @@ export function isDesktopSlashCommand(command: string): boolean {
 
 /**
  * An "extension" command is anything the backend surfaces that is NOT one of
- * Robin' built-in slash commands — i.e. skill commands (`/gif-search`,
+ * Emmy' built-in slash commands — i.e. skill commands (`/gif-search`,
  * `/codex`, …) and user-defined quick commands. These are user-activated, so
  * they should appear in the desktop slash palette even though they aren't in
  * the curated `DESKTOP_COMMANDS` allow-list. This mirrors the predicate in

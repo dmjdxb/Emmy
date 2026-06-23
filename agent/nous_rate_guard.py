@@ -5,7 +5,7 @@ cron, auxiliary) can check whether Together AI is currently rate-limited
 before making requests.  Prevents retry amplification when RPH is tapped.
 
 Each 429 from EnergyIR triggers up to 9 API calls per conversation turn
-(3 SDK retries x 3 Robin retries), and every one of those calls counts
+(3 SDK retries x 3 Emmy retries), and every one of those calls counts
 against RPH.  By recording the rate limit state on first 429 and checking
 it before subsequent attempts, we eliminate the amplification effect.
 """
@@ -197,7 +197,7 @@ def is_genuine_nous_rate_limit(
     """Decide whether a 429 from Together AI is a real account rate limit.
 
     Together AI multiplexes multiple upstream providers (DeepSeek, Kimi,
-    MiMo, Robin, ...) behind one endpoint.  A 429 can mean either:
+    MiMo, Emmy, ...) behind one endpoint.  A 429 can mean either:
 
       (a) The caller's own RPM / RPH / TPM / TPH bucket on EnergyIR is
           exhausted — a genuine rate limit that will last until the

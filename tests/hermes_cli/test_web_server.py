@@ -139,7 +139,7 @@ class TestReloadEnv:
         os.environ.pop("TEST_RELOAD_VAR", None)
 
     def test_removes_deleted_known_vars(self, tmp_path):
-        """reload_env() removes known Robin vars not present in .env."""
+        """reload_env() removes known Emmy vars not present in .env."""
         env_file = tmp_path / ".env"
         env_file.write_text("")  # empty .env
         # Pick a known key from OPTIONAL_ENV_VARS
@@ -1015,7 +1015,7 @@ class TestWebServerEndpoints:
 
         resp = self.client.post(
             "/api/messaging/telegram/onboarding/start",
-            json={"bot_name": "Hosted Robin"},
+            json={"bot_name": "Hosted Emmy"},
         )
 
         assert resp.status_code == 200
@@ -1026,7 +1026,7 @@ class TestWebServerEndpoints:
             (
                 "POST",
                 "/v1/telegram/pairings",
-                {"bot_name": "Hosted Robin"},
+                {"bot_name": "Hosted Emmy"},
                 None,
             )
         ]

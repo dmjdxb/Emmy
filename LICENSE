@@ -1,7 +1,7 @@
-Robin — Proprietary Software License
+Emmy — Proprietary Software License
 Copyright © 2026 EnergyIR. All rights reserved.
 
-1. PROPRIETARY. Robin (the "Software"), including its source code, design,
+1. PROPRIETARY. Emmy (the "Software"), including its source code, design,
    branding, and documentation, is the proprietary and confidential property of
    EnergyIR. The Software is licensed, not sold. No title to or ownership of the
    Software is transferred.
@@ -14,7 +14,7 @@ Copyright © 2026 EnergyIR. All rights reserved.
    or its source code, and you may not remove or alter any proprietary notices.
 
 3. END-USER LICENSE. End users who obtain an official distributed build of
-   Robin from EnergyIR are granted a limited, non-exclusive, non-transferable,
+   Emmy from EnergyIR are granted a limited, non-exclusive, non-transferable,
    revocable license to install and use that build in accordance with EnergyIR's
    Terms of Use (docs/TERMS.md) and Privacy Policy (docs/PRIVACY.md), for so long
    as those terms are observed.
@@ -22,11 +22,11 @@ Copyright © 2026 EnergyIR. All rights reserved.
 4. THIRD-PARTY COMPONENTS. The Software incorporates third-party open-source
    components, each licensed under its own terms. Those components remain
    governed by their original licenses, and nothing in this license restricts,
-   or is intended to restrict, your rights under them. In particular, Robin is
+   or is intended to restrict, your rights under them. In particular, Emmy is
    built on Hermes Agent (MIT License, © Nous Research). The required copyright
    and permission notices for Hermes Agent and for every other bundled
    component are reproduced in docs/THIRD_PARTY_NOTICES.md, which forms part of
-   this distribution and is incorporated here by reference. Robin and EnergyIR
+   this distribution and is incorporated here by reference. Emmy and EnergyIR
    are independent of, and not endorsed by, those projects.
 
 5. NO WARRANTY. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -41,6 +41,6 @@ Copyright © 2026 EnergyIR. All rights reserved.
 7. CONTACT. EnergyIR — hello@energyir.com
 
 ────────────────────────────────────────────────────────────────────────────
-This license governs Robin as a whole. It does not, and cannot, relicense the
-third-party open-source components Robin includes; those keep their own licenses
+This license governs Emmy as a whole. It does not, and cannot, relicense the
+third-party open-source components Emmy includes; those keep their own licenses
 (see docs/THIRD_PARTY_NOTICES.md).

@@ -1,4 +1,4 @@
-# Robin Achievements Performance Implementation Plan
+# Emmy Achievements Performance Implementation Plan
 
 Status: Ready for execution after hackathon review window
 Constraint: Plugin remains frozen until judging is complete

@@ -56,7 +56,7 @@ export interface ApiKeyOption {
   short?: string
 }
 
-// Robin (by EnergyIR) ships a SINGLE provider by design: the EnergyIR API.
+// Emmy (by EnergyIR) ships a SINGLE provider by design: the EnergyIR API.
 // No third-party providers are offered. The key is stored against the EnergyIR
 // inference endpoint; the model (DeepSeek V4 Pro) is fixed and not selectable.
 const API_KEY_OPTIONS: ApiKeyOption[] = [
@@ -65,7 +65,7 @@ const API_KEY_OPTIONS: ApiKeyOption[] = [
     name: 'EnergyIR',
     short: 'Your EnergyIR API key',
     envKey: 'TOGETHER_API_KEY',
-    description: 'Connect Robin with your EnergyIR API key to start.',
+    description: 'Connect Emmy with your EnergyIR API key to start.',
     docsUrl: 'https://energyir.io/robin'
   }
 ]
@@ -86,8 +86,8 @@ const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/
 
 const FLOW_SUBTITLES: Record<OAuthProvider['flow'], string> = {
   pkce: 'Opens your browser to sign in, then continues here',
-  device_code: 'Opens a verification page in your browser — Robin connects automatically',
-  loopback: 'Opens your browser to sign in — Robin connects automatically',
+  device_code: 'Opens a verification page in your browser — Emmy connects automatically',
+  loopback: 'Opens your browser to sign in — Emmy connects automatically',
   external: 'Sign in once in your terminal, then come back to chat'
 }
 
@@ -156,7 +156,7 @@ export function DesktopOnboardingOverlay({ enabled, onCompleted, requestGateway 
     return null
   }
 
-  // Robin (by EnergyIR) REQUIRES the EnergyIR API key to do anything, so setup
+  // Emmy (by EnergyIR) REQUIRES the EnergyIR API key to do anything, so setup
   // is mandatory: we deliberately do NOT honour a persisted "choose later" skip.
   // Whenever the app is unconfigured, the EnergyIR setup screen is shown.
 
@@ -213,8 +213,8 @@ function Preparing({ boot }: { boot: DesktopBootState }) {
     <div className="grid gap-3" role="status">
       <p className="text-sm text-muted-foreground">
         {installing
-          ? 'Robin is finishing install. This usually takes under a minute on first run.'
-          : 'Starting Robin…'}
+          ? 'Emmy is finishing install. This usually takes under a minute on first run.'
+          : 'Starting Emmy…'}
       </p>
       <div className="h-2 overflow-hidden rounded-full bg-muted">
         <div
@@ -242,7 +242,7 @@ function Header() {
           <Sparkles className="size-5" />
         </div>
         <div>
-          <h2 className="text-[0.9375rem] font-semibold tracking-tight">Let's get you setup with Robin</h2>
+          <h2 className="text-[0.9375rem] font-semibold tracking-tight">Let's get you setup with Emmy</h2>
           <p className="mt-1 max-w-xl text-[0.8125rem] leading-5 text-(--ui-text-tertiary)">
             Connect a model provider to start chatting. Most options take one click.
           </p>
@@ -253,7 +253,7 @@ function Header() {
 }
 
 export const FEATURED_ID = 'nous'
-const FEATURED_PITCH = 'One subscription, 300+ frontier models — the recommended way to run Robin'
+const FEATURED_PITCH = 'One subscription, 300+ frontier models — the recommended way to run Emmy'
 const SHOW_ALL_KEY = 'hermes-onboarding-show-all-v1'
 
 const readShowAll = () => {
@@ -275,7 +275,7 @@ const persistShowAll = (value: boolean) => {
 }
 
 export function Picker({ ctx }: { ctx: OnboardingContext }) {
-  // Robin (by EnergyIR) offers exactly one provider — the EnergyIR API — by
+  // Emmy (by EnergyIR) offers exactly one provider — the EnergyIR API — by
   // design. No third-party providers, no OAuth flows, and no "choose later"
   // escape: the user pastes their EnergyIR API key to begin. The model
   // (DeepSeek V4 Pro) is fixed.
@@ -594,7 +594,7 @@ function FlowPanel({ ctx, flow }: { ctx: OnboardingContext; flow: OnboardingFlow
       <Step title={`Sign in with ${title}`}>
         <ol className="list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
           <li>We opened {title} in your browser.</li>
-          <li>Authorize Robin there.</li>
+          <li>Authorize Emmy there.</li>
           <li>Copy the authorization code and paste it below.</li>
         </ol>
         <Input
@@ -618,7 +618,7 @@ function FlowPanel({ ctx, flow }: { ctx: OnboardingContext; flow: OnboardingFlow
     return (
       <Step title={`Sign in with ${title}`}>
         <p className="text-sm text-muted-foreground">
-          We opened {title} in your browser. Authorize Robin there and you'll be connected automatically — nothing to
+          We opened {title} in your browser. Authorize Emmy there and you'll be connected automatically — nothing to
           copy or paste.
         </p>
         <FlowFooter left={<DocsLink href={flow.start.auth_url}>Re-open sign-in page</DocsLink>}>
@@ -726,7 +726,7 @@ function ConfirmingModelPanel({
   ctx: OnboardingContext
   flow: Extract<OnboardingFlow, { status: 'confirming_model' }>
 }) {
-  // Robin has no model picker and NEVER reveals its underlying model (white-
+  // Emmy has no model picker and NEVER reveals its underlying model (white-
   // label). This card only confirms the connection, then drops the user into
   // chat — no model name, provider, or pricing is shown.
   return (
@@ -737,7 +737,7 @@ function ConfirmingModelPanel({
       </div>
 
       <div className="rounded-2xl border border-border bg-background/60 px-4 py-3 text-sm text-muted-foreground">
-        You&apos;re all set — Robin is ready to go.
+        You&apos;re all set — Emmy is ready to go.
       </div>
 
       <div className="flex justify-end">

@@ -350,7 +350,7 @@ TOOLSETS = {
     },
     
     # ==========================================================================
-    # Full Robin toolsets (CLI + messaging platforms)
+    # Full Emmy toolsets (CLI + messaging platforms)
     #
     # All platforms share the same core tools (including send_message,
     # which is gated on gateway running via its check_fn).
@@ -471,7 +471,7 @@ TOOLSETS = {
     },
 
     "hermes-email": {
-        "description": "Email bot toolset - interact with Robin via email (IMAP/SMTP)",
+        "description": "Email bot toolset - interact with Emmy via email (IMAP/SMTP)",
         "tools": _HERMES_CORE_TOOLS,
         "includes": []
     },
@@ -544,7 +544,7 @@ TOOLSETS = {
     },
 
     "hermes-sms": {
-        "description": "SMS bot toolset - interact with Robin via SMS (Twilio)",
+        "description": "SMS bot toolset - interact with Emmy via SMS (Twilio)",
         "tools": _HERMES_CORE_TOOLS,
         "includes": []
     },

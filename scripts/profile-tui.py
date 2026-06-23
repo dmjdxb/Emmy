@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Drive the Robin TUI under HERMES_DEV_PERF and summarize the pipeline.
+"""Drive the Emmy TUI under HERMES_DEV_PERF and summarize the pipeline.
 
 Usage:
   scripts/profile-tui.py [--session SID] [--hold KEY] [--seconds N] [--rate HZ]

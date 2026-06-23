@@ -64,7 +64,7 @@ class TestAnthropicMcpPrefixStrip:
         """OAuth tools: mcp_read_file -> read_file (stripped).
 
         The tool was registered as 'read_file' in the registry.
-        Anthropic sees 'mcp_read_file' because Robin adds the prefix.
+        Anthropic sees 'mcp_read_file' because Emmy adds the prefix.
         On response, we must strip it back to 'read_file'.
         """
         transport = self._get_transport()

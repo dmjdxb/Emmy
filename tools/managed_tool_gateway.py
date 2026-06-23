@@ -28,7 +28,7 @@ class ManagedToolGatewayConfig:
 
 
 def auth_json_path():
-    """Return the Robin auth store path, respecting HERMES_HOME overrides."""
+    """Return the Emmy auth store path, respecting HERMES_HOME overrides."""
     return get_hermes_home() / "auth.json"
 
 

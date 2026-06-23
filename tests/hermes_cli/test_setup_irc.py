@@ -1,7 +1,7 @@
 """Tests for IRC gateway configuration via `hermes setup gateway` UI.
 
 Covers the full plugin-platform discovery → status → configure flow so that
-a fresh Robin install (no state, no env vars) can set up IRC through the
+a fresh Emmy install (no state, no env vars) can set up IRC through the
 interactive setup menus.
 """
 
@@ -56,7 +56,7 @@ def _unregister_irc_platform():
 
 
 class TestIRCFreshInstallDiscovery:
-    """IRC appears in the setup menu on a brand-new Robin install."""
+    """IRC appears in the setup menu on a brand-new Emmy install."""
 
     def test_irc_appears_in_all_platforms(self, monkeypatch):
         """When the IRC plugin is registered, _all_platforms() surfaces it."""

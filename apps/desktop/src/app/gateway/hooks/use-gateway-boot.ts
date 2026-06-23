@@ -86,7 +86,7 @@ export function useGatewayBoot({
     // --- Reconnect-after-sleep machinery -------------------------------------
     // macOS sleep silently drops the renderer's WebSocket. The backend Python
     // process keeps running, but nothing re-opened the socket on wake, so the
-    // composer stayed disabled forever on "Starting Robin...". Once the
+    // composer stayed disabled forever on "Starting Emmy...". Once the
     // initial boot succeeds we treat any non-open state as recoverable and
     // reconnect with backoff, and we nudge a reconnect on the OS/browser
     // signals that fire around wake (power resume, network online, the window
@@ -130,7 +130,7 @@ export function useGatewayBoot({
         // Re-mint the WS URL before reconnecting. OAuth tickets are single-use
         // with a short TTL, so the ticket baked into the cached conn.wsUrl is
         // dead on every reconnect after the initial boot — reusing it surfaces
-        // as an opaque "Could not connect to Robin gateway". resolveGatewayWsUrl
+        // as an opaque "Could not connect to Emmy gateway". resolveGatewayWsUrl
         // mints a fresh ticket (or throws a reauth error in OAuth mode rather
         // than connecting with a stale one). For local/token gateways the URL
         // carries a long-lived token and the re-mint is a cheap no-op.
@@ -280,13 +280,13 @@ export function useGatewayBoot({
 
     const offExit = desktop.onBackendExit(() => {
       if ($desktopBoot.get().running || $desktopBoot.get().visible) {
-        failDesktopBoot('Robin background process exited during startup.')
+        failDesktopBoot('Emmy background process exited during startup.')
       }
 
       notify({
         kind: 'error',
         title: 'Backend stopped',
-        message: 'Robin background process exited.',
+        message: 'Emmy background process exited.',
         durationMs: 0
       })
     })
@@ -332,7 +332,7 @@ export function useGatewayBoot({
 
         setDesktopBootStep({
           phase: 'renderer.config',
-          message: 'Loading Robin settings',
+          message: 'Loading Emmy settings',
           progress: 97
         })
         await callbacksRef.current.refreshRobinConfig()

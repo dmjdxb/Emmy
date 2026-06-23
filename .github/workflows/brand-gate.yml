@@ -1,10 +1,10 @@
 name: Brand gate
 
-# Falsification instrument for the Robin acceptance gate (PRD §18.7):
+# Falsification instrument for the Emmy acceptance gate (PRD §18.7):
 # zero user-visible "Hermes"/"Nous" strings in the shipped UI, and the
 # deterministic rebrand is fully applied. Also runs a fast TypeScript typecheck
 # (no build/publish) so refactors — e.g. the hermes_cli -> robin /
-# Hermes* -> Robin* rename — are validated in CI without producing a release.
+# Hermes* -> Emmy* rename — are validated in CI without producing a release.
 
 on:
   push:
@@ -59,7 +59,7 @@ jobs:
           pip install --only-binary=:all: pypdf==5.1.0 pdfplumber==0.11.4 \
             python-docx==1.1.2 python-pptx==1.0.2 openpyxl==3.1.5
           pip install reportlab pytest pytest-asyncio pytest-timeout
-      - name: Install Robin (base, for tool registry imports)
+      - name: Install Emmy (base, for tool registry imports)
         run: pip install -e .
       - name: Run document tool tests
         run: python -m pytest tests/tools/test_document_tools.py -q

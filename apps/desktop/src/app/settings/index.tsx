@@ -39,7 +39,7 @@ export function SettingsView({ gateway, onClose, onConfigSaved, onMainModelChang
   const [activeView, setActiveView] = useRouteEnumParam('tab', SETTINGS_VIEWS, 'config:chat' as SettingsViewId)
   // Providers subnav (Accounts vs API keys) lives in its own param so each
   // sub-view is deep-linkable and survives a refresh.
-  // White-label: Robin only offers the EnergyIR API key. The "Accounts" sub-view
+  // White-label: Emmy only offers the EnergyIR API key. The "Accounts" sub-view
   // (third-party OAuth sign-in) is removed, so Providers always lands on keys.
   const [providerView, setProviderView] = useRouteEnumParam<ProviderView>('pview', PROVIDER_VIEWS, 'keys')
   const [keysView, setKeysView] = useRouteEnumParam<KeysView>('kview', KEYS_VIEWS, 'tools')

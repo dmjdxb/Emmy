@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Robin Release Script
+"""Emmy Release Script
 
 Generates changelogs and creates GitHub releases with CalVer tags.
 
@@ -1446,7 +1446,7 @@ AUTHOR_MAP = {
     "ethie@nous": "ethernet8023",  # PR #29342 (TUI clipboard copy on linux/wayland)
     "jiahuigu@sjtu.edu.cn": "Jiahui-Gu",  # PR #29276 (guard pickle.loads in darwinian-evolver)
     "justinccdev@gmail.com": "justincc",  # PR #28914 (set tool_name on tool-result messages)
-    "kdkcfp@gmail.com": "slowtokki0409",  # PR #29025 (ignore local Robin runtime files)
+    "kdkcfp@gmail.com": "slowtokki0409",  # PR #29025 (ignore local Emmy runtime files)
     "peter.yuqin@gmail.com": "WuKongAI-CMU",  # PR #10082 (reject symlinked audio inputs)
     "sunil.nitie@gmail.com": "Sunil123135",  # PR #31031 (Windows Docker Desktop compose)
     "weichangyuwcy@gmail.com": "ChyuWei",  # PR #30987 (TUI TTS env var on voice off)
@@ -1561,7 +1561,7 @@ def update_version_files(semver: str, calver_date: str):
     PYPROJECT_FILE.write_text(pyproject)
 
     # Keep the desktop Electron app's package.json version in lockstep with the
-    # Python package version. The desktop About panel reads the live Robin
+    # Python package version. The desktop About panel reads the live Emmy
     # version at runtime, but app.getVersion()/packaging metadata still come
     # from this field, so it must track pyproject to avoid drift.
     desktop_pkg = REPO_ROOT / "apps" / "desktop" / "package.json"
@@ -1797,14 +1797,14 @@ def generate_changelog(commits, tag_name, semver, repo_url="https://github.com/d
     # Header
     now = datetime.now()
     date_str = now.strftime("%B %d, %Y")
-    lines.append(f"# Robin v{semver} ({tag_name})")
+    lines.append(f"# Emmy v{semver} ({tag_name})")
     lines.append("")
     lines.append(f"**Release Date:** {date_str}")
     lines.append("")
 
     if first_release:
         lines.append("> 🎉 **First official release!** This marks the beginning of regular weekly releases")
-        lines.append("> for Robin. See below for everything included in this initial release.")
+        lines.append("> for Emmy. See below for everything included in this initial release.")
         lines.append("")
 
     # Group commits by category
@@ -1895,8 +1895,8 @@ def generate_changelog(commits, tag_name, semver, repo_url="https://github.com/d
 
 def main():
     # ── GUARD: this CLI is inherited Hermes-fork tooling and must NOT be used ──
-    # Robin releases are cut MANUALLY and never went through this script. Its
-    # CalVer tag scheme (get_last_tag scans "v20*") doesn't recognize Robin's
+    # Emmy releases are cut MANUALLY and never went through this script. Its
+    # CalVer tag scheme (get_last_tag scans "v20*") doesn't recognize Emmy's
     # "v1.2.x" series, and update_version_files() sets apps/desktop/package.json
     # to the *Python* semver — which would DOWNGRADE the user-facing desktop
     # version (e.g. 1.2.8 -> 0.16.x) and break the electron-updater feed.
@@ -1905,7 +1905,7 @@ def main():
     # scripts/contributor_audit.py. Running it as a CLI is a footgun, so abort
     # unless the operator explicitly opts in via ROBIN_ALLOW_DEPRECATED_RELEASE=1.
     #
-    # To cut a Robin release (manual process — see any "release: vX.Y.Z" commit):
+    # To cut a Emmy release (manual process — see any "release: vX.Y.Z" commit):
     #   1. Bump apps/desktop/package.json "version" (desktop semver, 1.2.x)
     #   2. Bump pyproject.toml + robin/__init__.py (core semver, 0.16.x)
     #   3. git commit -m "release: vX.Y.Z — <summary> ... Bump: desktop A->B, core C->D."
@@ -1914,7 +1914,7 @@ def main():
     if os.environ.get("ROBIN_ALLOW_DEPRECATED_RELEASE") != "1":
         print(
             "scripts/release.py is deprecated and disabled for cutting releases.\n"
-            "Robin is released MANUALLY (this script's CalVer/version logic would\n"
+            "Emmy is released MANUALLY (this script's CalVer/version logic would\n"
             "downgrade the desktop version and break auto-update). See the docstring\n"
             "in main() for the manual steps. The module is retained only for\n"
             "resolve_author() used by scripts/contributor_audit.py.\n"
@@ -1924,7 +1924,7 @@ def main():
         )
         raise SystemExit(2)
 
-    parser = argparse.ArgumentParser(description="Robin Release Tool")
+    parser = argparse.ArgumentParser(description="Emmy Release Tool")
     parser.add_argument("--bump", choices=["major", "minor", "patch"],
                         help="Which semver component to bump")
     parser.add_argument("--publish", action="store_true",
@@ -1972,7 +1972,7 @@ def main():
             return
 
     print(f"{'='*60}")
-    print(f"  Robin Release Preview")
+    print(f"  Emmy Release Preview")
     print(f"{'='*60}")
     print(f"  CalVer tag:      {tag_name}")
     print(f"  SemVer:          v{current_version} → v{new_version}")
@@ -2026,7 +2026,7 @@ def main():
         # Create annotated tag
         tag_result = git_result(
             "tag", "-a", tag_name, "-m",
-            f"Robin v{new_version} ({calver_date})\n\nWeekly release"
+            f"Emmy v{new_version} ({calver_date})\n\nWeekly release"
         )
         if tag_result.returncode != 0:
             print(f"  ✗ Failed to create tag {tag_name}: {tag_result.stderr.strip()}")
@@ -2056,7 +2056,7 @@ def main():
 
         gh_cmd = [
             "gh", "release", "create", tag_name,
-            "--title", f"Robin v{new_version} ({calver_date})",
+            "--title", f"Emmy v{new_version} ({calver_date})",
             "--notes-file", str(changelog_file),
         ]
         gh_cmd.extend(str(path) for path in artifacts)
@@ -2083,7 +2083,7 @@ def main():
             print(f"    Release notes kept at: {changelog_file}")
             print(f"    Tag was created locally. Create the release manually:")
             print(
-                f"    gh release create {tag_name} --title 'Robin v{new_version} ({calver_date})' "
+                f"    gh release create {tag_name} --title 'Emmy v{new_version} ({calver_date})' "
                 f"--notes-file .release_notes.md {' '.join(str(path) for path in artifacts)}"
             )
             print(f"\n  ✓ Release artifacts prepared for manual publish: v{new_version} ({tag_name})")

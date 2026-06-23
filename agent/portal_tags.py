@@ -1,9 +1,9 @@
 """Centralized Together AI request tags.
 
-Every Robin request that hits the Together AI — main agent loop, auxiliary
+Every Emmy request that hits the Together AI — main agent loop, auxiliary
 client (compression / titles / vision / web_extract / session_search / etc.),
 and any future code path — must carry the same product-attribution tags so
-EnergyIR can attribute usage to Robin and bucket it by client release.
+EnergyIR can attribute usage to Emmy and bucket it by client release.
 
 Tag shape (sent in OpenAI-compatible ``extra_body['tags']``):
 
@@ -35,7 +35,7 @@ from typing import List
 
 
 def _hermes_version() -> str:
-    """Return the current Robin release version, e.g. ``"0.13.0"``.
+    """Return the current Emmy release version, e.g. ``"0.13.0"``.
 
     Falls back to ``"unknown"`` if ``robin`` cannot be imported (should
     never happen in a real install — guarded for defensive testing).

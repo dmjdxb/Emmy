@@ -1,4 +1,4 @@
-"""Tests for the Robin plugin system (robin.plugins)."""
+"""Tests for the Emmy plugin system (robin.plugins)."""
 
 import logging
 import sys

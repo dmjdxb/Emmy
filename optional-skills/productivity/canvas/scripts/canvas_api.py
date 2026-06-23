@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canvas LMS API CLI for Robin.
+"""Canvas LMS API CLI for Emmy.
 
 A thin CLI wrapper around the Canvas REST API.
 Authenticates using a personal access token from environment variables.
@@ -124,7 +124,7 @@ def list_assignments(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Canvas LMS API CLI for Robin"
+        description="Canvas LMS API CLI for Emmy"
     )
     sub = parser.add_subparsers(dest="command", required=True)
 

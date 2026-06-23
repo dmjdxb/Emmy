@@ -105,7 +105,7 @@ const DirectiveIcon: FC<{ type: string }> = ({ type }) => (
 export const DIRECTIVE_CHIP_CLASS =
   'mx-0.5 inline-flex max-w-56 items-center gap-1 rounded px-1.5 py-0.5 align-middle text-[0.86em] font-normal leading-none bg-[color-mix(in_srgb,currentColor_8%,transparent)] text-muted-foreground'
 
-// "Ask your document" mode prepends this instruction so Robin grounds its answer
+// "Ask your document" mode prepends this instruction so Emmy grounds its answer
 // in the attached document. It is STILL SENT to the backend (so the agent obeys
 // it) but stripped from the displayed user bubble — the same display/transmit
 // split as @file: chips, so the user never sees the machine instruction. The
@@ -292,7 +292,7 @@ function shortLabel(type: RobinRefType, id: string): string {
 }
 
 /**
- * Renders text containing Robin directives (`@file:...`, `@image:...`) as
+ * Renders text containing Emmy directives (`@file:...`, `@image:...`) as
  * inline chips. Embedded MEDIA images render below as a thumbnail row.
  */
 export function DirectiveContent({ text }: { text: string }) {

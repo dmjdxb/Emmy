@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Bootstrap Open WebUI against Robin's OpenAI-compatible API server.
+# Bootstrap Open WebUI against Emmy's OpenAI-compatible API server.
 #
 # Idempotent by design:
 # - ensures ~/.hermes/.env has API server settings
@@ -15,14 +15,14 @@ set -euo pipefail
 # Optional environment overrides:
 #   OPEN_WEBUI_PORT=8080
 #   OPEN_WEBUI_HOST=127.0.0.1
-#   OPEN_WEBUI_NAME='Johnny Robin'
+#   OPEN_WEBUI_NAME='Johnny Emmy'
 #   OPEN_WEBUI_ENABLE_SIGNUP=true
 #   OPEN_WEBUI_ENABLE_SERVICE=auto   # auto|true|false
 #   OPEN_WEBUI_VENV=~/.local/open-webui-venv
 #   OPEN_WEBUI_DATA_DIR=~/.local/share/open-webui/data
 #   HERMES_API_PORT=8642
 #   HERMES_API_HOST=127.0.0.1
-#   HERMES_API_MODEL_NAME='Robin'
+#   HERMES_API_MODEL_NAME='Emmy'
 
 OPEN_WEBUI_PORT="${OPEN_WEBUI_PORT:-8080}"
 OPEN_WEBUI_HOST="${OPEN_WEBUI_HOST:-127.0.0.1}"
@@ -262,7 +262,7 @@ install_systemd_user_service() {
   mkdir -p "$unit_dir"
   cat > "$unit" <<EOF
 [Unit]
-Description=Open WebUI connected to Robin
+Description=Open WebUI connected to Emmy
 After=default.target
 
 [Service]
@@ -299,7 +299,7 @@ main() {
     api_key="$(generate_secret)"
   fi
 
-  log 'Ensuring Robin API server is configured...'
+  log 'Ensuring Emmy API server is configured...'
   upsert_env API_SERVER_ENABLED true "$HERMES_ENV_FILE"
   upsert_env API_SERVER_HOST "$HERMES_API_HOST" "$HERMES_ENV_FILE"
   upsert_env API_SERVER_PORT "$HERMES_API_PORT" "$HERMES_ENV_FILE"
@@ -307,11 +307,11 @@ main() {
   upsert_env API_SERVER_KEY "$api_key" "$HERMES_ENV_FILE"
   ensure_env_permissions
 
-  log 'Restarting Robin gateway so API server settings take effect...'
+  log 'Restarting Emmy gateway so API server settings take effect...'
   hermes gateway restart >/dev/null 2>&1 || true
   sleep 4
   if ! curl -fsS "http://${HERMES_API_CONNECT_HOST}:${HERMES_API_PORT}/health" >/dev/null; then
-    log 'Robin API server did not answer on the first check. Trying to start gateway in the background...'
+    log 'Emmy API server did not answer on the first check. Trying to start gateway in the background...'
     nohup hermes gateway run >/dev/null 2>&1 &
     sleep 6
   fi
@@ -342,7 +342,7 @@ main() {
   esac
 
   log "Done. Open WebUI should be available at: http://${OPEN_WEBUI_HOST}:${OPEN_WEBUI_PORT}"
-  log "Robin API endpoint: ${HERMES_API_BASE_URL}"
+  log "Emmy API endpoint: ${HERMES_API_BASE_URL}"
   log 'Important: Open WebUI persists connection settings after first launch. If you later save a wrong API key in the Admin UI, update/delete that connection there or reset its database.'
 }
 

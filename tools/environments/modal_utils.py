@@ -1,6 +1,6 @@
 """Shared Robin-side execution flow for Modal transports.
 
-This module deliberately stops at the Robin boundary:
+This module deliberately stops at the Emmy boundary:
 - command preparation
 - cwd/timeout normalization
 - stdin/sudo shell wrapping

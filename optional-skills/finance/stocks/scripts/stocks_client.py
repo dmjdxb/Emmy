@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-stocks_client.py - Stock market data CLI tool for the Robin project.
+stocks_client.py - Stock market data CLI tool for the Emmy project.
 Zero external dependencies - Python stdlib only.
 """
 
@@ -673,7 +673,7 @@ def cmd_crypto(symbol: str, vs: str = "USD") -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stocks_client",
-        description="Stock & crypto market data CLI — Robin",
+        description="Stock & crypto market data CLI — Emmy",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

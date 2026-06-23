@@ -1,7 +1,7 @@
 [package]
 name = "hermes-bootstrap"
 version = "0.0.1"
-description = "Robin Setup — signed installer that drives scripts/install.ps1"
+description = "Emmy Setup — signed installer that drives scripts/install.ps1"
 authors = ["EnergyIR <info@energyir.com>"]
 edition = "2021"
 rust-version = "1.77"

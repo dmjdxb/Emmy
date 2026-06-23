@@ -11,7 +11,7 @@
 # unreadable to the supervised gateway. The most common manifestation: the
 # user runs `docker exec <c> hermes login`, this writes
 # /opt/data/auth.json as root:root mode 0600, and from then on the gateway
-# returns "Provider authentication failed: Robin is not logged into EnergyIR
+# returns "Provider authentication failed: Emmy is not logged into EnergyIR
 # Portal" on every incoming message — even though `docker exec <c> hermes
 # chat -q ping` (also running as root) succeeds because root happens to be
 # able to read its own root-owned file. See systematic-debugging skill

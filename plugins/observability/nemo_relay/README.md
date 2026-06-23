@@ -1,17 +1,17 @@
 # NeMo Relay Observability
 
-Optional Robin observability plugin that maps Robin observer hooks to
+Optional Emmy observability plugin that maps Emmy observer hooks to
 NeMo Relay scopes, LLM spans, tool spans, marks, ATOF, and ATIF.
 
 NeMo Relay is NVIDIA's runtime layer for agent execution boundaries. It does
-not replace Robin's planner, tools, memory, model provider routing, or
-CLI UX. Instead, this plugin lets Robin emit NeMo Relay lifecycle events for
-the work Robin already owns: sessions, turns, provider/API calls, tool calls,
+not replace Emmy's planner, tools, memory, model provider routing, or
+CLI UX. Instead, this plugin lets Emmy emit NeMo Relay lifecycle events for
+the work Emmy already owns: sessions, turns, provider/API calls, tool calls,
 approval prompts, and delegated subagents.
 
-With this plugin enabled, Robin can:
+With this plugin enabled, Emmy can:
 
-- Preserve Robin execution as NeMo Relay scopes, LLM spans, tool spans, and
+- Preserve Emmy execution as NeMo Relay scopes, LLM spans, tool spans, and
   mark events.
 - Export raw lifecycle events as Agent Trajectory Observability Format (ATOF)
   JSONL for debugging and offline inspection.
@@ -56,9 +56,9 @@ Runs started with `--ignore_user_config` skip the enabled-plugin state from
 `HERMES_HOME`, so local E2E tests should omit that flag unless the test harness
 loads `observability/nemo_relay` explicitly another way.
 
-`HERMES_HOME` is the Robin profile/config home used by both
+`HERMES_HOME` is the Emmy profile/config home used by both
 `hermes plugins enable ...` and the later `hermes chat ...` run. If unset,
-Robin uses the user's default home, usually `~/.hermes`. For isolated smoke
+Emmy uses the user's default home, usually `~/.hermes`. For isolated smoke
 tests, choose any writable temporary directory and use the same value for every
 command in that test:
 
@@ -129,7 +129,7 @@ Optional overrides:
 ### NeMo Relay Component Config
 
 To initialize NeMo Relay from a component config, create a `plugins.toml` file
-and point Robin at it:
+and point Emmy at it:
 
 ```bash
 export HERMES_NEMO_RELAY_PLUGINS_TOML=.nemo-relay/plugins.toml
@@ -157,7 +157,7 @@ mode = "overwrite"
 enabled = true
 output_directory = ".nemo-relay/atif"
 filename_template = "trajectory-{session_id}.json"
-agent_name = "Robin"
+agent_name = "Emmy"
 agent_version = "local"
 ```
 
@@ -198,7 +198,7 @@ YAML
 
 ### Delegated Subagent Tool Call
 
-This run starts a parent Robin session, delegates to a child subagent, has the
+This run starts a parent Emmy session, delegates to a child subagent, has the
 child call `terminal`, and writes both ATOF and ATIF.
 
 ```bash
@@ -209,7 +209,7 @@ export HERMES_NEMO_RELAY_ATOF_MODE=overwrite
 export HERMES_NEMO_RELAY_ATIF_ENABLED=1
 export HERMES_NEMO_RELAY_ATIF_OUTPUT_DIRECTORY=/tmp/hermes-nemo-relay-docs/subagent/atif
 export HERMES_NEMO_RELAY_ATIF_FILENAME_TEMPLATE='nested-subagent-atif-{session_id}.json'
-export HERMES_NEMO_RELAY_ATIF_AGENT_NAME='Robin E2E'
+export HERMES_NEMO_RELAY_ATIF_AGENT_NAME='Emmy E2E'
 export HERMES_NEMO_RELAY_ATIF_AGENT_VERSION=docs-example
 export HERMES_NEMO_RELAY_ATIF_SUBAGENT_EXPORT_MODE=all
 
@@ -245,7 +245,7 @@ Sanitized ATIF excerpt:
 {
   "schema_version": "ATIF-v1.7",
   "session_id": "docs-parent-session",
-  "agent": {"name": "Robin E2E", "version": "docs-example", "model_name": "qwen3.6:35b"},
+  "agent": {"name": "Emmy E2E", "version": "docs-example", "model_name": "qwen3.6:35b"},
   "steps": [
     {
       "source": "agent",
@@ -279,7 +279,7 @@ Sanitized ATIF excerpt:
 ### Parallel Tool Calls
 
 This run asks the model to emit two `read_file` tool calls in the same assistant
-message. Robin dispatches the read-only tools as one batch, and NeMo Relay
+message. Emmy dispatches the read-only tools as one batch, and NeMo Relay
 records both tool invocations.
 
 ```bash
@@ -295,7 +295,7 @@ export HERMES_NEMO_RELAY_ATOF_MODE=overwrite
 export HERMES_NEMO_RELAY_ATIF_ENABLED=1
 export HERMES_NEMO_RELAY_ATIF_OUTPUT_DIRECTORY=/tmp/hermes-nemo-relay-docs/parallel/atif
 export HERMES_NEMO_RELAY_ATIF_FILENAME_TEMPLATE='parallel-tools-atif-{session_id}.json'
-export HERMES_NEMO_RELAY_ATIF_AGENT_NAME='Robin E2E'
+export HERMES_NEMO_RELAY_ATIF_AGENT_NAME='Emmy E2E'
 export HERMES_NEMO_RELAY_ATIF_AGENT_VERSION=docs-example
 
 hermes chat \
@@ -331,7 +331,7 @@ Sanitized ATIF excerpt:
 {
   "schema_version": "ATIF-v1.7",
   "session_id": "docs-parallel-session",
-  "agent": {"name": "Robin E2E", "version": "docs-example", "model_name": "qwen3.6:35b"},
+  "agent": {"name": "Emmy E2E", "version": "docs-example", "model_name": "qwen3.6:35b"},
   "steps": [
     {
       "source": "agent",
@@ -355,9 +355,9 @@ Sanitized ATIF excerpt:
 
 The plugin keeps NeMo Relay's native event model:
 
-- Robin sessions map to `agent` scopes.
-- Robin API request hooks map to `llm` scope start/end events.
-- Robin tool hooks map to `tool` scope start/end events.
+- Emmy sessions map to `agent` scopes.
+- Emmy API request hooks map to `llm` scope start/end events.
+- Emmy tool hooks map to `tool` scope start/end events.
 - Turn, approval, subagent, and diagnostic fallback events map to `mark`
   events.
 

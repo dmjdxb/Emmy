@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Robin (by EnergyIR) deterministic rebrand pass.
+"""Emmy (by EnergyIR) deterministic rebrand pass.
 
 This applies the *safe, unambiguous* string replacements that turn the upstream
-Hermes Agent fork into Robin: provisioning/update repo URLs, the bundle id,
+Hermes Agent fork into Emmy: provisioning/update repo URLs, the bundle id,
 support email, marketing domain, copyright, and the full product name
-"Hermes Agent" -> "Robin". It is idempotent (re-running is a no-op) and is
+"Hermes Agent" -> "Emmy". It is idempotent (re-running is a no-op) and is
 re-run on every upstream re-sync so the fork stays cheap to maintain
 (PRD R-fork mitigation).
 
@@ -59,29 +59,29 @@ REPLACEMENTS: list[tuple[str, str]] = [
     ("www.nousresearch.com", "energyir.com"),
     ("nousresearch.com", "energyir.com"),
     # full product name (safe: no identifier is the two-word phrase)
-    ("Hermes Agent", "Robin"),
+    ("Hermes Agent", "Emmy"),
     # UI display phrases — multi-word / punctuation-bounded value text only, so
     # they never collide with code identifiers or i18n keys. "Hermes Desktop"
     # first so it wins over the bare-word phrases below.
-    ("Hermes Desktop", "Robin"),
-    ("Hermes backend", "Robin backend"),
-    ("Hermes inference", "Robin inference"),
-    ("Hermes configuration", "Robin configuration"),
-    ("Hermes sessions", "Robin sessions"),
-    ("Hermes session", "Robin session"),
-    ("Starting Hermes", "Starting Robin"),
-    ("Updating Hermes", "Updating Robin"),
-    ("Restart Hermes", "Restart Robin"),
-    ("restart Hermes", "restart Robin"),
-    ("About Hermes", "About Robin"),
-    ("Ask Hermes", "Ask Robin"),
-    ("Hermes is restarting", "Robin is restarting"),
-    ("Hermes is loading", "Robin is loading"),
-    ("Hermes is ready", "Robin is ready"),
-    ("Hermes will only", "Robin will only"),
-    ("Hermes Teal", "Robin Green"),
-    ("URL at Hermes", "URL at Robin"),
-    ("history of Hermes", "history of Robin"),
+    ("Hermes Desktop", "Emmy"),
+    ("Hermes backend", "Emmy backend"),
+    ("Hermes inference", "Emmy inference"),
+    ("Hermes configuration", "Emmy configuration"),
+    ("Hermes sessions", "Emmy sessions"),
+    ("Hermes session", "Emmy session"),
+    ("Starting Hermes", "Starting Emmy"),
+    ("Updating Hermes", "Updating Emmy"),
+    ("Restart Hermes", "Restart Emmy"),
+    ("restart Hermes", "restart Emmy"),
+    ("About Hermes", "About Emmy"),
+    ("Ask Hermes", "Ask Emmy"),
+    ("Hermes is restarting", "Emmy is restarting"),
+    ("Hermes is loading", "Emmy is loading"),
+    ("Hermes is ready", "Emmy is ready"),
+    ("Hermes will only", "Emmy will only"),
+    ("Hermes Teal", "Emmy Green"),
+    ("URL at Hermes", "URL at Emmy"),
+    ("history of Hermes", "history of Emmy"),
     # publisher / copyright holder
     ("Nous Research", "EnergyIR"),
 ]

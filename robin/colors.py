@@ -1,4 +1,4 @@
-"""Shared ANSI color utilities for Robin CLI modules."""
+"""Shared ANSI color utilities for Emmy CLI modules."""
 
 import os
 import sys

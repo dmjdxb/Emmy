@@ -1,1 +1,1 @@
-# Robin plugins package
+# Emmy plugins package

@@ -53,7 +53,7 @@ function RadioDot({ selected }: { selected: boolean }) {
 export const ClarifyTool = (props: ToolCallMessagePartProps) => {
   const isPending = props.result === undefined
 
-  // Once Robin records an answer, fall back to the standard tool block so
+  // Once Emmy records an answer, fall back to the standard tool block so
   // the past Q/A renders consistently with every other tool in the thread.
   if (!isPending) {
     return <ToolFallback {...props} />
@@ -108,7 +108,7 @@ function ClarifyToolPending({ args }: ToolCallMessagePartProps) {
       }
 
       if (!gateway) {
-        notifyError(new Error('Robin gateway is not connected'), 'Could not send clarify response')
+        notifyError(new Error('Emmy gateway is not connected'), 'Could not send clarify response')
 
         return
       }

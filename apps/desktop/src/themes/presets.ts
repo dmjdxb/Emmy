@@ -20,17 +20,17 @@ const nousTint = (pct: number) => `color-mix(in srgb, ${NOUS_BLUE} ${pct}%, #FFF
 const nousTintTransparent = (pct: number) => `color-mix(in srgb, ${NOUS_BLUE} ${pct}%, transparent)`
 
 /**
- * Robin — the EnergyIR brand identity and Robin's default theme.
+ * Emmy — the EnergyIR brand identity and Emmy's default theme.
  * `colors` is the light ("white") interface; `darkColors` is the dark
  * interface. Both are brand-green (#3aa676) accented. Users switch between
- * light and dark from the theme toggle — Robin ships with both, not just dark.
+ * light and dark from the theme toggle — Emmy ships with both, not just dark.
  */
 const ROBIN_GREEN = '#3aa676'
 const ROBIN_GREEN_LIGHT = '#55c392'
 
 export const robinTheme: DesktopTheme = {
   name: 'robin',
-  label: 'Robin',
+  label: 'Emmy',
   description: 'EnergyIR brand — green on cream (light) or deep slate (dark)',
   colors: {
     background: '#ffffff',

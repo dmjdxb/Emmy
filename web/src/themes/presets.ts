@@ -40,8 +40,8 @@ const DEFAULT_LAYOUT: ThemeLayout = {
 
 export const defaultTheme: DashboardTheme = {
   name: "default",
-  label: "Robin Green",
-  description: "Classic dark teal — the canonical Robin look",
+  label: "Emmy Green",
+  description: "Classic dark teal — the canonical Emmy look",
   palette: {
     background: { hex: "#041c1c", alpha: 1 },
     midground: { hex: "#ffe6cb", alpha: 1 },
@@ -185,7 +185,7 @@ export const roseTheme: DashboardTheme = {
 };
 
 /**
- * Ocean — the inverted "light mode" Robin look, ported from the
+ * Ocean — the inverted "light mode" Emmy look, ported from the
  * LENS_5I overlay preset in `@nous-research/ui`.
  *
  * Unlike the other built-ins (which paint dark color directly on the
@@ -285,8 +285,8 @@ export const nousBlueTheme: DashboardTheme = {
  */
 export const defaultLargeTheme: DashboardTheme = {
   name: "default-large",
-  label: "Robin Green (Large)",
-  description: "Robin Green with bigger fonts and roomier spacing",
+  label: "Emmy Green (Large)",
+  description: "Emmy Green with bigger fonts and roomier spacing",
   palette: defaultTheme.palette,
   typography: {
     ...DEFAULT_TYPOGRAPHY,

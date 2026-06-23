@@ -265,7 +265,7 @@ all = [
 ]
 
 [project.scripts]
-# User-facing Robin commands (the brand surface).
+# User-facing Emmy commands (the brand surface).
 robin = "robin.main:main"
 robin-agent = "run_agent:main"
 robin-acp = "acp_adapter.entry:main"

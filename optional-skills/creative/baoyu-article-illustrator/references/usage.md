@@ -1,6 +1,6 @@
 # Usage
 
-This skill is triggered by natural language in Robin — no slash command or CLI flags.
+This skill is triggered by natural language in Emmy — no slash command or CLI flags.
 
 ## Trigger Phrases
 

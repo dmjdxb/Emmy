@@ -141,8 +141,8 @@ class TestBlueBubblesHelpers:
         adapter = _make_adapter(monkeypatch, require_mention=True)
 
         assert adapter.require_mention is True
-        assert adapter._message_matches_mention_patterns("Robin, summarize this")
-        assert adapter._message_matches_mention_patterns("@Robin agent help")
+        assert adapter._message_matches_mention_patterns("Emmy, summarize this")
+        assert adapter._message_matches_mention_patterns("@Emmy agent help")
         assert not adapter._message_matches_mention_patterns("casual family chatter")
         assert not adapter._message_matches_mention_patterns("antihermes should not match")
 
@@ -154,14 +154,14 @@ class TestBlueBubblesHelpers:
         )
 
         assert adapter._message_matches_mention_patterns("Amos what is next?")
-        assert not adapter._message_matches_mention_patterns("Robin what is next?")
+        assert not adapter._message_matches_mention_patterns("Emmy what is next?")
 
     def test_clean_mention_text_strips_leading_wake_word(self, monkeypatch):
         adapter = _make_adapter(monkeypatch, require_mention=True)
 
-        assert adapter._clean_mention_text("Robin, summarize this") == "summarize this"
-        assert adapter._clean_mention_text("Robin agent: summarize this") == "summarize this"
-        assert adapter._clean_mention_text("please ask Robin about this") == "please ask Robin about this"
+        assert adapter._clean_mention_text("Emmy, summarize this") == "summarize this"
+        assert adapter._clean_mention_text("Emmy agent: summarize this") == "summarize this"
+        assert adapter._clean_mention_text("please ask Emmy about this") == "please ask Emmy about this"
 
 
 class _FakeBlueBubblesRequest:
@@ -221,7 +221,7 @@ class TestBlueBubblesMentionGating:
             "type": "new-message",
             "data": {
                 "guid": "msg-2",
-                "text": "Robin, summarize this",
+                "text": "Emmy, summarize this",
                 "handle": {"address": "+15555550100"},
                 "isFromMe": False,
                 "isGroup": True,

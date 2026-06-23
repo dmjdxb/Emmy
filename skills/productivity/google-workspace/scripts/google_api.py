@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Google Workspace API CLI for Robin.
+"""Google Workspace API CLI for Emmy.
 
 Uses the Google Workspace CLI (`gws`) when available, but preserves the
 existing Robin-facing JSON contract and falls back to the Python client
@@ -1052,7 +1052,7 @@ def _docs_insert_text(doc_id: str, text: str, index: int) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Google Workspace API for Robin")
+    parser = argparse.ArgumentParser(description="Google Workspace API for Emmy")
     sub = parser.add_subparsers(dest="service", required=True)
 
     # --- Gmail ---

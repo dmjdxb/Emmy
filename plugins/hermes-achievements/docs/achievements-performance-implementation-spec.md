@@ -1,4 +1,4 @@
-# Robin Achievements Implementation Spec (Detailed)
+# Emmy Achievements Implementation Spec (Detailed)
 
 This document is implementation-facing detail to execute the performance refactor later.
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-  <!-- Robin by EnergyIR — app icon. A brand-green robin in flight on the
+  <!-- Emmy by EnergyIR — app icon. A brand-green robin in flight on the
        EnergyIR dark tile. Deliberately distinct from any superhero trade dress. -->
   <defs>
     <radialGradient id="tile" cx="38%" cy="32%" r="80%">
@@ -21,7 +21,7 @@
   <rect x="48" y="48" width="928" height="928" rx="188" fill="none"
         stroke="#3aa676" stroke-opacity="0.16" stroke-width="6"/>
 
-  <!-- Robin: a single, confident bird-in-flight glyph -->
+  <!-- Emmy: a single, confident bird-in-flight glyph -->
   <g transform="translate(512 524)">
     <!-- upper wing sweep -->
     <path d="M -250 -40

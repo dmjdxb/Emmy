@@ -4,10 +4,10 @@ Together AI is an OpenAI-compatible cloud inference API (base URL
 ``https://api.together.xyz/v1``, namespaced model IDs such as
 ``deepseek-ai/DeepSeek-V4-Pro``). It implements chat completions with function
 calling and structured output, but NOT the OpenAI Responses/Assistants APIs —
-so the agent loop is driven by Robin's own function-calling harness, which is
+so the agent loop is driven by Emmy's own function-calling harness, which is
 exactly the supported pattern.
 
-This is the configured default provider for Robin (by EnergyIR): the model is
+This is the configured default provider for Emmy (by EnergyIR): the model is
 hosted by Together AI (US) — it is not run locally on the user's device.
 
 DeepSeek V4 served through Together uses the same thinking-mode wire contract as
@@ -26,7 +26,7 @@ from urllib.parse import urlparse
 from providers import register_provider
 from providers.base import ProviderProfile
 
-# Robin's managed-inference endpoint = the EnergyIR gateway (api.energyir.io). Customers authenticate with
+# Emmy's managed-inference endpoint = the EnergyIR gateway (api.energyir.io). Customers authenticate with
 # their eir-robin- key (stored in TOGETHER_API_KEY); the gateway proxies to DeepSeek V4 Pro via the hidden
 # platform key, preserving full agentic fidelity (tools, history, streaming). Customers never see Together.
 # Dev override: set ENERGYIR_BASE_URL (e.g. https://api.together.xyz/v1) to talk to Together directly with
@@ -100,14 +100,14 @@ together = TogetherProfile(
     aliases=("togetherai", "together-ai"),
     env_vars=("TOGETHER_API_KEY",),
     display_name="EnergyIR",
-    description="EnergyIR — managed inference for Robin",
+    description="EnergyIR — managed inference for Emmy",
     signup_url="https://energyir.io",
     base_url=_BASE_URL,
     models_url=f"{_BASE_URL}/models",
     hostname=_HOSTNAME,
     supports_vision=True,
     # Curated agentic, tool-calling models shown in the picker when live fetch
-    # fails. DeepSeek V4 Pro is Robin's configured default; Flash is the
+    # fails. DeepSeek V4 Pro is Emmy's configured default; Flash is the
     # cheaper/faster option for simple, high-volume turns.
     fallback_models=(
         "deepseek-ai/DeepSeek-V4-Pro",

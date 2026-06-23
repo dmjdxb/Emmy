@@ -1,4 +1,4 @@
-"""Centralized logging setup for Robin.
+"""Centralized logging setup for Emmy.
 
 Provides a single ``setup_logging()`` entry point that both the CLI and
 gateway call early in their startup path.  All log files live under
@@ -172,7 +172,7 @@ def setup_logging(
     mode: Optional[str] = None,
     force: bool = False,
 ) -> Path:
-    """Configure the Robin logging subsystem.
+    """Configure the Emmy logging subsystem.
 
     Safe to call multiple times — the second call is a no-op unless
     *force* is ``True``.
@@ -180,7 +180,7 @@ def setup_logging(
     Parameters
     ----------
     hermes_home
-        Override for the Robin home directory.  Falls back to
+        Override for the Emmy home directory.  Falls back to
         ``get_hermes_home()`` (profile-aware).
     log_level
         Minimum level for the ``agent.log`` file handler.  Accepts any

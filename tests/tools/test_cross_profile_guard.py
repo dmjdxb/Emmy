@@ -20,7 +20,7 @@ import pytest
 
 @pytest.fixture
 def fake_hermes(tmp_path, monkeypatch):
-    """Build a two-profile Robin layout and point HERMES_HOME at
+    """Build a two-profile Emmy layout and point HERMES_HOME at
     the hermes-security profile (matching the original-incident shape).
     """
     root = tmp_path / "fake-hermes"
@@ -250,9 +250,9 @@ class TestSystemPromptActiveProfile:
         # explicit user direction.
         from pathlib import Path
         src = Path("agent/system_prompt.py").read_text()
-        assert "Active Robin profile" in src
+        assert "Active Emmy profile" in src
         assert "cross_profile=True" in src
         assert "~/.hermes/profiles/" in src
         # Both branches present (default and named profile).
-        assert "Active Robin profile: default" in src
-        assert "Active Robin profile: {active_profile}" in src
+        assert "Active Emmy profile: default" in src
+        assert "Active Emmy profile: {active_profile}" in src

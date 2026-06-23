@@ -72,7 +72,7 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
 
     Joined into a single string by :func:`build_system_prompt` and
     cached on ``agent._cached_system_prompt`` for the lifetime of the
-    AIAgent.  Robin never re-renders parts of this string mid-
+    AIAgent.  Emmy never re-renders parts of this string mid-
     session — that's the only way to keep upstream prompt caches
     warm across turns.
     """
@@ -98,7 +98,7 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
         # Fallback to hardcoded identity
         stable_parts.append(DEFAULT_AGENT_IDENTITY)
 
-    # Pointer to the robin-agent skill + docs for user questions about Robin itself.
+    # Pointer to the robin-agent skill + docs for user questions about Emmy itself.
     stable_parts.append(HERMES_AGENT_HELP_GUIDANCE)
 
     # Universal task-completion / no-fabrication guidance.  Applied to ALL
@@ -232,7 +232,7 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
             # Probe failure must never block prompt build.
             pass
 
-    # Active-profile hint — names the Robin profile the agent is running
+    # Active-profile hint — names the Emmy profile the agent is running
     # under so it doesn't conflate ~/.robin/skills/ (default profile) with
     # ~/.robin/profiles/<active>/skills/ (this profile's). Deterministic
     # for the lifetime of the agent — profile name doesn't change
@@ -246,7 +246,7 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
         active_profile = "default"
     if active_profile == "default":
         stable_parts.append(
-            "Active Robin profile: default. Other profiles (if any) live "
+            "Active Emmy profile: default. Other profiles (if any) live "
             "under ~/.robin/profiles/<name>/. Each profile has its own "
             "skills/, plugins/, cron/, and memories/ that affect a different "
             "session than this one. Do not modify another profile's "
@@ -255,7 +255,7 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
         )
     else:
         stable_parts.append(
-            f"Active Robin profile: {active_profile}. This session reads "
+            f"Active Emmy profile: {active_profile}. This session reads "
             f"and writes ~/.robin/profiles/{active_profile}/. The default "
             f"profile's data lives at ~/.robin/skills/, ~/.robin/plugins/, "
             f"~/.robin/cron/, ~/.robin/memories/ — those belong to a "
@@ -355,7 +355,7 @@ def build_system_prompt(agent: Any, system_message: Optional[str] = None) -> str
     Layers are ordered cache-friendly: stable identity/guidance first,
     then session-stable context files, then per-call volatile content
     (memory, USER profile, timestamp).  The whole string is treated as
-    one cached block — Robin never rebuilds or reinjects parts of it
+    one cached block — Emmy never rebuilds or reinjects parts of it
     mid-session, which is the only way to keep upstream prompt caches
     warm across turns.
     """

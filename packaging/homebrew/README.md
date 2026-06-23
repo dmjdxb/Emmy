@@ -1,4 +1,4 @@
-Homebrew packaging notes for Robin.
+Homebrew packaging notes for Emmy.
 
 Use `packaging/homebrew/hermes-agent.rb` as a tap or `homebrew-core` starting point.
 

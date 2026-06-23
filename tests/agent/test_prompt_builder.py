@@ -500,7 +500,7 @@ class TestBuildContextFilesPrompt:
         with patch("pathlib.Path.home", return_value=fake_home):
             result = build_context_files_prompt(cwd=str(tmp_path))
         assert "Project Context" in result
-        assert "Robin Agent" in result
+        assert "Emmy Agent" in result
 
     def test_loads_agents_md(self, tmp_path):
         (tmp_path / "AGENTS.md").write_text("Use Ruff for linting.")
@@ -621,9 +621,9 @@ class TestBuildContextFilesPrompt:
     def test_hermes_md_beats_agents_md(self, tmp_path):
         """When both exist, .hermes.md wins and AGENTS.md is not loaded."""
         (tmp_path / "AGENTS.md").write_text("Agent guidelines here.")
-        (tmp_path / ".hermes.md").write_text("Robin project rules.")
+        (tmp_path / ".hermes.md").write_text("Emmy project rules.")
         result = build_context_files_prompt(cwd=str(tmp_path))
-        assert "Robin project rules" in result
+        assert "Emmy project rules" in result
         assert "Agent guidelines" not in result
 
     def test_agents_md_beats_claude_md(self, tmp_path):
@@ -674,12 +674,12 @@ class TestBuildContextFilesPrompt:
 
     def test_hermes_md_beats_all_others(self, tmp_path):
         """When all four types exist, only .hermes.md is loaded."""
-        (tmp_path / ".hermes.md").write_text("Robin wins.")
+        (tmp_path / ".hermes.md").write_text("Emmy wins.")
         (tmp_path / "AGENTS.md").write_text("Agents lose.")
         (tmp_path / "CLAUDE.md").write_text("Claude loses.")
         (tmp_path / ".cursorrules").write_text("Cursor loses.")
         result = build_context_files_prompt(cwd=str(tmp_path))
-        assert "Robin wins" in result
+        assert "Emmy wins" in result
         assert "Agents lose" not in result
         assert "Claude loses" not in result
         assert "Cursor loses" not in result

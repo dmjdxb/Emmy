@@ -4,7 +4,7 @@ Standalone Web Tools Module
 
 This module provides generic web tools that work with multiple backend providers.
 Backend is selected during ``hermes tools`` setup (web.backend in config.yaml).
-When available, Robin can route Firecrawl calls through a EnergyIR-hosted tool-gateway
+When available, Emmy can route Firecrawl calls through a EnergyIR-hosted tool-gateway
 for EnergyIR Subscribers only.
 
 Available tools:

@@ -115,7 +115,7 @@ export const $introSeed = atom(0)
 export const $contextSuggestions = atom<ContextSuggestion[]>([])
 export const $modelPickerOpen = atom(false)
 // "Ask your document" mode. A plain client-side toggle: when on, the composer
-// prepends a focus instruction to the submitted message so Robin reads the
+// prepends a focus instruction to the submitted message so Emmy reads the
 // attached document and answers only from it (with citations) instead of
 // wandering into other tools — "nothing wasted". No backend/session state.
 export const $documentMode = atom(false)

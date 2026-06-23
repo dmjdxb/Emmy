@@ -188,7 +188,7 @@ export function useStatusbarItems({
     const tooltip = [
       applying ? updateApply.message || 'Update in progress' : null,
       !applying && behind > 0 && `${behind} commit${behind === 1 ? '' : 's'} behind ${updateStatus?.branch ?? '…'}`,
-      appVersion && `Robin v${appVersion}`,
+      appVersion && `Emmy v${appVersion}`,
       sha && `commit ${sha}`,
       updateStatus?.branch && `branch ${updateStatus.branch}`
     ]
@@ -234,7 +234,7 @@ export function useStatusbarItems({
         label: 'Gateway',
         menuClassName: 'w-72',
         menuContent: gatewayMenuContent,
-        title: inferenceStatus?.reason || 'Robin inference gateway status',
+        title: inferenceStatus?.reason || 'Emmy inference gateway status',
         variant: 'menu'
       },
       {
@@ -331,7 +331,7 @@ export function useStatusbarItems({
           : 'YOLO off — click to auto-approve dangerous commands.',
         variant: 'action'
       },
-      // Robin (by EnergyIR) ships a single, fixed model by design. Users never
+      // Emmy (by EnergyIR) ships a single, fixed model by design. Users never
       // need to know which model runs, so the model indicator is not shown.
       versionItem
     ],

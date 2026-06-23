@@ -1,4 +1,4 @@
-"""Thin Spotify Web API helper used by Robin native tools."""
+"""Thin Spotify Web API helper used by Emmy native tools."""
 
 from __future__ import annotations
 

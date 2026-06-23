@@ -55,9 +55,9 @@ def check_sms_requirements() -> bool:
 
 class SmsAdapter(BasePlatformAdapter):
     """
-    Twilio SMS <-> Robin gateway adapter.
+    Twilio SMS <-> Emmy gateway adapter.
 
-    Each inbound phone number gets its own Robin session (multi-tenant).
+    Each inbound phone number gets its own Emmy session (multi-tenant).
     Replies are always sent from the configured TWILIO_PHONE_NUMBER.
     """
 

@@ -123,7 +123,7 @@ export function exposePluginSDK() {
       createContext,
     },
 
-    // Robin API client
+    // Emmy API client
     api,
     // Raw fetchJSON for plugin-specific JSON endpoints
     fetchJSON,

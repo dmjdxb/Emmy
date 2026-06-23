@@ -38,7 +38,7 @@ from robin.model_switch import (
 )
 def test_matches_real_nous_hermes_chat_models(model_name: str) -> None:
     assert is_nous_hermes_non_agentic(model_name), (
-        f"expected {model_name!r} to be flagged as EnergyIR Robin 3/4"
+        f"expected {model_name!r} to be flagged as EnergyIR Emmy 3/4"
     )
     assert _check_hermes_model_warning(model_name) == _HERMES_MODEL_WARNING
 
@@ -60,7 +60,7 @@ def test_matches_real_nous_hermes_chat_models(model_name: str) -> None:
         "openai/gpt-4o",
         "google/gemini-2.5-flash",
         "deepseek-chat",
-        # Non-chat Robin models we don't warn about
+        # Non-chat Emmy models we don't warn about
         "hermes-llm-2",
         "hermes2-pro",
         "nous-hermes-2-mistral",
@@ -73,7 +73,7 @@ def test_matches_real_nous_hermes_chat_models(model_name: str) -> None:
 )
 def test_does_not_match_unrelated_models(model_name: str) -> None:
     assert not is_nous_hermes_non_agentic(model_name), (
-        f"expected {model_name!r} NOT to be flagged as EnergyIR Robin 3/4"
+        f"expected {model_name!r} NOT to be flagged as EnergyIR Emmy 3/4"
     )
     assert _check_hermes_model_warning(model_name) == ""
 

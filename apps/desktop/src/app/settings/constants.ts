@@ -40,7 +40,7 @@ export const PROVIDER_GROUPS: ProviderPrefix[] = [
   {
     prefix: 'NOUS_',
     name: 'EnergyIR',
-    description: 'Your EnergyIR API key powers Robin',
+    description: 'Your EnergyIR API key powers Emmy',
     docsUrl: 'https://energyir.io/robin',
     priority: 0
   },
@@ -319,15 +319,15 @@ export const FIELD_DESCRIPTIONS: Record<string, string> = {
   model_context_length: "Leave at 0 to use the selected model's detected context window.",
   fallback_providers: 'Backup provider:model entries to try if the default model fails.',
   'display.personality': 'Default assistant style for new sessions.',
-  timezone: 'Used when Robin needs local time context. Blank uses the system timezone.',
+  timezone: 'Used when Emmy needs local time context. Blank uses the system timezone.',
   'display.show_reasoning': 'Show reasoning sections when the backend provides them.',
   'agent.image_input_mode': 'Controls how image attachments are sent to the model.',
   'terminal.cwd': 'Default project folder for tool and terminal work.',
   'code_execution.mode': 'How strictly code execution is scoped to the current project.',
   'terminal.persistent_shell': 'Keep shell state between commands when the backend supports it.',
   'terminal.env_passthrough': 'Environment variables to pass into tool execution.',
-  file_read_max_chars: 'Maximum characters Robin can read from one file request.',
-  'approvals.mode': 'How Robin handles commands that need explicit approval.',
+  file_read_max_chars: 'Maximum characters Emmy can read from one file request.',
+  'approvals.mode': 'How Emmy handles commands that need explicit approval.',
   'approvals.timeout': 'How long approval prompts wait before timing out.',
   'security.redact_secrets': 'Hide detected secrets from model-visible content when possible.',
   'checkpoints.enabled': 'Create rollback snapshots before file edits.',
@@ -338,21 +338,21 @@ export const FIELD_DESCRIPTIONS: Record<string, string> = {
   'voice.auto_tts': 'Automatically speak assistant responses.',
   'stt.enabled': 'Enable local or provider-backed speech transcription.',
   'stt.elevenlabs.language_code': 'Optional ISO-639-3 language code. Blank lets ElevenLabs auto-detect.',
-  'agent.max_turns': 'Upper bound for tool-calling turns before Robin stops a run.',
+  'agent.max_turns': 'Upper bound for tool-calling turns before Emmy stops a run.',
   // De-branded override: the backend schema's help text names third-party
-  // vendors (e.g. "OpenAI/Anthropic"). Robin is white-labeled, so surface a
+  // vendors (e.g. "OpenAI/Anthropic"). Emmy is white-labeled, so surface a
   // vendor-neutral description instead.
   'agent.service_tier': 'Requested API service tier for inference (leave as default unless told otherwise).',
-  'agent.api_max_retries': 'How many times Robin retries a failed inference request before giving up.',
+  'agent.api_max_retries': 'How many times Emmy retries a failed inference request before giving up.',
   'tts.openai.model': 'Voice model used to read responses aloud.',
   'tts.openai.voice': 'Voice used when reading responses aloud.',
   'updates.non_interactive_local_changes':
-    'When Robin updates itself from the app (no terminal prompt), keep local source edits (stash) or throw them away (discard). Terminal updates always ask.'
+    'When Emmy updates itself from the app (no terminal prompt), keep local source edits (stash) or throw them away (discard). Terminal updates always ask.'
 }
 
 // Curated desktop config surface: only fields a user might tune from the app.
 export const SECTIONS: DesktopConfigSection[] = [
-  // Robin (by EnergyIR) ships a single fixed model (DeepSeek V4 Pro) and a
+  // Emmy (by EnergyIR) ships a single fixed model (DeepSeek V4 Pro) and a
   // single provider (EnergyIR). The "Model" settings page — model picker,
   // provider picker, and per-task model routing — is intentionally removed:
   // users never choose a model.

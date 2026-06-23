@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useTheme } from './context'
 
-// Retired skin names land on the canonical Robin skin so old muscle memory works.
+// Retired skin names land on the canonical Emmy skin so old muscle memory works.
 const ALIASES: Record<string, string> = {
   ares: 'ember',
   default: 'robin',

@@ -1,4 +1,4 @@
-# OpenAI-Compatible API Server for Robin
+# OpenAI-Compatible API Server for Emmy
 
 ## Motivation
 

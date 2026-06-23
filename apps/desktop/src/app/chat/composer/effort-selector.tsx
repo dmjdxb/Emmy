@@ -20,7 +20,7 @@ import { GHOST_ICON_BTN } from './controls'
 import type { ChatBarState } from './types'
 
 /**
- * Composer effort selector — a Claude-style ladder that sets how hard Robin
+ * Composer effort selector — a Claude-style ladder that sets how hard Emmy
  * thinks for the current conversation. Each tier maps (in the backend) to a
  * primary chat model; tool calls / auxiliary tasks are unaffected. The selected
  * tier id is written to the `$effort` store and sent on the next prompt.submit.

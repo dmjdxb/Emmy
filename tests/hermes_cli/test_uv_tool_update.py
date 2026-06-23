@@ -141,7 +141,7 @@ class TestRecommendedUpdateCommandForUvTool:
             assert cmd == "uv tool upgrade hermes-agent"
 
     def test_uv_pip_install_keeps_legacy_recommendation(self):
-        """Existing behavior: uv is on PATH but Robin is a regular pip install."""
+        """Existing behavior: uv is on PATH but Emmy is a regular pip install."""
         from robin import config
 
         with patch("shutil.which", return_value="/usr/local/bin/uv"), \
@@ -193,7 +193,7 @@ class TestCmdUpdatePipUsesUvTool:
 
     @patch("subprocess.run")
     def test_runs_uv_pip_install_when_not_uv_tool(self, mock_run):
-        """Existing behavior preserved when uv is present but Robin isn't a tool install."""
+        """Existing behavior preserved when uv is present but Emmy isn't a tool install."""
         from robin.main import _cmd_update_pip
 
         mock_run.return_value = subprocess.CompletedProcess(["uv"], 0, stdout="", stderr="")

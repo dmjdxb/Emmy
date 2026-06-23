@@ -97,8 +97,8 @@ class TestIsBotMentioned:
         assert self.adapter._is_bot_mentioned("HERMES can you help?")
 
     def test_matrix_pill_in_formatted_body(self):
-        html = '<a href="https://matrix.to/#/@hermes:example.org">Robin</a> help'
-        assert self.adapter._is_bot_mentioned("Robin help", html)
+        html = '<a href="https://matrix.to/#/@hermes:example.org">Emmy</a> help'
+        assert self.adapter._is_bot_mentioned("Emmy help", html)
 
     def test_no_mention(self):
         assert not self.adapter._is_bot_mentioned("hello everyone")
@@ -172,9 +172,9 @@ class TestStripMention:
         assert result == "help me"
 
     def test_does_not_strip_bare_localpart_word(self):
-        # Regression: plain words like "Robin Agent" should not be mutated.
-        result = self.adapter._strip_mention("Robin Agent")
-        assert result == "Robin Agent"
+        # Regression: plain words like "Emmy Agent" should not be mutated.
+        result = self.adapter._strip_mention("Emmy Agent")
+        assert result == "Emmy Agent"
 
     def test_strip_returns_empty_for_mention_only(self):
         result = self.adapter._strip_mention("@hermes:example.org")
@@ -302,8 +302,8 @@ async def test_require_mention_html_pill(monkeypatch):
     monkeypatch.setenv("MATRIX_AUTO_THREAD", "false")
 
     adapter = _make_adapter()
-    formatted = '<a href="https://matrix.to/#/@hermes:example.org">Robin</a> help'
-    event = _make_event("Robin help", formatted_body=formatted)
+    formatted = '<a href="https://matrix.to/#/@hermes:example.org">Emmy</a> help'
+    event = _make_event("Emmy help", formatted_body=formatted)
 
     await adapter._on_room_message(event)
     adapter.handle_message.assert_awaited_once()

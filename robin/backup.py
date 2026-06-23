@@ -142,11 +142,11 @@ def _format_size(nbytes: int) -> str:
 
 
 def run_backup(args) -> None:
-    """Create a zip backup of the Robin home directory."""
+    """Create a zip backup of the Emmy home directory."""
     hermes_root = get_default_hermes_root()
 
     if not hermes_root.is_dir():
-        print(f"Error: Robin home directory not found at {hermes_root}")
+        print(f"Error: Emmy home directory not found at {hermes_root}")
         sys.exit(1)
 
     # Determine output path
@@ -263,7 +263,7 @@ def run_backup(args) -> None:
 # ---------------------------------------------------------------------------
 
 def _validate_backup_zip(zf: zipfile.ZipFile) -> tuple[bool, str]:
-    """Check that a zip looks like a Robin backup.
+    """Check that a zip looks like a Emmy backup.
 
     Returns (ok, reason).
     """
@@ -282,7 +282,7 @@ def _validate_backup_zip(zf: zipfile.ZipFile) -> tuple[bool, str]:
 
     if not found:
         return False, (
-            "zip does not appear to be a Robin backup "
+            "zip does not appear to be a Emmy backup "
             "(no config.yaml, .env, or state databases found)"
         )
 
@@ -314,7 +314,7 @@ def _detect_prefix(zf: zipfile.ZipFile) -> str:
 
 
 def run_import(args) -> None:
-    """Restore a Robin backup from a zip file."""
+    """Restore a Emmy backup from a zip file."""
     zip_path = Path(args.zipfile).expanduser().resolve()
 
     if not zip_path.is_file():
@@ -350,7 +350,7 @@ def run_import(args) -> None:
 
         if (has_config or has_env) and not args.force:
             print()
-            print("Warning: Target directory already has Robin configuration.")
+            print("Warning: Target directory already has Emmy configuration.")
             print("Importing will overwrite existing files with backup contents.")
             print()
             try:
@@ -469,7 +469,7 @@ def run_import(args) -> None:
             for pname in gw_profiles:
                 print(f"  hermes -p {pname} gateway install")
 
-        print("Done. Your Robin configuration has been restored.")
+        print("Done. Your Emmy configuration has been restored.")
 
 
 # ---------------------------------------------------------------------------
@@ -726,7 +726,7 @@ def restore_cron_jobs_if_emptied(
     Args:
         snapshot_id: The pre-update quick-snapshot id (from
             :func:`create_quick_snapshot`).
-        hermes_home: Override for the Robin home directory (tests).
+        hermes_home: Override for the Emmy home directory (tests).
 
     Returns:
         ``None`` when no action was taken (the common, healthy path). On a

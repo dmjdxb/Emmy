@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Robin CLI - Main entry point.
+Emmy CLI - Main entry point.
 
 Usage:
     hermes                     # Interactive chat (default)
@@ -33,10 +33,10 @@ Usage:
     hermes honcho tokens --dialectic N     # Set dialectic result char cap
     hermes honcho identity                 # Show AI peer identity representation
     hermes honcho identity <file>          # Seed AI peer identity from a file (SOUL.md etc.)
-    hermes honcho migrate                  # Step-by-step migration guide: OpenClaw native → Robin + Honcho
+    hermes honcho migrate                  # Step-by-step migration guide: OpenClaw native → Emmy + Honcho
     hermes version             Show version
     hermes update              Update to latest version
-    hermes uninstall           Uninstall Robin
+    hermes uninstall           Uninstall Emmy
     hermes acp                 Run as an ACP server for editor integration
     hermes sessions browse     Interactive session picker with search
 
@@ -228,7 +228,7 @@ def _print_fast_version_info() -> None:
     from robin import __release_date__, __version__
 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-    print(f"Robin v{__version__} ({__release_date__})")
+    print(f"Emmy v{__version__} ({__release_date__})")
     print(f"Project: {project_root}")
     print(f"Python: {sys.version.split()[0]}")
 
@@ -632,7 +632,7 @@ def _has_any_provider_configured() -> bool:
     from robin.config import get_env_path, get_hermes_home, load_config
     from robin.auth import get_auth_status
 
-    # Determine whether Robin itself has been explicitly configured (model
+    # Determine whether Emmy itself has been explicitly configured (model
     # in config that isn't the hardcoded default). Used below to gate external
     # tool credentials (Claude Code, Codex CLI) that shouldn't silently skip
     # the setup wizard on a fresh install.
@@ -721,8 +721,8 @@ def _has_any_provider_configured() -> bool:
             return True
 
     # Check for Claude Code OAuth credentials (~/.claude/.credentials.json)
-    # Only count these if Robin has been explicitly configured — Claude Code
-    # being installed doesn't mean the user wants Robin to use their tokens.
+    # Only count these if Emmy has been explicitly configured — Claude Code
+    # being installed doesn't mean the user wants Emmy to use their tokens.
     if _has_hermes_config:
         try:
             from agent.anthropic_adapter import (
@@ -1935,12 +1935,12 @@ def _sync_bundled_skills_quietly() -> None:
     """Seed ``~/.hermes/skills/`` with the bundled skill library on first launch.
 
     Called from any CLI entrypoint that the user might use as their first
-    interaction with Robin — chat, dashboard (the desktop GUI's backend),
+    interaction with Emmy — chat, dashboard (the desktop GUI's backend),
     and gateway. The skills_sync module is manifest-based and idempotent:
     skipped skills cost ~milliseconds, so calling this repeatedly is fine.
 
     Failures are swallowed because skills are an enhancement, not a hard
-    dependency. Robin still functions without them; the user just sees an
+    dependency. Emmy still functions without them; the user just sees an
     empty skills library.
     """
     try:
@@ -2041,7 +2041,7 @@ def cmd_chat(args):
     if not _has_any_provider_configured():
         print()
         print(
-            "It looks like Robin isn't configured yet -- no API keys or providers found."
+            "It looks like Emmy isn't configured yet -- no API keys or providers found."
         )
         print()
         print("  Run:  hermes setup")
@@ -2194,7 +2194,7 @@ def cmd_whatsapp(args):
     current_mode = get_env_value("WHATSAPP_MODE") or ""
     if not current_mode:
         print()
-        print("How will you use WhatsApp with Robin?")
+        print("How will you use WhatsApp with Emmy?")
         print()
         print("  1. Separate bot number (recommended)")
         print("     People message the bot's number directly — cleanest experience.")
@@ -2388,14 +2388,14 @@ def cmd_whatsapp(args):
             print("    2. Send a message to the bot's WhatsApp number")
             print("    3. The agent will reply automatically")
             print()
-            print("  Tip: Agent responses are prefixed with '⚕ Robin'")
+            print("  Tip: Agent responses are prefixed with '⚕ Emmy'")
         else:
             print("  Next steps:")
             print("    1. Start the gateway:  hermes gateway")
             print("    2. Open WhatsApp → Message Yourself")
             print("    3. Type a message — the agent will reply")
             print()
-            print("  Tip: Agent responses are prefixed with '⚕ Robin'")
+            print("  Tip: Agent responses are prefixed with '⚕ Emmy'")
             print("  so you can tell them apart from your own messages.")
         print()
         print("  Or install as a service: hermes gateway install")
@@ -2417,7 +2417,7 @@ def cmd_postinstall(args):
 
     stamp_install_method("pip")
 
-    print("⚕ Robin post-install bootstrap")
+    print("⚕ Emmy post-install bootstrap")
     print()
 
     for dep in ("node", "browser", "ripgrep", "ffmpeg"):
@@ -2899,7 +2899,7 @@ def _clear_stale_openai_base_url():
 # ─────────────────────────────────────────────────────────────────────────────
 # Auxiliary model configuration
 #
-# Robin uses lightweight "auxiliary" models for side tasks (vision analysis,
+# Emmy uses lightweight "auxiliary" models for side tasks (vision analysis,
 # context compression, web extraction, session search, etc.). Each task has
 # its own provider+model pair in config.yaml under `auxiliary.<task>`.
 #
@@ -3046,7 +3046,7 @@ def _aux_config_menu() -> None:
         print()
         print("  Side tasks (vision, compression, web extraction, etc.) default")
         print('  to your main chat model.  "auto" means "use my main model" —')
-        print("  Robin only falls back to a lightweight backend (OpenRouter,")
+        print("  Emmy only falls back to a lightweight backend (OpenRouter,")
         print("  Together AI) if the main model is unavailable.  Override a")
         print("  task below if you want it pinned to a specific provider/model.")
         print()
@@ -4035,7 +4035,7 @@ def _model_flow_custom(config):
     else:
         print(
             f"Warning: could not verify this endpoint via {probe.get('probed_url')}. "
-            f"Robin will still save it."
+            f"Emmy will still save it."
         )
         if probe.get("suggested_base_url"):
             suggested = probe["suggested_base_url"]
@@ -4183,7 +4183,7 @@ def _prompt_custom_api_mode_selection(base_url: str, current_api_mode: str = "")
         (
             "",
             "Auto-detect",
-            "Use Robin URL heuristics; best for standard OpenAI-compatible endpoints.",
+            "Use Emmy URL heuristics; best for standard OpenAI-compatible endpoints.",
         ),
         (
             "chat_completions",
@@ -4407,7 +4407,7 @@ def _model_flow_azure_foundry(config, current_model=""):
     print("=" * 50)
     print()
     print("Azure Foundry can host models with either OpenAI-style or")
-    print("Anthropic-style API endpoints.  Robin will probe your")
+    print("Anthropic-style API endpoints.  Emmy will probe your")
     print("endpoint to auto-detect the transport and the deployed")
     print("models when possible.")
     print()
@@ -4495,7 +4495,7 @@ def _model_flow_azure_foundry(config, current_model=""):
         if not has_azure_identity_installed():
             print("◐ The 'azure-identity' package is not installed yet.")
             print(
-                "  Robin will install it now (the preflight below "
+                "  Emmy will install it now (the preflight below "
                 "triggers the lazy-install). To skip lazy installs, "
                 "run:  pip install azure-identity"
             )
@@ -5303,9 +5303,9 @@ def _model_flow_copilot_acp(config, current_model=""):
     )
     effective_base = status.get("base_url") or pconfig.inference_base_url
 
-    print("  GitHub Copilot ACP delegates Robin turns to `copilot --acp`.")
-    print("  Robin currently starts its own ACP subprocess for each request.")
-    print("  Robin uses your selected model as a hint for the Copilot ACP session.")
+    print("  GitHub Copilot ACP delegates Emmy turns to `copilot --acp`.")
+    print("  Emmy currently starts its own ACP subprocess for each request.")
+    print("  Emmy uses your selected model as a hint for the Copilot ACP session.")
     print(f"  Command: {resolved_command}")
     print(f"  Backend marker: {effective_base}")
     print()
@@ -6031,7 +6031,7 @@ def _model_flow_api_key_provider(config, provider_id, current_model=""):
                     "(<= 250 requests/day for gemini-2.5-flash)."
                 )
                 print(
-                    "   Robin typically makes 3-10 API calls per user turn "
+                    "   Emmy typically makes 3-10 API calls per user turn "
                     "(tool iterations + auxiliary tasks),"
                 )
                 print(
@@ -6041,7 +6041,7 @@ def _model_flow_api_key_provider(config, provider_id, current_model=""):
                 print("   an agent session.")
                 print()
                 print(
-                    "   To use Gemini with Robin, enable billing on your "
+                    "   To use Gemini with Emmy, enable billing on your "
                     "Google Cloud project and regenerate"
                 )
                 print(
@@ -6278,7 +6278,7 @@ def _run_anthropic_oauth_flow(save_env_value):
             from hermes_constants import display_hermes_home as _dhh_fn
 
             print(
-                f"    Robin will use Claude's credential store directly instead of copying a setup-token into {_dhh_fn()}/.env."
+                f"    Emmy will use Claude's credential store directly instead of copying a setup-token into {_dhh_fn()}/.env."
             )
             return True
         return False
@@ -6500,7 +6500,7 @@ def _model_flow_anthropic(config, current_model=""):
 
 
 def cmd_login(args):
-    """Authenticate Robin CLI with a provider."""
+    """Authenticate Emmy CLI with a provider."""
     from robin.auth import login_command
 
     login_command(args)
@@ -6628,7 +6628,7 @@ def cmd_config(args):
 
 
 def cmd_backup(args):
-    """Back up Robin home directory to a zip file."""
+    """Back up Emmy home directory to a zip file."""
     if getattr(args, "quick", False):
         from robin.backup import run_quick_backup
 
@@ -6640,14 +6640,14 @@ def cmd_backup(args):
 
 
 def cmd_import(args):
-    """Restore a Robin backup from a zip file."""
+    """Restore a Emmy backup from a zip file."""
     from robin.backup import run_import
 
     run_import(args)
 
 
 def _print_version_info(*, check_updates: bool = True) -> None:
-    print(f"Robin v{__version__} ({__release_date__})")
+    print(f"Emmy v{__version__} ({__release_date__})")
     print(f"Project: {PROJECT_ROOT}")
 
     # Show Python version
@@ -6693,7 +6693,7 @@ def cmd_version(args):
 
 
 def cmd_uninstall(args):
-    """Uninstall Robin."""
+    """Uninstall Emmy."""
     _require_tty("uninstall")
     from robin.uninstall import run_uninstall
 
@@ -7304,16 +7304,16 @@ def _desktop_packaged_executable(desktop_dir: Path) -> Optional[Path]:
         candidates = list(release_dir.glob("mac*/Robin.app/Contents/MacOS/Robin"))
     elif sys.platform == "win32":
         candidates = [
-            release_dir / "win-unpacked" / "Robin.exe",
-            release_dir / "win-ia32-unpacked" / "Robin.exe",
-            release_dir / "win-arm64-unpacked" / "Robin.exe",
+            release_dir / "win-unpacked" / "Emmy.exe",
+            release_dir / "win-ia32-unpacked" / "Emmy.exe",
+            release_dir / "win-arm64-unpacked" / "Emmy.exe",
         ]
     else:
         candidates = [
             release_dir / "linux-unpacked" / "hermes",
-            release_dir / "linux-unpacked" / "Robin",
+            release_dir / "linux-unpacked" / "Emmy",
             release_dir / "linux-arm64-unpacked" / "hermes",
-            release_dir / "linux-arm64-unpacked" / "Robin",
+            release_dir / "linux-arm64-unpacked" / "Emmy",
         ]
 
     existing = [p for p in candidates if p.exists()]
@@ -7424,7 +7424,7 @@ def _desktop_macos_relaunchable_fixup(desktop_dir: Path) -> None:
     An ad-hoc-signed .app has no stable Designated Requirement (no Team ID), so
     when the self-updater rebuilds the bundle in place with a fresh build (a new,
     different cdhash) Gatekeeper/LaunchServices treats the changed code as
-    tampering and macOS reports "Robin is damaged and can't be opened." The
+    tampering and macOS reports "Emmy is damaged and can't be opened." The
     bundle also inherits the com.apple.quarantine flag from the downloaded
     installer process chain. Both make the relaunch fail.
 
@@ -7462,7 +7462,7 @@ def _desktop_linux_sandbox_fixup(packaged_executable: Path) -> bool:
 
     sandbox = packaged_executable.parent / "chrome-sandbox"
     if not sandbox.exists():
-        print(f"✗ Robin is missing Electron's Linux sandbox helper: {sandbox}")
+        print(f"✗ Emmy is missing Electron's Linux sandbox helper: {sandbox}")
         return False
 
     # Reject symlinks — chown/chmod must not follow an attacker-controlled
@@ -7482,7 +7482,7 @@ def _desktop_linux_sandbox_fixup(packaged_executable: Path) -> bool:
 
     sudo = shutil.which("sudo")
     if not sudo:
-        print("✗ Robin requires sudo to configure Electron's Linux sandbox helper.")
+        print("✗ Emmy requires sudo to configure Electron's Linux sandbox helper.")
         return False
 
     print("→ Configuring Electron Linux sandbox helper (sudo required)...")
@@ -7576,7 +7576,7 @@ def cmd_gui(args: argparse.Namespace):
             build_result = subprocess.run([npm, "run", build_script], cwd=desktop_dir, env=env, check=False)
             if build_result.returncode != 0 and not source_mode:
                 # A corrupt cached Electron zip makes `pack` fail with an ENOENT
-                # on the final `electron` -> `Robin` rename: unpack-electron
+                # on the final `electron` -> `Emmy` rename: unpack-electron
                 # extracted a partial tree (missing the 193 MB binary) from the
                 # bad zip. We do NOT try to prove the zip is corrupt ourselves —
                 # stdlib zipfile silently tolerates the prepended/concatenated
@@ -7601,7 +7601,7 @@ def cmd_gui(args: argparse.Namespace):
             packaged_executable = _desktop_packaged_executable(desktop_dir)
             if not source_mode:
                 # Locally-built apps are ad-hoc signed; make them relaunchable after
-                # an in-place self-update (otherwise macOS reports "Robin is
+                # an in-place self-update (otherwise macOS reports "Emmy is
                 # damaged"). No-op on non-macOS and on real-identity builds.
                 _desktop_macos_relaunchable_fixup(desktop_dir)
 
@@ -7629,7 +7629,7 @@ def cmd_gui(args: argparse.Namespace):
         return
 
     if source_mode:
-        print("→ Launching Robin from source build...")
+        print("→ Launching Emmy from source build...")
         launch_result = subprocess.run([npm, "exec", "--", "electron", "."], cwd=desktop_dir, env=env, check=False)
         sys.exit(launch_result.returncode)
 
@@ -7641,7 +7641,7 @@ def cmd_gui(args: argparse.Namespace):
     if not _desktop_linux_sandbox_fixup(packaged_executable):
         sys.exit(1)
 
-    print(f"→ Launching packaged Robin: {packaged_executable}")
+    print(f"→ Launching packaged Emmy: {packaged_executable}")
     launch_result = subprocess.run([str(packaged_executable)], cwd=desktop_dir, env=env, check=False)
     sys.exit(launch_result.returncode)
 
@@ -7665,7 +7665,7 @@ def _find_stale_dashboard_pids(
     ``_kill_stale_dashboard_processes`` for the kill.
 
     *exclude_pids* is an optional set of PIDs that must never be returned.
-    This is used by the Robin Electron app to protect its own
+    This is used by the Emmy Electron app to protect its own
     backend child process: when the desktop spawns ``hermes dashboard`` as
     a backend and triggers an auto-update, the update must not kill the
     dashboard that the desktop itself manages.  The desktop sets the
@@ -7901,7 +7901,7 @@ def _kill_stale_dashboard_processes(
     launch args (--host, --port, --insecure, --tui, --no-open).  The user
     restarts it manually; a hint is printed.
     """
-    # When the Robin Electron app spawns this dashboard as a
+    # When the Emmy Electron app spawns this dashboard as a
     # backend child, it sets HERMES_DESKTOP_CHILD_PID so that the update
     # path can skip killing the desktop-managed process.  (#37532)
     exclude: set[int] | None = None
@@ -8005,7 +8005,7 @@ _warn_stale_dashboard_processes = _kill_stale_dashboard_processes
 
 
 def _update_via_zip(args):
-    """Update Robin by downloading a ZIP archive.
+    """Update Emmy by downloading a ZIP archive.
 
     Used on Windows when git file I/O is broken (antivirus, NTFS filter
     drivers causing 'Invalid argument' errors on file creation).
@@ -8280,7 +8280,7 @@ def _restore_stashed_changes(
         print(
             "  Restoring them may reapply local customizations onto the updated codebase."
         )
-        print("  Review the result afterward if Robin behaves unexpectedly.")
+        print("  Review the result afterward if Emmy behaves unexpectedly.")
         print("Restore local changes now? [Y/n]")
         if input_fn is not None:
             response = input_fn("Restore local changes now? [Y/n]", "y")
@@ -8344,7 +8344,7 @@ def _restore_stashed_changes(
     stash_selector = _resolve_stash_selector(git_cmd, cwd, stash_ref)
     if stash_selector is None:
         print(
-            "⚠ Local changes were restored, but Robin couldn't find the stash entry to drop."
+            "⚠ Local changes were restored, but Emmy couldn't find the stash entry to drop."
         )
         print(
             "  The stash was left in place. You can remove it manually after checking the result."
@@ -8359,7 +8359,7 @@ def _restore_stashed_changes(
         )
         if drop.returncode != 0:
             print(
-                "⚠ Local changes were restored, but Robin couldn't drop the saved stash entry."
+                "⚠ Local changes were restored, but Emmy couldn't drop the saved stash entry."
             )
             if drop.stdout.strip():
                 print(drop.stdout.strip())
@@ -8371,7 +8371,7 @@ def _restore_stashed_changes(
             _print_stash_cleanup_guidance(stash_ref, stash_selector)
 
     print("⚠ Local changes were restored on top of the updated codebase.")
-    print("  Review `git diff` / `git status` if Robin behaves unexpectedly.")
+    print("  Review `git diff` / `git status` if Emmy behaves unexpectedly.")
     return True
 
 
@@ -8398,7 +8398,7 @@ def _discard_stashed_changes(
     if stash_selector is None:
         print(
             "⚠ Configured to discard local changes on non-interactive update, "
-            "but Robin couldn't find the stash entry to drop."
+            "but Emmy couldn't find the stash entry to drop."
         )
         _print_stash_cleanup_guidance(stash_ref)
         return False
@@ -8411,7 +8411,7 @@ def _discard_stashed_changes(
     )
     if drop.returncode != 0:
         print(
-            "⚠ Configured to discard local changes, but Robin couldn't drop "
+            "⚠ Configured to discard local changes, but Emmy couldn't drop "
             "the saved stash entry."
         )
         if drop.stderr.strip():
@@ -8566,7 +8566,7 @@ def _sync_with_upstream_if_needed(git_cmd: list[str], cwd: Path) -> None:
 
         # Ask user if they want to add upstream
         print()
-        print("ℹ Your fork is not tracking the official Robin repository.")
+        print("ℹ Your fork is not tracking the official Emmy repository.")
         print("  This means you may miss updates from dmjdxb/Robin.")
         print()
         try:
@@ -8793,7 +8793,7 @@ def _detect_concurrent_hermes_instances(
 
     Windows blocks DELETE/REPLACE on a running .exe — and even RENAME on the
     same .exe when another process opened it without ``FILE_SHARE_DELETE``.
-    The Robin Electron app spawns ``hermes.EXE`` as a backend child,
+    The Emmy Electron app spawns ``hermes.EXE`` as a backend child,
     so during ``hermes update`` the user-invoked process and the desktop's
     child both hold the same file. The quarantine rename then fails with
     ``[WinError 32]`` and uv inherits the lock.
@@ -8843,7 +8843,7 @@ def _detect_concurrent_hermes_instances(
     #      across session/elevation boundaries), leaving the launcher shim in
     #      the candidate set and re-triggering the false positive.
     #   2. Only exclude ancestors whose exe is itself a shim. A genuine second
-    #      hermes.exe sitting *under* a non-Robin parent (e.g. a Robin
+    #      hermes.exe sitting *under* a non-Robin parent (e.g. a Emmy
     #      Desktop backend child) must still be flagged, so we don't blanket-
     #      exclude unrelated ancestors like the shell or terminal.
     # Broad ``except Exception`` guards against partially-stubbed psutil in
@@ -8915,7 +8915,7 @@ def _format_concurrent_instances_message(
     lines.append(f"  Updating now would fail to overwrite {shim} because")
     lines.append("  Windows blocks REPLACE on a running executable.")
     lines.append("")
-    lines.append("  Close Robin, exit any open `hermes` REPLs, and")
+    lines.append("  Close Emmy, exit any open `hermes` REPLs, and")
     lines.append("  stop the gateway (`hermes gateway stop`) before retrying.")
     lines.append("")
     if matches:
@@ -8946,7 +8946,7 @@ def _quarantine_running_hermes_exe(
 
     Rename can still fail when *another* process has opened the .exe without
     ``FILE_SHARE_DELETE`` — typically AV real-time scanners with transient
-    handles (recovers in <1s), or the Robin backend child process
+    handles (recovers in <1s), or the Emmy backend child process
     (won't recover until the user closes it). We mitigate:
 
     1. Retry up to ``max_attempts`` times with exponential backoff
@@ -8958,7 +8958,7 @@ def _quarantine_running_hermes_exe(
        update can complete; the user just needs to reboot to fully unload
        the stale image.
     3. Print a clear warning naming the most likely culprit (running
-       Robin / gateway / REPL) and pointing to ``--force``.
+       Emmy / gateway / REPL) and pointing to ``--force``.
 
     Returns the list of (original, quarantined) pairs so the caller can roll
     back if the install itself fails before uv writes a replacement. Pairs
@@ -9025,7 +9025,7 @@ def _quarantine_running_hermes_exe(
             f"another process is holding it open)."
         )
         print(
-            "    Close Robin, exit other `hermes` REPLs, stop the "
+            "    Close Emmy, exit other `hermes` REPLs, stop the "
             "gateway, or pause AV scanning, then re-run `hermes update`."
         )
 
@@ -9936,7 +9936,7 @@ def _ensure_fhs_path_guard() -> None:
 
     path_line = 'export PATH="/usr/local/bin:$PATH"'
     path_comment = (
-        "# Robin — ensure /usr/local/bin is on PATH " "(RHEL non-login shells)"
+        "# Emmy — ensure /usr/local/bin is on PATH " "(RHEL non-login shells)"
     )
     wrote_any = False
     for candidate in (".bashrc", ".bash_profile"):
@@ -10103,7 +10103,7 @@ def _discard_lockfile_churn(git_cmd, repo_root):
 
 
 def cmd_update(args):
-    """Update Robin to the latest version.
+    """Update Emmy to the latest version.
 
     Thin wrapper around ``_cmd_update_impl``: installs hangup protection,
     runs the update, then restores stdio on the way out (even on
@@ -10117,7 +10117,7 @@ def cmd_update(args):
     )
 
     if is_managed():
-        managed_error("update Robin")
+        managed_error("update Emmy")
         return
 
     # Docker users can't ``git pull`` — the image excludes ``.git`` from
@@ -10153,7 +10153,7 @@ def cmd_update(args):
 
 
 def _cmd_update_pip(args):
-    """Update Robin via pip (for PyPI installs)."""
+    """Update Emmy via pip (for PyPI installs)."""
     from robin import __version__
     from robin.config import is_uv_tool_install
 
@@ -10248,7 +10248,7 @@ def _cmd_update_impl(args, gateway_mode: bool):
             logger.debug("Could not read updates.non_interactive_local_changes: %s", exc)
             discard_local_changes = False
 
-    print("⚕ Updating Robin...")
+    print("⚕ Updating Emmy...")
     print()
 
     # On Windows, abort early if another hermes.exe is holding the venv shim
@@ -10284,17 +10284,17 @@ def _cmd_update_impl(args, gateway_mode: bool):
                 # by the desktop shell whenever the app version changes, so
                 # there is no in-place `hermes update` path here — and trying
                 # to git-pull a bundle has no remote to pull from.
-                print("✓ Robin's backend updates automatically with the desktop app.")
+                print("✓ Emmy's backend updates automatically with the desktop app.")
                 print("  There is nothing to update from the command line on this install.")
-                print("  To get the latest Robin:")
+                print("  To get the latest Emmy:")
                 print("    • use the in-app updater (the desktop app checks for updates), or")
                 print("    • download the latest version from https://energyir.io/robin")
-                print("  The matching backend re-installs itself the next time Robin launches.")
+                print("  The matching backend re-installs itself the next time Emmy launches.")
                 return
             if method == "pip":
                 _cmd_update_pip(args)
                 return
-            print("✗ Not a git repository. Please reinstall Robin from:")
+            print("✗ Not a git repository. Please reinstall Emmy from:")
             print("  https://energyir.io/robin")
             sys.exit(1)
 
@@ -11518,7 +11518,7 @@ def _cmd_update_impl(args, gateway_mode: bool):
         except Exception as e:
             logger.debug("Gateway restart during update failed: %s", e)
 
-        # Warn if legacy Robin gateway unit files are still installed.
+        # Warn if legacy Emmy gateway unit files are still installed.
         # When both hermes.service (from a pre-rename install) and the
         # current hermes-gateway.service are enabled, they SIGTERM-fight
         # for the same bot token (see PR #11909). Flagging here means
@@ -11532,7 +11532,7 @@ def _cmd_update_impl(args, gateway_mode: bool):
 
             if supports_systemd_services() and has_legacy_hermes_units():
                 print()
-                print("⚠ Legacy Robin gateway unit(s) detected:")
+                print("⚠ Legacy Emmy gateway unit(s) detected:")
                 for name, path, is_sys in _find_legacy_hermes_units():
                     scope = "system" if is_sys else "user"
                     print(f"    {path}  ({scope} scope)")
@@ -12197,7 +12197,7 @@ def cmd_profile(args):
         if data.get("license"):
             print(f"License:      {data['license']}")
         if data.get("hermes_requires"):
-            print(f"Requires:     Robin {data['hermes_requires']}")
+            print(f"Requires:     Emmy {data['hermes_requires']}")
         if data.get("source"):
             print(f"Source:       {data['source']}")
         if data.get("installed_at"):
@@ -12226,7 +12226,7 @@ def _render_distribution_plan(plan) -> None:
     if mf.author:
         print(f"  Author:   {mf.author}")
     if mf.hermes_requires:
-        print(f"  Requires: Robin {mf.hermes_requires}")
+        print(f"  Requires: Emmy {mf.hermes_requires}")
     print(f"  Source:   {plan.provenance}")
     print(f"  Target:   {plan.target_dir}")
     if plan.existing:
@@ -12336,7 +12336,7 @@ def cmd_dashboard(args):
         sys.exit(1 if remaining else 0)
 
     # Attach gui.log early so dashboard startup/build failures are captured in
-    # the same logs directory as every other Robin surface.
+    # the same logs directory as every other Emmy surface.
     try:
         from hermes_logging import setup_logging as _setup_logging_gui
         _setup_logging_gui(mode="gui")
@@ -12439,7 +12439,7 @@ def cmd_prompt_size(args):
 
 
 def cmd_logs(args):
-    """View and filter Robin log files."""
+    """View and filter Emmy log files."""
     from robin.logs import tail_log, list_logs
 
     log_name = getattr(args, "log_name", "agent") or "agent"
@@ -13164,7 +13164,7 @@ def main():
         "migrate-legacy",
         help="Remove legacy hermes.service units from pre-rename installs",
         description=(
-            "Stop, disable, and remove legacy Robin gateway unit files "
+            "Stop, disable, and remove legacy Emmy gateway unit files "
             "(e.g. hermes.service) left over from older installs. Profile "
             "units (hermes-gateway-<profile>.service) and unrelated "
             "third-party services are never touched."
@@ -13248,7 +13248,7 @@ def main():
     setup_parser = subparsers.add_parser(
         "setup",
         help="Interactive setup wizard",
-        description="Configure Robin with an interactive wizard. "
+        description="Configure Emmy with an interactive wizard. "
         "Run a specific section: hermes setup model|tts|terminal|gateway|tools|agent",
     )
     setup_parser.add_argument(
@@ -13315,7 +13315,7 @@ def main():
     slack_parser = subparsers.add_parser(
         "slack",
         help="Slack integration helpers (manifest generation, etc.)",
-        description="Slack integration helpers for Robin.",
+        description="Slack integration helpers for Emmy.",
     )
     slack_sub = slack_parser.add_subparsers(dest="slack_command")
     slack_manifest = slack_sub.add_parser(
@@ -13342,7 +13342,7 @@ def main():
     slack_manifest.add_argument(
         "--name",
         default=None,
-        help='Bot display name (default: "Robin")',
+        help='Bot display name (default: "Emmy")',
     )
     slack_manifest.add_argument(
         "--description",
@@ -13369,7 +13369,7 @@ def main():
     login_parser = subparsers.add_parser(
         "login",
         help="Authenticate with an inference provider",
-        description="Run OAuth device authorization flow for Robin CLI",
+        description="Run OAuth device authorization flow for Emmy CLI",
     )
     login_parser.add_argument(
         "--provider",
@@ -13496,7 +13496,7 @@ def main():
     )
     auth_logout.add_argument("provider", help="Provider id")
     auth_spotify = auth_subparsers.add_parser(
-        "spotify", help="Authenticate Robin with Spotify via PKCE"
+        "spotify", help="Authenticate Emmy with Spotify via PKCE"
     )
     auth_spotify.add_argument(
         "spotify_action",
@@ -13528,7 +13528,7 @@ def main():
     status_parser = subparsers.add_parser(
         "status",
         help="Show status of all components",
-        description="Display status of Robin components",
+        description="Display status of Emmy components",
     )
     status_parser.add_argument(
         "--all", action="store_true", help="Show all details (redacted for sharing)"
@@ -13599,7 +13599,7 @@ def main():
     )
     cron_create.add_argument(
         "--profile",
-        help="Robin profile name to run the job under. Use 'default' for the root profile. Named profiles must already exist. Omit to preserve the scheduler's existing profile.",
+        help="Emmy profile name to run the job under. Use 'default' for the root profile. Named profiles must already exist. Omit to preserve the scheduler's existing profile.",
     )
 
     # cron edit
@@ -13667,7 +13667,7 @@ def main():
     )
     cron_edit.add_argument(
         "--profile",
-        help="Robin profile name to run the job under. Use 'default' for the root profile. Pass empty string to clear.",
+        help="Emmy profile name to run the job under. Use 'default' for the root profile. Pass empty string to clear.",
     )
 
     # lifecycle actions
@@ -13848,7 +13848,7 @@ def main():
     doctor_parser = subparsers.add_parser(
         "doctor",
         help="Check configuration and dependencies",
-        description="Diagnose issues with Robin setup",
+        description="Diagnose issues with Emmy setup",
     )
     doctor_parser.add_argument(
         "--fix", action="store_true", help="Attempt to fix issues automatically"
@@ -13872,7 +13872,7 @@ def main():
         "security",
         help="Supply-chain audit (OSV.dev) for venv, plugins, and MCP servers",
         description=(
-            "On-demand vulnerability scan against OSV.dev. Covers the Robin "
+            "On-demand vulnerability scan against OSV.dev. Covers the Emmy "
             "venv (installed PyPI dists), Python deps declared by plugins under "
             "~/.hermes/plugins/, and pinned npx/uvx MCP servers in config.yaml. "
             "Does NOT scan globally-installed packages or editor/browser extensions."
@@ -13902,7 +13902,7 @@ def main():
     audit_parser.add_argument(
         "--skip-venv",
         action="store_true",
-        help="Skip scanning the Robin Python venv",
+        help="Skip scanning the Emmy Python venv",
     )
     audit_parser.add_argument(
         "--skip-plugins",
@@ -13923,7 +13923,7 @@ def main():
     dump_parser = subparsers.add_parser(
         "dump",
         help="Dump setup summary for support/debugging",
-        description="Output a compact, plain-text summary of your Robin setup "
+        description="Output a compact, plain-text summary of your Emmy setup "
         "that can be copy-pasted into Discord/GitHub for support context",
     )
     dump_parser.add_argument(
@@ -13939,7 +13939,7 @@ def main():
     debug_parser = subparsers.add_parser(
         "debug",
         help="Debug tools — upload logs and system info for support",
-        description="Debug utilities for Robin. Use 'hermes debug share' to "
+        description="Debug utilities for Emmy. Use 'hermes debug share' to "
         "upload a debug report (system info + recent logs) to a paste "
         "service and get a shareable URL.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -14002,8 +14002,8 @@ Examples:
     # =========================================================================
     backup_parser = subparsers.add_parser(
         "backup",
-        help="Back up Robin home directory to a zip file",
-        description="Create a zip archive of your entire Robin configuration, "
+        help="Back up Emmy home directory to a zip file",
+        description="Create a zip archive of your entire Emmy configuration, "
         "skills, sessions, and data (excludes the hermes-agent codebase). "
         "Use --quick for a fast snapshot of just critical state files.",
     )
@@ -14042,9 +14042,9 @@ Examples:
     # =========================================================================
     import_parser = subparsers.add_parser(
         "import",
-        help="Restore a Robin backup from a zip file",
-        description="Extract a previously created Robin backup into your "
-        "Robin home directory, restoring configuration, skills, "
+        help="Restore a Emmy backup from a zip file",
+        description="Extract a previously created Emmy backup into your "
+        "Emmy home directory, restoring configuration, skills, "
         "sessions, and data",
     )
     import_parser.add_argument("zipfile", help="Path to the backup zip file")
@@ -14062,7 +14062,7 @@ Examples:
     config_parser = subparsers.add_parser(
         "config",
         help="View and edit configuration",
-        description="Manage Robin configuration",
+        description="Manage Emmy configuration",
     )
     config_subparsers = config_parser.add_subparsers(dest="config_command")
 
@@ -14832,19 +14832,19 @@ Examples:
     # =========================================================================
     mcp_parser = subparsers.add_parser(
         "mcp",
-        help="Manage MCP servers and run Robin as an MCP server",
+        help="Manage MCP servers and run Emmy as an MCP server",
         description=(
-            "Manage MCP server connections and run Robin as an MCP server.\n\n"
+            "Manage MCP server connections and run Emmy as an MCP server.\n\n"
             "MCP servers provide additional tools via the Model Context Protocol.\n"
             "Use 'hermes mcp add' to connect to a new server, or\n"
-            "'hermes mcp serve' to expose Robin conversations over MCP."
+            "'hermes mcp serve' to expose Emmy conversations over MCP."
         ),
     )
     mcp_sub = mcp_parser.add_subparsers(dest="mcp_action")
 
     mcp_serve_p = mcp_sub.add_parser(
         "serve",
-        help="Run Robin as an MCP server (expose conversations to other agents)",
+        help="Run Emmy as an MCP server (expose conversations to other agents)",
     )
     mcp_serve_p.add_argument(
         "-v",
@@ -15235,14 +15235,14 @@ Examples:
     claw_parser = subparsers.add_parser(
         "claw",
         help="OpenClaw migration tools",
-        description="Migrate settings, memories, skills, and API keys from OpenClaw to Robin",
+        description="Migrate settings, memories, skills, and API keys from OpenClaw to Emmy",
     )
     claw_subparsers = claw_parser.add_subparsers(dest="claw_action")
 
     # claw migrate
     claw_migrate = claw_subparsers.add_parser(
         "migrate",
-        help="Migrate from OpenClaw to Robin",
+        help="Migrate from OpenClaw to Emmy",
         description="Import settings, memories, skills, and API keys from an OpenClaw installation. "
         "Always shows a preview before making changes.",
     )
@@ -15329,7 +15329,7 @@ Examples:
     # =========================================================================
     update_parser = subparsers.add_parser(
         "update",
-        help="Update Robin to the latest version",
+        help="Update Emmy to the latest version",
         description="Pull the latest changes from git and reinstall dependencies",
     )
     update_parser.add_argument(
@@ -15387,8 +15387,8 @@ Examples:
     # =========================================================================
     uninstall_parser = subparsers.add_parser(
         "uninstall",
-        help="Uninstall Robin",
-        description="Remove Robin from your system. Can keep configs/data for reinstall.",
+        help="Uninstall Emmy",
+        description="Remove Emmy from your system. Can keep configs/data for reinstall.",
     )
     uninstall_parser.add_argument(
         "--full",
@@ -15405,15 +15405,15 @@ Examples:
     # =========================================================================
     acp_parser = subparsers.add_parser(
         "acp",
-        help="Run Robin as an ACP (Agent Client Protocol) server",
-        description="Start Robin in ACP mode for editor integration (VS Code, Zed, JetBrains)",
+        help="Run Emmy as an ACP (Agent Client Protocol) server",
+        description="Start Emmy in ACP mode for editor integration (VS Code, Zed, JetBrains)",
     )
     _add_accept_hooks_flag(acp_parser)
     acp_parser.add_argument(
         "--version",
         action="store_true",
         dest="acp_version",
-        help="Print Robin ACP version and exit",
+        help="Print Emmy ACP version and exit",
     )
     acp_parser.add_argument(
         "--check",
@@ -15423,7 +15423,7 @@ Examples:
     acp_parser.add_argument(
         "--setup",
         action="store_true",
-        help="Run interactive Robin provider/model setup for ACP terminal auth",
+        help="Run interactive Emmy provider/model setup for ACP terminal auth",
     )
     acp_parser.add_argument(
         "--setup-browser",
@@ -15441,7 +15441,7 @@ Examples:
     )
 
     def cmd_acp(args):
-        """Launch Robin as an ACP server."""
+        """Launch Emmy as an ACP server."""
         try:
             from acp_adapter.entry import main as acp_main
 
@@ -15469,7 +15469,7 @@ Examples:
     # =========================================================================
     profile_parser = subparsers.add_parser(
         "profile",
-        help="Manage profiles — multiple isolated Robin instances",
+        help="Manage profiles — multiple isolated Emmy instances",
     )
     profile_subparsers = profile_parser.add_subparsers(dest="profile_action")
 
@@ -15601,7 +15601,7 @@ Examples:
         "install",
         help="Install a profile distribution from a git URL or local directory",
         description=(
-            "Install a Robin profile distribution. SOURCE can be a git URL "
+            "Install a Emmy profile distribution. SOURCE can be a git URL "
             "(github.com/user/repo, https://..., git@...) or a local "
             "directory containing distribution.yaml at its root."
         ),
@@ -15677,7 +15677,7 @@ Examples:
     dashboard_parser = subparsers.add_parser(
         "dashboard",
         help="Start the web UI dashboard",
-        description="Launch the Robin web dashboard for managing config, API keys, and sessions",
+        description="Launch the Emmy web dashboard for managing config, API keys, and sessions",
     )
     dashboard_parser.add_argument(
         "--port", type=int, default=9119, help="Port (default 9119)"
@@ -15778,7 +15778,7 @@ Examples:
         aliases=["gui"],
         help="Build and launch the native desktop app",
         description=(
-            "Launch the Robin Electron desktop app. By default this installs "
+            "Launch the Emmy Electron desktop app. By default this installs "
             "workspace Node dependencies, builds the current OS's unpacked "
             "Electron app, then launches that packaged artifact."
         ),
@@ -15805,7 +15805,7 @@ Examples:
     )
     gui_parser.add_argument(
         "--hermes-root",
-        help="Override the Robin source root used by Desktop (sets HERMES_DESKTOP_HERMES_ROOT)",
+        help="Override the Emmy source root used by Desktop (sets HERMES_DESKTOP_HERMES_ROOT)",
     )
     gui_parser.add_argument(
         "--cwd",
@@ -15828,7 +15828,7 @@ Examples:
     # =========================================================================
     logs_parser = subparsers.add_parser(
         "logs",
-        help="View and filter Robin log files",
+        help="View and filter Emmy log files",
         description="View, tail, and filter agent.log / errors.log / gateway.log / gui.log / desktop.log",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\

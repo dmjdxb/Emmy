@@ -98,7 +98,7 @@ export function useGatewayRequest() {
       const gateway = gatewayRef.current
 
       if (!gateway) {
-        throw new Error('Robin gateway unavailable')
+        throw new Error('Emmy gateway unavailable')
       }
 
       try {

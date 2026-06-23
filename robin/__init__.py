@@ -1,5 +1,5 @@
 """
-Robin CLI - Unified command-line interface for Robin.
+Emmy CLI - Unified command-line interface for Emmy.
 
 Provides subcommands for:
 - hermes chat          - Interactive chat (same as ./hermes)

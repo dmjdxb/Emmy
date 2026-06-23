@@ -1,4 +1,4 @@
-# Robin statikus üzenetkatalógus -- Magyar
+# Emmy statikus üzenetkatalógus -- Magyar
 # See locales/en.yaml for the source of truth; keep keys in sync.
 
 approval:
@@ -99,7 +99,7 @@ gateway:
     header:                "**Hibakeresési jelentés feltöltve:**"
     auto_delete:           "⏱ A beillesztések 6 óra múlva automatikusan törlődnek."
     full_logs_hint:        "Teljes naplók feltöltéséhez használd a `hermes debug share` parancsot a CLI-ből."
-    share_hint:            "Oszd meg ezeket a hivatkozásokat a Robin csapattal támogatásért."
+    share_hint:            "Oszd meg ezeket a hivatkozásokat a Emmy csapattal támogatásért."
 
   deny:
     stale:                 "❌ Parancs elutasítva (a jóváhagyás elavult)."
@@ -136,7 +136,7 @@ gateway:
     set:                   "⊙ Cél beállítva ({budget} körös keret): {goal}\nDolgozni fogok rajta, amíg a cél el nem készül, te nem szünetelteted/törlöd, vagy a keret ki nem merül.\nVezérlés: /goal status · /goal pause · /goal resume · /goal clear"
 
   help:
-    header:                "📖 **Robin parancsok**\n"
+    header:                "📖 **Emmy parancsok**\n"
     skill_header:          "\n⚡ **Készségparancsok** ({count} aktív):"
     more_use_commands:     "\n... és még {count}. Használd a `/commands` parancsot a teljes, lapozható listához."
 
@@ -250,7 +250,7 @@ gateway:
     success:               "✅ Kezdőcsatorna beállítva: **{name}** (ID: {chat_id}).\nA cron-feladatok és a platformok közötti üzenetek ide érkeznek."
 
   status:
-    header:                "📊 **Robin Gateway állapot**"
+    header:                "📊 **Emmy Gateway állapot**"
     session_id:            "**Munkamenet-azonosító:** `{session_id}`"
     title:                 "**Cím:** {title}"
     created:               "**Létrehozva:** {timestamp}"
@@ -296,9 +296,9 @@ gateway:
   update:
     platform_not_messaging:  "✗ A /update csak üzenetküldő platformokról érhető el. Futtasd a `hermes update` parancsot a terminálból."
     not_git_repo:            "✗ Nem git-tárhely — frissítés nem lehetséges."
-    hermes_cmd_not_found:    "✗ Nem sikerült megtalálni a `hermes` parancsot. A Robin fut, de a frissítőparancs nem találta a futtatható fájlt a PATH-on vagy a jelenlegi Python interpreteren keresztül. Próbáld futtatni a `hermes update` parancsot manuálisan a terminálban."
+    hermes_cmd_not_found:    "✗ Nem sikerült megtalálni a `hermes` parancsot. A Emmy fut, de a frissítőparancs nem találta a futtatható fájlt a PATH-on vagy a jelenlegi Python interpreteren keresztül. Próbáld futtatni a `hermes update` parancsot manuálisan a terminálban."
     start_failed:            "✗ Nem sikerült elindítani a frissítést: {error}"
-    starting:                "⚕ Robin frissítés indítása… A folyamatot itt fogom közvetíteni."
+    starting:                "⚕ Emmy frissítés indítása… A folyamatot itt fogom közvetíteni."
 
   usage:
     rate_limits:              "⏱️ **Sebességkorlátok:** {state}"

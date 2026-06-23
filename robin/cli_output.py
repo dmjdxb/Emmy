@@ -1,4 +1,4 @@
-"""Shared CLI output helpers for Robin CLI modules.
+"""Shared CLI output helpers for Emmy CLI modules.
 
 Extracts the identical ``print_info/success/warning/error`` and ``prompt()``
 functions previously duplicated across setup.py, tools_config.py,

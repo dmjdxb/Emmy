@@ -125,7 +125,7 @@ function ConfigField({
 
   if (schema.type === 'list') {
     // White-label the toolset preset ids: the backend names them "hermes-*",
-    // but Robin must never show "hermes". Display them as "robin-*" and reverse
+    // but Emmy must never show "hermes". Display them as "robin-*" and reverse
     // on save so the stored value stays the real preset the backend resolves.
     const isToolsets = schemaKey === 'toolsets'
     const toDisplayToken = (s: string) => (isToolsets ? toolsetTokenToDisplay(s) : s)
@@ -348,7 +348,7 @@ export function ConfigSettings({
   }
 
   if (!config || !schema) {
-    return <LoadingState label="Loading Robin configuration..." />
+    return <LoadingState label="Loading Emmy configuration..." />
   }
 
   return (

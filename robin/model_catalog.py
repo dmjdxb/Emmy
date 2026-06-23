@@ -1,6 +1,6 @@
 """Remote model catalog fetcher.
 
-The Robin docs site hosts a JSON manifest of curated models for providers
+The Emmy docs site hosts a JSON manifest of curated models for providers
 we want to update without shipping a release (currently OpenRouter and
 Together AI). This module fetches, validates, and caches that manifest,
 falling back to the in-repo hardcoded lists when the network is unavailable.
@@ -288,7 +288,7 @@ def get_catalog(*, force_refresh: bool = False) -> dict[str, Any]:
 
     # Total failure (no fetch, no prior cache). Negative-cache an empty-but-valid manifest so we don't
     # re-run the fetch — and re-eat the catalog URL's DNS-timeout — on every call within the TTL. Callers
-    # treat empty providers as "use the in-repo default" (Robin's model is fixed), so behaviour is
+    # treat empty providers as "use the in-repo default" (Emmy's model is fixed), so behaviour is
     # unchanged; this only removes the per-request network latency when the catalog host is unreachable.
     empty: dict[str, Any] = {"version": SUPPORTED_SCHEMA_VERSION, "providers": {}}
     _write_disk_cache(empty)

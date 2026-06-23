@@ -43,15 +43,15 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Robin Agent — EnergyIR DS with the LENS_0 (Robin teal) lens applied   */
+/* Emmy Agent — EnergyIR DS with the LENS_0 (Emmy teal) lens applied   */
 /* statically. Mirrors nousnet-web/(hermes-agent)/layout.tsx so the    */
-/* canonical Robin palette is the default — teal canvas + cream      */
+/* canonical Emmy palette is the default — teal canvas + cream      */
 /* accent — without relying on leva/gsap at runtime.                  */
 /* ------------------------------------------------------------------ */
 
 :root {
   /* LENS_0 — from design-language/src/ui/components/overlays/index.tsx.
-     These are the defaults for the `default` (Robin Teal) dashboard theme;
+     These are the defaults for the `default` (Emmy Teal) dashboard theme;
      ThemeProvider rewrites them as inline styles when a user switches themes. */
   --foreground: color-mix(in srgb, #ffffff 0%, transparent);
   --foreground-base: #ffffff;

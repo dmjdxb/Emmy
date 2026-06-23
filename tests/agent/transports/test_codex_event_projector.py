@@ -1,4 +1,4 @@
-"""Tests for CodexEventProjector — codex item/* events → Robin messages list.
+"""Tests for CodexEventProjector — codex item/* events → Emmy messages list.
 
 Drives projection against fixture notifications captured from codex 0.130.0
 plus synthetic ones for item types we couldn't auth-test live."""
@@ -274,7 +274,7 @@ class TestHelpers:
 
 class TestRoleAlternationInvariant:
     """The project must never emit two assistant messages back-to-back from
-    one item — that breaks Robin' message alternation invariant."""
+    one item — that breaks Emmy' message alternation invariant."""
 
     @pytest.mark.parametrize(
         "item",

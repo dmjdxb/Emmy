@@ -280,11 +280,11 @@ class TestHistoryDisplay:
         output = capsys.readouterr().out
 
         assert "[You #1]" in output
-        assert "[Robin #2]" in output
+        assert "[Emmy #2]" in output
         assert "(requested 2 tool calls)" in output
         assert "[Tools]" in output
         assert "(2 tool messages hidden)" in output
-        assert "[Robin #3]" in output
+        assert "[Emmy #3]" in output
         assert "[You #4]" in output
         assert "[You #5]" not in output
         assert "A" * 250 in output
@@ -303,7 +303,7 @@ class TestHistoryDisplay:
             },
             {
                 "id": "20260401_201329_d85961",
-                "title": "Checking Running Robin Agent",
+                "title": "Checking Running Emmy Agent",
                 "preview": "check running gateways for hermes agent",
                 "last_active": 0,
             },
@@ -313,7 +313,7 @@ class TestHistoryDisplay:
         output = capsys.readouterr().out
 
         assert "No messages in the current chat yet" in output
-        assert "Checking Running Robin Agent" in output
+        assert "Checking Running Emmy Agent" in output
         assert "20260401_201329_d85961" in output
         assert "/resume" in output
         assert "Current preview" not in output
@@ -331,7 +331,7 @@ class TestHistoryDisplay:
             },
             {
                 "id": "20260401_201329_d85961",
-                "title": "Checking Running Robin Agent",
+                "title": "Checking Running Emmy Agent",
                 "preview": "check running gateways for hermes agent",
                 "last_active": 0,
             },
@@ -341,7 +341,7 @@ class TestHistoryDisplay:
         output = capsys.readouterr().out
 
         assert "Recent sessions" in output
-        assert "Checking Running Robin Agent" in output
+        assert "Checking Running Emmy Agent" in output
         assert "Use /resume" in output
         assert "session title" in output
 
@@ -414,7 +414,7 @@ class TestHistoryDisplay:
         cli._session_db.list_sessions_rich.return_value = [
             {
                 "id": "20260401_201329_d85961",
-                "title": "Checking Running Robin Agent",
+                "title": "Checking Running Emmy Agent",
                 "preview": "check running gateways for hermes agent",
                 "last_active": 0,
             },
@@ -427,7 +427,7 @@ class TestHistoryDisplay:
 
         assert "Unknown command" not in output
         assert "Recent sessions" in output
-        assert "Checking Running Robin Agent" in output
+        assert "Checking Running Emmy Agent" in output
         assert "20260401_201329_d85961" in output
 
     def test_sessions_list_subcommand_lists_recent_sessions(self, capsys):
@@ -438,7 +438,7 @@ class TestHistoryDisplay:
         cli._session_db.list_sessions_rich.return_value = [
             {
                 "id": "20260401_201329_d85961",
-                "title": "Checking Running Robin Agent",
+                "title": "Checking Running Emmy Agent",
                 "preview": "check running gateways for hermes agent",
                 "last_active": 0,
             },
@@ -449,7 +449,7 @@ class TestHistoryDisplay:
 
         assert "Unknown command" not in output
         assert "Recent sessions" in output
-        assert "Checking Running Robin Agent" in output
+        assert "Checking Running Emmy Agent" in output
 
     def test_sessions_with_target_delegates_to_resume(self):
         """/sessions <id_or_title> behaves identically to /resume <id_or_title>.
@@ -460,10 +460,10 @@ class TestHistoryDisplay:
         """
         cli = _make_cli()
         with patch.object(cli, "_handle_resume_command") as mock_resume:
-            cli.process_command("/sessions Checking Running Robin Agent")
+            cli.process_command("/sessions Checking Running Emmy Agent")
 
         mock_resume.assert_called_once_with(
-            "/resume Checking Running Robin Agent"
+            "/resume Checking Running Emmy Agent"
         )
 
     def test_sessions_command_is_dispatched(self):

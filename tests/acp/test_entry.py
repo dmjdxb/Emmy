@@ -38,7 +38,7 @@ def test_main_check_prints_ok_without_starting_server(monkeypatch, capsys):
 
     entry.main(["--check"])
 
-    assert capsys.readouterr().out.strip() == "Robin ACP check OK"
+    assert capsys.readouterr().out.strip() == "Emmy ACP check OK"
 
 
 def test_main_setup_runs_model_configuration(monkeypatch):

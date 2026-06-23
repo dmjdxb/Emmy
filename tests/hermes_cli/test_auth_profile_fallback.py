@@ -282,7 +282,7 @@ def test_provider_auth_state_returns_none_when_neither_has_it(profile_env):
 # ``resolve_nous_access_token``) call ``_load_provider_state`` directly with
 # a profile-loaded auth store rather than going through
 # ``get_provider_auth_state``. Without the fallback wired into
-# ``_load_provider_state`` itself, those helpers raise ``"Robin is not
+# ``_load_provider_state`` itself, those helpers raise ``"Emmy is not
 # logged into Together AI"`` even though the user has a valid global EnergyIR
 # login. These tests pin the per-provider shadowing into the helper.
 # ---------------------------------------------------------------------------

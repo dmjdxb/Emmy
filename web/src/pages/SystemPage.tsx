@@ -510,7 +510,7 @@ export default function SystemPage() {
         open={updateConfirmOpen}
         onCancel={() => setUpdateConfirmOpen(false)}
         onConfirm={() => void applyUpdate()}
-        title="Update Robin?"
+        title="Update Emmy?"
         description={
           updateInfo && updateInfo.behind && updateInfo.behind > 0
             ? `This will run 'robin update' (${updateInfo.update_command}) and pull ${updateInfo.behind} new commit${updateInfo.behind === 1 ? "" : "s"}. The gateway restarts when the update finishes; the current session keeps its prompt cache until then.`
@@ -683,7 +683,7 @@ export default function SystemPage() {
                 <div>{stats?.python_impl} {stats?.python_version}</div>
               </div>
               <div>
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">Robin</div>
+                <div className="text-xs uppercase tracking-wider text-muted-foreground">Emmy</div>
                 <div className="flex items-center gap-2">
                   <span>v{stats?.hermes_version}</span>
                   {updateInfo &&
@@ -1059,7 +1059,7 @@ export default function SystemPage() {
                   <span className="text-sm font-medium">Share debug report</span>
                   <span className="text-xs text-muted-foreground max-w-prose">
                     Uploads system info + logs to a public paste service and
-                    returns links to send the Robin team. Pastes auto-delete
+                    returns links to send the Emmy team. Pastes auto-delete
                     after 6 hours.
                   </span>
                 </div>

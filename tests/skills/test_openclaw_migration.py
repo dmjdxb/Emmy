@@ -48,12 +48,12 @@ def test_extract_markdown_entries_promotes_heading_context():
 
 ### Active Projects
 
-- Robin Agent
+- Emmy Agent
 """
     entries = mod.extract_markdown_entries(text)
     assert "Tyler Williams: Founder of VANTA Research" in entries
     assert "Tyler Williams: Timezone: America/Los_Angeles" in entries
-    assert "Tyler Williams > Active Projects: Robin Agent" in entries
+    assert "Tyler Williams > Active Projects: Emmy Agent" in entries
 
 
 def test_merge_entries_respects_limit_and_reports_overflow():
@@ -857,13 +857,13 @@ def test_skill_installs_cleanly_under_skills_guard():
 
 def test_rebrand_text_replaces_openclaw_variants():
     mod = load_module()
-    # Mixed-case / capitalized matches → capital-H ``Robin``.
-    assert mod.rebrand_text("OpenClaw prefers Python 3.11") == "Robin prefers Python 3.11"
-    assert mod.rebrand_text("I told Open Claw to use dark mode") == "I told Robin to use dark mode"
-    assert mod.rebrand_text("Open-Claw config is great") == "Robin config is great"
-    assert mod.rebrand_text("OPENCLAW uses tools well") == "Robin uses tools well"
+    # Mixed-case / capitalized matches → capital-H ``Emmy``.
+    assert mod.rebrand_text("OpenClaw prefers Python 3.11") == "Emmy prefers Python 3.11"
+    assert mod.rebrand_text("I told Open Claw to use dark mode") == "I told Emmy to use dark mode"
+    assert mod.rebrand_text("Open-Claw config is great") == "Emmy config is great"
+    assert mod.rebrand_text("OPENCLAW uses tools well") == "Emmy uses tools well"
     # All-lowercase matches → lowercase ``hermes``; this preserves the
-    # real filesystem path ``~/.hermes`` (Robin home) when rebranding
+    # real filesystem path ``~/.hermes`` (Emmy home) when rebranding
     # memory entries that reference ``~/.openclaw`` or ``openclaw`` prose.
     assert mod.rebrand_text("openclaw should always respond concisely") == "hermes should always respond concisely"
 
@@ -871,9 +871,9 @@ def test_rebrand_text_replaces_openclaw_variants():
 def test_rebrand_text_replaces_legacy_bot_names():
     mod = load_module()
     # Same case-preservation rule as above.
-    assert mod.rebrand_text("ClawdBot remembers my timezone") == "Robin remembers my timezone"
+    assert mod.rebrand_text("ClawdBot remembers my timezone") == "Emmy remembers my timezone"
     assert mod.rebrand_text("clawdbot prefers tabs") == "hermes prefers tabs"
-    assert mod.rebrand_text("MoltBot was configured for Spanish") == "Robin was configured for Spanish"
+    assert mod.rebrand_text("MoltBot was configured for Spanish") == "Emmy was configured for Spanish"
     assert mod.rebrand_text("moltbot uses Python") == "hermes uses Python"
 
 
@@ -886,17 +886,17 @@ def test_rebrand_text_preserves_unrelated_content():
 def test_rebrand_text_handles_multiple_replacements():
     mod = load_module()
     text = "OpenClaw said to ask ClawdBot about MoltBot settings"
-    assert mod.rebrand_text(text) == "Robin said to ask Robin about Robin settings"
+    assert mod.rebrand_text(text) == "Emmy said to ask Emmy about Emmy settings"
 
 
 def test_rebrand_text_preserves_filesystem_path_casing():
     """Lowercase matches — especially ``.openclaw`` filesystem paths — must
-    rewrite to lowercase ``.hermes`` (the real Robin home), not the broken
-    ``.Robin``.
+    rewrite to lowercase ``.hermes`` (the real Emmy home), not the broken
+    ``.Emmy``.
 
     Regression test for @versun's OpenClaw-residue feedback: after migration,
     memory entries that referenced ``~/.openclaw/config.yaml`` were being
-    rewritten to ``~/.Robin/config.yaml`` — a path that doesn't exist —
+    rewritten to ``~/.Emmy/config.yaml`` — a path that doesn't exist —
     and the agent kept trying to read it.
     """
     mod = load_module()
@@ -940,7 +940,7 @@ def test_migrate_memory_rebrands_entries(tmp_path):
     result = (target_root / "memories" / "MEMORY.md").read_text(encoding="utf-8")
     assert "OpenClaw" not in result
     assert "ClawdBot" not in result
-    assert "Robin" in result
+    assert "Emmy" in result
 
 
 def test_migrate_soul_rebrands_content(tmp_path):
@@ -969,7 +969,7 @@ def test_migrate_soul_rebrands_content(tmp_path):
 
     result = (target_root / "SOUL.md").read_text(encoding="utf-8")
     assert "OpenClaw" not in result
-    assert "You are Robin" in result
+    assert "You are Emmy" in result
 
 
 # ── migrate_model_config: alias resolution (issue #16745) ──────────────────

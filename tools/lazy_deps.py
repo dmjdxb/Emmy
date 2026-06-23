@@ -1,7 +1,7 @@
 """
-Lazy dependency installer for opt-in Robin backends.
+Lazy dependency installer for opt-in Emmy backends.
 
-Many Robin features (Mistral TTS, ElevenLabs TTS, Honcho memory, Bedrock,
+Many Emmy features (Mistral TTS, ElevenLabs TTS, Honcho memory, Bedrock,
 Slack, Matrix, etc.) require Python packages that not every user needs. The
 historical approach was to bundle them all under ``pyproject.toml`` extras
 (``hermes-agent[all]``) and install them eagerly at setup time. That has

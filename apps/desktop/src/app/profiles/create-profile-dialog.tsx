@@ -87,7 +87,7 @@ export function CreateProfileDialog({
         <DialogHeader>
           <DialogTitle>New profile</DialogTitle>
           <DialogDescription>
-            Profiles are independent Robin environments: separate config, skills, and SOUL.md.
+            Profiles are independent Emmy environments: separate config, skills, and SOUL.md.
           </DialogDescription>
         </DialogHeader>
 

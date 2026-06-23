@@ -1,6 +1,6 @@
-# Robin TUI
+# Emmy TUI
 
-React + Ink terminal UI for Robin. TypeScript owns the screen. Python owns sessions, tools, model calls, and most command logic.
+React + Ink terminal UI for Emmy. TypeScript owns the screen. Python owns sessions, tools, model calls, and most command logic.
 
 ```bash
 hermes --tui

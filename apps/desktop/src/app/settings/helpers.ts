@@ -16,7 +16,7 @@ export const toolsetDisplayLabel = (toolset: Pick<ToolsetInfo, 'label' | 'name'>
   stripToolsetLabel(asText(toolset.label || toolset.name))
 
 // White-label alias for toolset PRESET ids. The backend ships built-in presets
-// named "hermes-*" (e.g. hermes-cli, hermes-telegram). Robin must never show
+// named "hermes-*" (e.g. hermes-cli, hermes-telegram). Emmy must never show
 // "hermes", so the Advanced "Enabled Toolsets" field DISPLAYS them as "robin-*"
 // and STORES the real preset id the backend resolves — a pure display alias
 // with no behavior change. Applied only on the toolsets field, where the only

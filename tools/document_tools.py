@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Ask your document — grounded Q&A over office documents (PDF/DOCX/PPTX/XLSX).
 
-This is Robin's flagship "talk to your document" tool. It does NOT answer the
+This is Emmy's flagship "talk to your document" tool. It does NOT answer the
 question itself: it extracts the document into clean, citation-anchored text and
-returns that text to Robin's main agent, which already holds the conversation and
+returns that text to Emmy's main agent, which already holds the conversation and
 a long context window. The agent then answers grounded in the returned text and
 cites the bracketed anchors (e.g. ``[p.3]``, ``[slide 4]``).
 

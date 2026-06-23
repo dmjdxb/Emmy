@@ -89,7 +89,7 @@ def register_env_passthrough(var_names: Iterable[str]) -> None:
             continue
         if _is_hermes_provider_credential(name):
             logger.warning(
-                "env passthrough: refusing to register Robin provider "
+                "env passthrough: refusing to register Emmy provider "
                 "credential %r (blocked by _HERMES_PROVIDER_ENV_BLOCKLIST). "
                 "Skills must not override the execute_code sandbox's "
                 "credential scrubbing; see GHSA-rhgp-j443-p4rf.",
@@ -123,7 +123,7 @@ def _load_config_passthrough() -> frozenset[str]:
                 # See GHSA-rhgp-j443-p4rf.
                 if _is_hermes_provider_credential(name):
                     logger.warning(
-                        "env passthrough: refusing to register Robin "
+                        "env passthrough: refusing to register Emmy "
                         "provider credential %r from config.yaml (blocked "
                         "by _HERMES_PROVIDER_ENV_BLOCKLIST). Operator "
                         "configuration must not override the execute_code "

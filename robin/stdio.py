@@ -2,7 +2,7 @@
 
 On Windows, Python's ``sys.stdout``/``sys.stderr`` default to the console's
 active code page (often ``cp1252``, sometimes ``cp437``, occasionally ``cp932``
-on Japanese locales, etc.).  Robin's banners, tool output feed, and slash
+on Japanese locales, etc.).  Emmy's banners, tool output feed, and slash
 command listings all contain Unicode: box-drawing characters (``─┌┐└┘├┤``),
 mathematical and geometric symbols (``◆ ◇ ◎ ▣ ⚔ ⚖ →``), and user-supplied
 text in any language.  Printing those to a cp1252 console raises
@@ -47,7 +47,7 @@ def _flip_console_code_page_to_utf8() -> None:
     """Set the attached console's input and output code pages to UTF-8.
 
     Uses ``SetConsoleCP`` / ``SetConsoleOutputCP`` via ``ctypes``.  Failure
-    is silent — if there's no attached console (e.g. Robin is running
+    is silent — if there's no attached console (e.g. Emmy is running
     behind a redirected stdout, under a service, or inside a PTY-less CI
     runner) these calls simply return 0 and we move on.
 
@@ -149,7 +149,7 @@ def configure_windows_stdio() -> bool:
     # degraded output over a stack trace.
     _reconfigure_stream(sys.stdout)
     _reconfigure_stream(sys.stderr)
-    # stdin is re-configured for completeness; Robin's interactive
+    # stdin is re-configured for completeness; Emmy's interactive
     # input path uses prompt_toolkit which manages its own encoding,
     # but batch/pipe input benefits from UTF-8 decoding on stdin too.
     _reconfigure_stream(sys.stdin)
@@ -167,7 +167,7 @@ def _default_windows_editor() -> str:
        blocking editor (``subprocess.call(["notepad", file])`` blocks until
        the user closes the window).  This is the "always-works" default.
 
-    The prompt_toolkit buffer's ``open_in_editor`` and Robin's
+    The prompt_toolkit buffer's ``open_in_editor`` and Emmy's
     ``hermes config edit`` both honour ``$EDITOR``.  Users who prefer a
     different editor can override:
 
@@ -176,8 +176,8 @@ def _default_windows_editor() -> str:
     - Notepad++: ``$env:EDITOR = "'C:\\Program Files\\Notepad++\\notepad++.exe' -multiInst -nosession"``
     - Neovim: ``$env:EDITOR = "nvim"``  (if installed)
 
-    Set this before launching Robin (User env var in Windows Settings, or
-    export in a PowerShell profile) and Robin picks it up automatically.
+    Set this before launching Emmy (User env var in Windows Settings, or
+    export in a PowerShell profile) and Emmy picks it up automatically.
     """
     import shutil
 
@@ -202,7 +202,7 @@ def _augment_path_with_known_tools() -> None:
     *spawned* processes only — already-running shells (including the one the
     user invokes ``hermes`` from right after install) retain their old PATH.
 
-    Any subprocess Robin spawns — bash, ``rg``, ``grep``, ``npm`` — inherits
+    Any subprocess Emmy spawns — bash, ``rg``, ``grep``, ``npm`` — inherits
     that stale PATH and reports commands as missing even though they're on
     disk.  Symptom: ``search_files`` reports "rg/find not available" when
     the user clearly just installed ripgrep.
@@ -229,7 +229,7 @@ def _augment_path_with_known_tools() -> None:
         os.path.join(local_appdata, "hermes", "git", "cmd"),
         os.path.join(local_appdata, "hermes", "git", "bin"),
         os.path.join(local_appdata, "hermes", "git", "usr", "bin"),
-        # Robin venv Scripts directory — host of the hermes.exe shim itself,
+        # Emmy venv Scripts directory — host of the hermes.exe shim itself,
         # also where any pip-installed console scripts land.  Usually already
         # on PATH when the user invokes hermes, but harmless to include.
         os.path.join(local_appdata, "hermes", "hermes-agent", "venv", "Scripts"),

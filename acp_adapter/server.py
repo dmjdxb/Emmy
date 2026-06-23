@@ -1,4 +1,4 @@
-"""ACP agent server — exposes Robin via the Agent Client Protocol."""
+"""ACP agent server — exposes Emmy via the Agent Client Protocol."""
 
 from __future__ import annotations
 
@@ -151,7 +151,7 @@ def _path_from_file_uri(uri: str) -> Path | None:
 
     Zed may send POSIX file URIs from Linux/WSL workspaces or Windows-ish paths
     when launched through wsl.exe. Translate the common Windows drive form to
-    /mnt/<drive>/... so Robin running in WSL can read it.
+    /mnt/<drive>/... so Emmy running in WSL can read it.
     """
     raw = (uri or "").strip()
     if not raw:
@@ -232,7 +232,7 @@ def _resource_link_to_parts(block: ResourceContentBlock) -> list[dict[str, Any]]
                 uri=uri,
                 name=name,
                 title=title,
-                body="[Resource link only; Robin cannot read non-file ACP resource URIs directly.]",
+                body="[Resource link only; Emmy cannot read non-file ACP resource URIs directly.]",
             ),
         }]
 
@@ -400,7 +400,7 @@ def _content_blocks_to_openai_user_content(
         | EmbeddedResourceContentBlock
     ],
 ) -> str | list[dict[str, Any]]:
-    """Convert ACP prompt blocks into a Robin/OpenAI-compatible user content payload."""
+    """Convert ACP prompt blocks into a Emmy/OpenAI-compatible user content payload."""
     parts: list[dict[str, Any]] = []
     text_parts: list[str] = []
 
@@ -443,7 +443,7 @@ def _content_blocks_to_openai_user_content(
 
 
 class RobinACPAgent(acp.Agent):
-    """ACP Agent implementation wrapping Robin AIAgent."""
+    """ACP Agent implementation wrapping Emmy AIAgent."""
 
     _SLASH_COMMANDS = {
         "help": "Show available commands",
@@ -454,7 +454,7 @@ class RobinACPAgent(acp.Agent):
         "compact": "Compress conversation context",
         "steer": "Inject guidance into the currently running agent turn",
         "queue": "Queue a prompt to run after the current turn finishes",
-        "version": "Show Robin version",
+        "version": "Show Emmy version",
     }
 
     _ADVERTISED_COMMANDS = (
@@ -495,7 +495,7 @@ class RobinACPAgent(acp.Agent):
         },
         {
             "name": "version",
-            "description": "Show Robin version",
+            "description": "Show Emmy version",
         },
     )
 
@@ -531,7 +531,7 @@ class RobinACPAgent(acp.Agent):
 
         Zed renders ``config_options`` in the prominent selector slot where the
         model picker was visible. Claude/Codex expose policy-like controls as ACP
-        modes, which coexist with the model picker, so Robin maps edit approval
+        modes, which coexist with the model picker, so Emmy maps edit approval
         policy onto modes instead of advertising config options.
         """
 
@@ -662,7 +662,7 @@ class RobinACPAgent(acp.Agent):
 
         Zed's circular context indicator is driven by ACP ``usage_update``
         session updates: ``size`` is the model context window and ``used`` is
-        the current request pressure.  Robin estimates ``used`` from the same
+        the current request pressure.  Emmy estimates ``used`` from the same
         buckets it sends to providers: system prompt, conversation history, and
         tool schemas.
         """
@@ -710,7 +710,7 @@ class RobinACPAgent(acp.Agent):
             )
 
     async def _send_session_info_update(self, session_id: str) -> None:
-        """Send ACP native session metadata after Robin changes it."""
+        """Send ACP native session metadata after Emmy changes it."""
         if not self._conn:
             return
         try:
@@ -857,7 +857,7 @@ class RobinACPAgent(acp.Agent):
         # provider we advertised in initialize(). Without this check,
         # authenticate() would acknowledge any method_id as long as the
         # server has provider credentials configured — harmless under
-        # Robin' threat model (ACP is stdio-only, local-trust), but poor
+        # Emmy' threat model (ACP is stdio-only, local-trust), but poor
         # API hygiene and confusing if ACP ever grows multi-method auth.
         if not isinstance(method_id, str):
             return None
@@ -865,7 +865,7 @@ class RobinACPAgent(acp.Agent):
         provider = detect_provider()
 
         if normalized_method == TERMINAL_SETUP_AUTH_METHOD_ID:
-            # Terminal auth launches Robin setup/model selection out-of-band.
+            # Terminal auth launches Emmy setup/model selection out-of-band.
             # Only report success once that flow has produced usable runtime
             # credentials for the normal ACP session.
             return AuthenticateResponse() if provider else None
@@ -986,7 +986,7 @@ class RobinACPAgent(acp.Agent):
 
         Replays the conversation as user/assistant chunks, thinking-mode
         thought chunks, plus reconstructed tool-call start/completion
-        notifications. Merely restoring server-side state makes Robin
+        notifications. Merely restoring server-side state makes Emmy
         remember context, but leaves the editor looking like a clean thread.
         """
         if not self._conn or not state.history:
@@ -1252,7 +1252,7 @@ class RobinACPAgent(acp.Agent):
         session_id: str,
         **kwargs: Any,
     ) -> PromptResponse:
-        """Run Robin on the user's prompt and stream events back to the editor."""
+        """Run Emmy on the user's prompt and stream events back to the editor."""
         state = self.session_manager.get_session(session_id)
         if state is None:
             logger.error("prompt: session %s not found", session_id)
@@ -1386,7 +1386,7 @@ class RobinACPAgent(acp.Agent):
 
         agent = state.agent
         agent.tool_progress_callback = tool_progress_cb
-        # ACP thought panes should not receive Robin' local kawaii waiting/status
+        # ACP thought panes should not receive Emmy' local kawaii waiting/status
         # updates. Route provider/model reasoning deltas instead; if the provider
         # emits no reasoning, Zed should not get a fake "thinking" accordion.
         agent.thinking_callback = None
@@ -1875,7 +1875,7 @@ class RobinACPAgent(acp.Agent):
         return f"Queued for the next turn. ({depth} queued)"
 
     def _cmd_version(self, args: str, state: SessionState) -> str:
-        return f"Robin v{HERMES_VERSION}"
+        return f"Emmy v{HERMES_VERSION}"
 
     # ---- Model switching (ACP protocol method) -------------------------------
 
@@ -1932,7 +1932,7 @@ class RobinACPAgent(acp.Agent):
     async def set_config_option(
         self, config_id: str, session_id: str, value: str, **kwargs: Any
     ) -> SetSessionConfigOptionResponse | None:
-        """Accept ACP config option updates even when Robin has no typed ACP config surface yet."""
+        """Accept ACP config option updates even when Emmy has no typed ACP config surface yet."""
         state = self.session_manager.get_session(session_id)
         if state is None:
             logger.warning("Session %s: config update requested for missing session", session_id)

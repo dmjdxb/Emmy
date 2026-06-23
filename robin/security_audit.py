@@ -1,9 +1,9 @@
-"""On-demand supply-chain audit for Robin installs.
+"""On-demand supply-chain audit for Emmy installs.
 
-Scans three surfaces a Robin user actually controls and we can map to
+Scans three surfaces a Emmy user actually controls and we can map to
 upstream advisories without auth or extra binaries:
 
-1. The Robin venv (every PyPI dist via ``importlib.metadata``).
+1. The Emmy venv (every PyPI dist via ``importlib.metadata``).
 2. Python deps declared by user-installed plugins under ``~/.hermes/plugins``
    (``requirements.txt`` + ``pyproject.toml`` best-effort pin extraction).
 3. MCP servers wired in ``config.yaml`` whose ``command/args`` look like

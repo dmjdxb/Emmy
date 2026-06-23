@@ -190,11 +190,11 @@ if (INSTALL_STAMP) {
 // HERMES_HOME beneath the throwaway userData dir so a fresh-install run never
 // touches the user's real ~/.hermes / %LOCALAPPDATA%\hermes.
 function resolveRobinHome() {
-  // Robin keeps its OWN isolated home (~/.robin, %LOCALAPPDATA%\robin) so it
+  // Emmy keeps its OWN isolated home (~/.robin, %LOCALAPPDATA%\robin) so it
   // never collides with — or adopts the backend of — a separate upstream
   // Hermes install on the same machine (PRD §11.4). We deliberately do NOT
   // honour an inherited HERMES_HOME or fall back to ~/.hermes here, because
-  // that is exactly how Robin would pick up someone's existing Hermes runtime.
+  // that is exactly how Emmy would pick up someone's existing Hermes runtime.
   if (process.env.ROBIN_HOME) return path.resolve(process.env.ROBIN_HOME)
   if (USER_DATA_OVERRIDE) return path.join(path.resolve(USER_DATA_OVERRIDE), 'robin-home')
   if (IS_WINDOWS && process.env.LOCALAPPDATA) {
@@ -204,7 +204,7 @@ function resolveRobinHome() {
 }
 
 const HERMES_HOME = resolveRobinHome()
-// ACTIVE_HERMES_ROOT — the canonical mutable Robin install. Same path
+// ACTIVE_HERMES_ROOT — the canonical mutable Emmy install. Same path
 // install.ps1 / install.sh use, so a desktop-only user and a CLI-only user end
 // up with identical layouts and can share one install.
 const ACTIVE_HERMES_ROOT = path.join(HERMES_HOME, 'hermes-agent')
@@ -226,7 +226,7 @@ const BOOTSTRAP_MARKER_SCHEMA_VERSION = 1
 
 const DESKTOP_CONNECTION_CONFIG_PATH = path.join(app.getPath('userData'), 'connection.json')
 const DESKTOP_UPDATE_CONFIG_PATH = path.join(app.getPath('userData'), 'updates.json')
-// active-profile.json records which Robin profile the desktop launches its
+// active-profile.json records which Emmy profile the desktop launches its
 // local backend as. When set, startHermes() passes `hermes --profile <name>
 // dashboard …`, which deterministically pins HERMES_HOME (see
 // _apply_profile_override in robin/main.py) and bypasses the sticky
@@ -252,7 +252,7 @@ const BOOT_FAKE_STEP_MS = (() => {
   if (!Number.isFinite(raw) || raw <= 0) return 650
   return Math.max(120, raw)
 })()
-const APP_NAME = 'Robin'
+const APP_NAME = 'Emmy'
 const TITLEBAR_HEIGHT = 34
 const MACOS_TRAFFIC_LIGHTS_HEIGHT = 14
 const WINDOW_BUTTON_POSITION = {
@@ -521,7 +521,7 @@ let nativeThemeListenerInstalled = false
 let bootProgressState = {
   error: null,
   fakeMode: BOOT_FAKE_MODE,
-  message: 'Waiting to start Robin backend',
+  message: 'Waiting to start Emmy backend',
   phase: 'idle',
   progress: 0,
   running: false,
@@ -959,7 +959,7 @@ function findSystemPython() {
   //      miss real Python 3.13 installs (user-reported case).
   //
   // We also restrict ourselves to Python 3.11–3.13. 3.14 is the latest
-  // CPython but several Robin deps (notably pywinpty's Rust-built
+  // CPython but several Emmy deps (notably pywinpty's Rust-built
   // windows_x86_64_msvc crate) don't yet publish 3.14 wheels, and
   // `pip install -e .` falls back to source-build, which fails without
   // a Rust toolchain. install.ps1 sidesteps this by pinning to 3.11
@@ -1053,7 +1053,7 @@ function findSystemPython() {
   return null
 }
 
-// findGitBash — locate bash.exe on Windows. Robin' terminal tool requires
+// findGitBash — locate bash.exe on Windows. Emmy' terminal tool requires
 // bash (POSIX shell), and on Windows that's almost always Git for Windows'
 // bundled Git Bash. We check the same set of locations tools/environments/
 // local.py:_find_bash() checks at runtime, so a positive result here means
@@ -1350,7 +1350,7 @@ async function checkUpdatesViaGitHub() {
         ? [
             {
               sha: latest,
-              summary: `Robin ${latest} is available`,
+              summary: `Emmy ${latest} is available`,
               author: 'EnergyIR',
               at: Date.parse(rel.published_at || '') || Date.now()
             }
@@ -1381,11 +1381,11 @@ async function applyUpdatesViaGitHub() {
     emitUpdateProgress({ stage: 'error', message: 'No installer found for this platform.', error: 'no-asset', percent: null })
     return { ok: false, error: 'no-asset', message: 'No installer asset in the latest release.' }
   }
-  emitUpdateProgress({ stage: 'fetch', message: `Downloading Robin ${latest}…`, percent: 0 })
+  emitUpdateProgress({ stage: 'fetch', message: `Downloading Emmy ${latest}…`, percent: 0 })
   const dest = path.join(app.getPath('downloads'), asset.name)
   try {
     await httpsDownload(asset.browser_download_url, dest, pct =>
-      emitUpdateProgress({ stage: 'fetch', message: `Downloading Robin ${latest}…`, percent: pct })
+      emitUpdateProgress({ stage: 'fetch', message: `Downloading Emmy ${latest}…`, percent: pct })
     )
   } catch (err) {
     emitUpdateProgress({
@@ -1397,7 +1397,7 @@ async function applyUpdatesViaGitHub() {
     return { ok: false, error: 'download-failed', message: (err && err.message) || String(err) }
   }
   // Open the installer (mounts the dmg / launches the exe) so the user drops the
-  // new Robin into Applications. A drag-install can't replace the running app in
+  // new Emmy into Applications. A drag-install can't replace the running app in
   // place, so this is the safe apply on a signed build.
   try {
     await shell.openPath(dest)
@@ -1667,7 +1667,7 @@ async function applyUpdates(opts = {}) {
       return { ok: true, manual: true, command, hermesRoot: updateRoot }
     }
 
-    emitUpdateProgress({ stage: 'restart', message: 'Handing off to the Robin updater…', percent: 100 })
+    emitUpdateProgress({ stage: 'restart', message: 'Handing off to the Emmy updater…', percent: 100 })
 
     const updateRoot = resolveUpdateRoot()
     const { branch: configuredBranch } = readDesktopUpdateConfig()
@@ -1821,7 +1821,7 @@ async function applyUpdatesPosixInApp() {
     // best effort
   }
 
-  emitUpdateProgress({ stage: 'update', message: 'Updating Robin (git + dependencies)…', percent: 10 })
+  emitUpdateProgress({ stage: 'update', message: 'Updating Emmy (git + dependencies)…', percent: 10 })
   const updated = await runStreamedUpdate(hermes, ['update', '--yes', ...branchArgs], {
     cwd: updateRoot,
     env,
@@ -1841,15 +1841,15 @@ async function applyUpdatesPosixInApp() {
   if (rebuilt.code !== 0) {
     emitUpdateProgress({
       stage: 'error',
-      message: 'Backend updated, but the desktop rebuild failed. Restart Robin to retry.',
+      message: 'Backend updated, but the desktop rebuild failed. Restart Emmy to retry.',
       error: rebuilt.error || 'rebuild-failed'
     })
     return { ok: false, backendUpdated: true, error: 'desktop rebuild failed' }
   }
 
   const rebuiltApp = [
-    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac-arm64', 'Robin.app'),
-    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac', 'Robin.app')
+    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac-arm64', 'Emmy.app'),
+    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac', 'Emmy.app')
   ].find(directoryExists)
   const targetApp = runningAppBundle()
 
@@ -1858,7 +1858,7 @@ async function applyUpdatesPosixInApp() {
   if (!rebuiltApp || !targetApp) {
     emitUpdateProgress({
       stage: 'done',
-      message: 'Backend updated. Restart Robin to load the new version.',
+      message: 'Backend updated. Restart Emmy to load the new version.',
       percent: 100
     })
     return { ok: true, backendUpdated: true, rebuiltApp: rebuiltApp || null }
@@ -1894,7 +1894,7 @@ fi
   } catch (err) {
     emitUpdateProgress({
       stage: 'done',
-      message: 'Backend + app updated. Restart Robin to load the new version.',
+      message: 'Backend + app updated. Restart Emmy to load the new version.',
       percent: 100
     })
     rememberLog(`[updates] could not write swap script: ${err.message}; rebuilt app at ${rebuiltApp}`)
@@ -1964,11 +1964,11 @@ function writeBootstrapMarker(payload) {
 }
 
 // ── Bundled backend (zero developer tooling) ───────────────────────────────
-// Robin ships a prebuilt, self-contained Python backend (source + a relocatable
+// Emmy ships a prebuilt, self-contained Python backend (source + a relocatable
 // CPython with all deps) as Contents/Resources/backend.tar.gz. On first launch
 // (and after an app update) we extract it into HERMES_HOME/hermes-agent and seed
 // config.yaml — NO git, NO compiler, NO Command Line Tools, NO pip-at-runtime.
-// This is what makes Robin installable by a non-technical user. If the bundle is
+// This is what makes Emmy installable by a non-technical user. If the bundle is
 // absent or extraction fails, we fall back to the network bootstrap.
 function spawnAwait(cmd, args) {
   return new Promise((resolve, reject) => {
@@ -2124,7 +2124,7 @@ function resolveRobinCwd() {
   // The user-configurable default project directory wins over everything,
   // followed by env hints (only honored when packaged if they point at a
   // real directory), then the home dir.
-  // Robin (by EnergyIR) is for office users: default the workspace to the
+  // Emmy (by EnergyIR) is for office users: default the workspace to the
   // Desktop (a familiar, safe working folder) rather than the whole home dir,
   // which would expose system/dev/library folders. Users open other specific
   // folders (Documents, Downloads, a project) via the folder picker.
@@ -2223,7 +2223,7 @@ function createActiveBackend(dashboardArgs) {
 
   return {
     kind: 'python',
-    label: `Robin at ${ACTIVE_HERMES_ROOT}`,
+    label: `Emmy at ${ACTIVE_HERMES_ROOT}`,
     command: fileExists(venvPython) ? venvPython : findSystemPython(),
     args: ['-m', 'robin.main', ...dashboardArgs],
     env: {
@@ -2240,7 +2240,7 @@ function resolveRobinBackend(dashboardArgs) {
   //    checkout. Honour it as-is (no bootstrap; the user is driving).
   const overrideRoot = process.env.HERMES_DESKTOP_HERMES_ROOT && path.resolve(process.env.HERMES_DESKTOP_HERMES_ROOT)
   if (overrideRoot && isRobinSourceRoot(overrideRoot)) {
-    const backend = createPythonBackend(overrideRoot, `Robin source at ${overrideRoot}`, dashboardArgs)
+    const backend = createPythonBackend(overrideRoot, `Emmy source at ${overrideRoot}`, dashboardArgs)
     if (backend) return backend
   }
 
@@ -2249,7 +2249,7 @@ function resolveRobinBackend(dashboardArgs) {
   //    installed `hermes` on PATH so local Python edits are actually exercised.
   //    (In dev with no checkout, SOURCE_REPO_ROOT won't pass isRobinSourceRoot.)
   if (!IS_PACKAGED && isRobinSourceRoot(SOURCE_REPO_ROOT)) {
-    const backend = createPythonBackend(SOURCE_REPO_ROOT, `Robin source at ${SOURCE_REPO_ROOT}`, dashboardArgs)
+    const backend = createPythonBackend(SOURCE_REPO_ROOT, `Emmy source at ${SOURCE_REPO_ROOT}`, dashboardArgs)
     if (backend) return backend
   }
 
@@ -2285,7 +2285,7 @@ function resolveRobinBackend(dashboardArgs) {
       )
       return {
         kind: 'bootstrap-needed',
-        label: 'Robin backend update required (desktop version changed)',
+        label: 'Emmy backend update required (desktop version changed)',
         command: null,
         args: dashboardArgs,
         bootstrap: true,
@@ -2317,7 +2317,7 @@ function resolveRobinBackend(dashboardArgs) {
       } else if (!isWindowsBinaryPathInWsl(hermesOverride, { isWsl: IS_WSL })) {
         hermesCommand = hermesOverride
       } else {
-        rememberLog(`Ignoring Windows Robin override under WSL: ${hermesOverride}`)
+        rememberLog(`Ignoring Windows Emmy override under WSL: ${hermesOverride}`)
       }
     } else {
       hermesCommand = findOnPath('hermes')
@@ -2325,7 +2325,7 @@ function resolveRobinBackend(dashboardArgs) {
 
     if (hermesCommand) {
       if (looksLikeDesktopAppBinary(hermesCommand)) {
-        rememberLog(`Ignoring desktop app executable on PATH while resolving Robin CLI: ${hermesCommand}`)
+        rememberLog(`Ignoring desktop app executable on PATH while resolving Emmy CLI: ${hermesCommand}`)
         hermesCommand = null
       }
     }
@@ -2341,7 +2341,7 @@ function resolveRobinBackend(dashboardArgs) {
       const shellForProbe = isCommandScript(hermesCommand)
       if (verifyRobinCli(hermesCommand, { shell: shellForProbe })) {
         return {
-          label: `existing Robin CLI at ${hermesCommand}`,
+          label: `existing Emmy CLI at ${hermesCommand}`,
           command: hermesCommand,
           args: dashboardArgs,
           bootstrap: false,
@@ -2351,7 +2351,7 @@ function resolveRobinBackend(dashboardArgs) {
         }
       }
       rememberLog(
-        `Ignoring existing Robin CLI at ${hermesCommand}: --version probe failed; falling through to bootstrap.`
+        `Ignoring existing Emmy CLI at ${hermesCommand}: --version probe failed; falling through to bootstrap.`
       )
     }
   }
@@ -2395,7 +2395,7 @@ function resolveRobinBackend(dashboardArgs) {
   //    is a recoverable state the GUI can drive through.
   return {
     kind: 'bootstrap-needed',
-    label: 'Robin not installed yet; bootstrap required',
+    label: 'Emmy not installed yet; bootstrap required',
     command: null,
     args: dashboardArgs,
     bootstrap: true,
@@ -2432,7 +2432,7 @@ async function ensureRuntime(backend) {
       if (await installBundledBackend()) {
         const reresolved = resolveRobinBackend(backend.args || [])
         if (reresolved && reresolved.kind === 'python') {
-          await advanceBootProgress('runtime.bundled', 'Robin is ready', 32)
+          await advanceBootProgress('runtime.bundled', 'Emmy is ready', 32)
           return reresolved
         }
       }
@@ -2440,7 +2440,7 @@ async function ensureRuntime(backend) {
       rememberLog('[bundle] bundled-backend path errored, using network bootstrap: ' + (err && err.message))
     }
 
-    rememberLog('[bootstrap] no Robin install found; starting first-launch bootstrap')
+    rememberLog('[bootstrap] no Emmy install found; starting first-launch bootstrap')
 
     // Eagerly flip the bootstrap UI state to 'active' so the renderer
     // shows the install overlay BEFORE the runner finishes fetching the
@@ -2489,7 +2489,7 @@ async function ensureRuntime(backend) {
     bootstrapAbortController = null
 
     if (bootstrapResult.cancelled) {
-      const cancelledError = new Error('Robin install was cancelled.')
+      const cancelledError = new Error('Emmy install was cancelled.')
       cancelledError.isBootstrapFailure = true
       cancelledError.bootstrapCancelled = true
       bootstrapFailure = cancelledError
@@ -2498,7 +2498,7 @@ async function ensureRuntime(backend) {
 
     if (!bootstrapResult.ok) {
       const bootstrapError = new Error(
-        `Robin bootstrap failed${bootstrapResult.failedStage ? ` at stage '${bootstrapResult.failedStage}'` : ''}: ` +
+        `Emmy bootstrap failed${bootstrapResult.failedStage ? ` at stage '${bootstrapResult.failedStage}'` : ''}: ` +
           `${bootstrapResult.error || 'unknown error'}. ` +
           `Check ${path.join(HERMES_HOME, 'logs', 'desktop.log')} for the full transcript.`
       )
@@ -2525,12 +2525,12 @@ async function ensureRuntime(backend) {
   // attests they ran successfully).
   if (!isRobinSourceRoot(ACTIVE_HERMES_ROOT)) {
     throw new Error(
-      `Robin install at ${ACTIVE_HERMES_ROOT} is missing or incomplete. ` +
+      `Emmy install at ${ACTIVE_HERMES_ROOT} is missing or incomplete. ` +
         'Reinstall via the desktop installer or scripts/install.ps1.'
     )
   }
 
-  // On Windows, preflight Git Bash. Robin' terminal tool calls bash.exe
+  // On Windows, preflight Git Bash. Emmy' terminal tool calls bash.exe
   // directly (tools/environments/local.py); without it the agent can't run
   // terminal commands. install.ps1's Stage-Git puts PortableGit at
   // %LOCALAPPDATA%\hermes\git\, which findGitBash() picks up, so for any
@@ -2538,10 +2538,10 @@ async function ensureRuntime(backend) {
   // here via an external `hermes` on PATH, this check still helps.
   if (IS_WINDOWS && !findGitBash()) {
     throw new Error(
-      'Git for Windows is required for Robin on Windows (provides Git Bash, ' +
+      'Git for Windows is required for Emmy on Windows (provides Git Bash, ' +
         "which the agent's terminal tool uses). Install it from " +
         'https://git-scm.com/download/win or run `winget install -e --id Git.Git`, ' +
-        'then relaunch Robin.'
+        'then relaunch Emmy.'
     )
   }
 
@@ -2555,15 +2555,15 @@ async function ensureRuntime(backend) {
     // install.ps1 succeeds. If we hit this, the user (or a deleted venv)
     // broke the invariant; tell them to re-run the install.
     throw new Error(
-      `Robin venv missing at ${VENV_ROOT}. Re-run the desktop installer or ` + '`scripts/install.ps1` to rebuild it.'
+      `Emmy venv missing at ${VENV_ROOT}. Re-run the desktop installer or ` + '`scripts/install.ps1` to rebuild it.'
     )
   }
 
   backend.command = venvPython
-  backend.label = `Robin at ${ACTIVE_HERMES_ROOT} (venv: ${VENV_ROOT})`
+  backend.label = `Emmy at ${ACTIVE_HERMES_ROOT} (venv: ${VENV_ROOT})`
   updateBootProgress({
     phase: 'runtime.ready',
-    message: 'Robin runtime is ready',
+    message: 'Emmy runtime is ready',
     progress: 82,
     running: true,
     error: null
@@ -2597,7 +2597,7 @@ function fetchJson(url, token, options = {}) {
     const timeoutMs = resolveTimeoutMs(options.timeoutMs, DEFAULT_FETCH_TIMEOUT_MS)
 
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-      reject(new Error(`Unsupported Robin backend URL protocol: ${parsed.protocol}`))
+      reject(new Error(`Unsupported Emmy backend URL protocol: ${parsed.protocol}`))
       return
     }
 
@@ -2635,7 +2635,7 @@ function fetchJson(url, token, options = {}) {
             reject(
               new Error(
                 `Expected JSON from ${url} but got HTML (status ${res.statusCode}). ` +
-                  'The endpoint is likely missing on the Robin backend.'
+                  'The endpoint is likely missing on the Emmy backend.'
               )
             )
             return
@@ -2651,7 +2651,7 @@ function fetchJson(url, token, options = {}) {
 
     req.on('error', reject)
     req.setTimeout(timeoutMs, () => {
-      req.destroy(new Error(`Timed out connecting to Robin backend after ${timeoutMs}ms`))
+      req.destroy(new Error(`Timed out connecting to Emmy backend after ${timeoutMs}ms`))
     })
     if (body) req.write(body)
     req.end()
@@ -2677,7 +2677,7 @@ function fetchPublicJson(url, options = {}) {
     const timeoutMs = resolveTimeoutMs(options.timeoutMs, DEFAULT_FETCH_TIMEOUT_MS)
 
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-      reject(new Error(`Unsupported Robin backend URL protocol: ${parsed.protocol}`))
+      reject(new Error(`Unsupported Emmy backend URL protocol: ${parsed.protocol}`))
       return
     }
 
@@ -2709,7 +2709,7 @@ function fetchPublicJson(url, options = {}) {
             reject(
               new Error(
                 `Expected JSON from ${url} but got HTML (status ${res.statusCode}). ` +
-                  'The endpoint is likely missing on the Robin backend.'
+                  'The endpoint is likely missing on the Emmy backend.'
               )
             )
             return
@@ -2725,7 +2725,7 @@ function fetchPublicJson(url, options = {}) {
 
     req.on('error', reject)
     req.setTimeout(timeoutMs, () => {
-      req.destroy(new Error(`Timed out connecting to Robin backend after ${timeoutMs}ms`))
+      req.destroy(new Error(`Timed out connecting to Emmy backend after ${timeoutMs}ms`))
     })
     if (body) req.write(body)
     req.end()
@@ -3252,7 +3252,7 @@ async function waitForHermes(baseUrl, token) {
     }
   }
 
-  throw new Error(`Robin backend did not become ready: ${lastError?.message || 'timeout'}`)
+  throw new Error(`Emmy backend did not become ready: ${lastError?.message || 'timeout'}`)
 }
 
 function getWindowButtonPosition() {
@@ -3292,7 +3292,7 @@ function sendClosePreviewRequested() {
 
 // Tell the renderer the machine just woke. Sleep silently drops the
 // renderer's WebSocket to the local backend; the renderer reconnects on this
-// signal so the chat composer doesn't stay stuck on "Starting Robin...".
+// signal so the chat composer doesn't stay stuck on "Starting Emmy...".
 function sendPowerResume() {
   if (!mainWindow || mainWindow.isDestroyed()) return
   const { webContents } = mainWindow
@@ -3666,7 +3666,7 @@ function installMediaPermissions() {
 // ---------------------------------------------------------------------------
 // OAuth remote-gateway auth.
 //
-// Hosted Robin gateways gate the dashboard behind an OAuth provider (e.g.
+// Hosted Emmy gateways gate the dashboard behind an OAuth provider (e.g.
 // EnergyIR) instead of a static session token. The auth model is
 // fundamentally different from the token path:
 //
@@ -3807,7 +3807,7 @@ function openOauthLoginWindow(baseUrl) {
       win = new BrowserWindow({
         width: 520,
         height: 720,
-        title: 'Sign in to Robin gateway',
+        title: 'Sign in to Emmy gateway',
         autoHideMenuBar: true,
         webPreferences: {
           contextIsolation: true,
@@ -3862,7 +3862,7 @@ function fetchJsonViaOauthSession(url, options = {}) {
       return
     }
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-      reject(new Error(`Unsupported Robin backend URL protocol: ${parsed.protocol}`))
+      reject(new Error(`Unsupported Emmy backend URL protocol: ${parsed.protocol}`))
       return
     }
     const body = options.body === undefined ? undefined : Buffer.from(JSON.stringify(options.body))
@@ -3886,7 +3886,7 @@ function fetchJsonViaOauthSession(url, options = {}) {
       } catch {
         // already finished
       }
-      reject(new Error(`Timed out connecting to Robin backend after ${timeoutMs}ms`))
+      reject(new Error(`Timed out connecting to Emmy backend after ${timeoutMs}ms`))
     }, timeoutMs)
 
     request.on('response', res => {
@@ -4219,7 +4219,7 @@ async function buildRemoteConnection(rawUrl, authMode, token, source) {
     // the authoritative liveness check.
     if (!(await hasLiveOauthSession(baseUrl))) {
       const err = new Error(
-        'Remote Robin gateway uses OAuth, but you are not signed in. ' +
+        'Remote Emmy gateway uses OAuth, but you are not signed in. ' +
           'Open Settings → Gateway and click "Sign in", or switch back to Local.'
       )
       err.needsOauthLogin = true
@@ -4251,7 +4251,7 @@ async function buildRemoteConnection(rawUrl, authMode, token, source) {
 
   if (!token) {
     throw new Error(
-      'Remote Robin gateway is selected, but no session token is saved. ' +
+      'Remote Emmy gateway is selected, but no session token is saved. ' +
         'Open Settings → Gateway and save a token, or switch back to Local.'
     )
   }
@@ -4292,7 +4292,7 @@ async function resolveRemoteBackend(profile) {
     if (!rawEnvToken) {
       throw new Error(
         'HERMES_DESKTOP_REMOTE_URL is set but HERMES_DESKTOP_REMOTE_TOKEN is not. ' +
-          'Both must be provided to connect to a remote Robin backend.'
+          'Both must be provided to connect to a remote Emmy backend.'
       )
     }
     return buildRemoteConnection(rawEnvUrl, 'token', rawEnvToken, 'env')
@@ -4347,7 +4347,7 @@ async function requestJsonForProfile(profile, path, method, body) {
 
 async function probeRemoteAuthMode(rawUrl) {
   // Determine how a remote gateway expects callers to authenticate, WITHOUT
-  // sending any credentials. ``/api/status`` is public on every Robin
+  // sending any credentials. ``/api/status`` is public on every Emmy
   // gateway (it backs the portal liveness probe) and reports:
   //   auth_required: true  → OAuth gate is engaged (cookie + ws-ticket auth)
   //   auth_required: false → loopback/--insecure: legacy session-token auth
@@ -4443,7 +4443,7 @@ async function testDesktopConnectionConfig(input = {}) {
   // connects — a separate transport with separate server-side guards (Host/
   // Origin, ws-ticket/token auth). Validating only the HTTP side produced a
   // false-positive "reachable" while the real boot still failed with "Could not
-  // connect to Robin gateway". Mirror the renderer's connect here so the test
+  // connect to Emmy gateway". Mirror the renderer's connect here so the test
   // reflects the full path the app actually uses.
   const wsUrl = await resolveTestWsUrl(baseUrl, authMode, token, { mintTicket: mintGatewayWsTicket })
   // Skip the WS leg only when the runtime genuinely lacks a WebSocket (so an
@@ -4632,7 +4632,7 @@ async function spawnPoolBackend(profile, entry) {
   const hermesCwd = resolveRobinCwd()
   const webDist = resolveWebDist()
 
-  rememberLog(`Starting Robin backend for profile "${profile}" via ${backend.label}`)
+  rememberLog(`Starting Emmy backend for profile "${profile}" via ${backend.label}`)
 
   const child = spawn(backend.command, backend.args, {
     cwd: hermesCwd,
@@ -4659,15 +4659,15 @@ async function spawnPoolBackend(profile, entry) {
     rejectStart = reject
   })
   child.once('error', error => {
-    rememberLog(`Robin backend for profile "${profile}" failed to start: ${error.message}`)
+    rememberLog(`Emmy backend for profile "${profile}" failed to start: ${error.message}`)
     backendPool.delete(profile)
     rejectStart?.(error)
   })
   child.once('exit', (code, signal) => {
-    rememberLog(`Robin backend for profile "${profile}" exited (${signal || code})`)
+    rememberLog(`Emmy backend for profile "${profile}" exited (${signal || code})`)
     backendPool.delete(profile)
     if (!ready) {
-      rejectStart?.(new Error(`Robin backend for profile "${profile}" exited before it became ready (${signal || code}).`))
+      rejectStart?.(new Error(`Emmy backend for profile "${profile}" exited before it became ready (${signal || code}).`))
     }
   })
 
@@ -4720,16 +4720,16 @@ async function startHermes() {
   if (connectionPromise) return connectionPromise
 
   connectionPromise = (async () => {
-    await advanceBootProgress('backend.resolve', 'Resolving Robin backend', 8)
+    await advanceBootProgress('backend.resolve', 'Resolving Emmy backend', 8)
     // Resolve for the desktop's primary profile so a per-profile remote
     // override on the active profile is honored (falls back to env / global).
     const remote = await resolveRemoteBackend(primaryProfileKey())
     if (remote) {
-      await advanceBootProgress('backend.remote', `Connecting to remote Robin backend at ${remote.baseUrl}`, 24)
+      await advanceBootProgress('backend.remote', `Connecting to remote Emmy backend at ${remote.baseUrl}`, 24)
       await waitForHermes(remote.baseUrl, remote.token)
       updateBootProgress({
         phase: 'backend.ready',
-        message: 'Remote Robin backend is ready',
+        message: 'Remote Emmy backend is ready',
         progress: 94,
         running: true,
         error: null
@@ -4759,13 +4759,13 @@ async function startHermes() {
     if (activeProfile) {
       dashboardArgs.unshift('--profile', activeProfile)
     }
-    await advanceBootProgress('backend.runtime', 'Resolving Robin runtime', 28)
+    await advanceBootProgress('backend.runtime', 'Resolving Emmy runtime', 28)
     const backend = await ensureRuntime(resolveRobinBackend(dashboardArgs))
     const hermesCwd = resolveRobinCwd()
     const webDist = resolveWebDist()
 
-    await advanceBootProgress('backend.spawn', `Starting Robin backend via ${backend.label}`, 84)
-    rememberLog(`Starting Robin backend via ${backend.label}`)
+    await advanceBootProgress('backend.spawn', `Starting Emmy backend via ${backend.label}`, 84)
+    rememberLog(`Starting Emmy backend via ${backend.label}`)
 
     hermesProcess = spawn(backend.command, backend.args, {
       cwd: hermesCwd,
@@ -4796,11 +4796,11 @@ async function startHermes() {
       rejectBackendStart = reject
     })
     hermesProcess.once('error', error => {
-      rememberLog(`Robin backend failed to start: ${error.message}`)
+      rememberLog(`Emmy backend failed to start: ${error.message}`)
       updateBootProgress(
         {
           error: error.message,
-          message: `Robin backend failed to start: ${error.message}`,
+          message: `Emmy backend failed to start: ${error.message}`,
           phase: 'backend.error',
           running: false
         },
@@ -4812,12 +4812,12 @@ async function startHermes() {
       rejectBackendStart?.(error)
     })
     hermesProcess.once('exit', (code, signal) => {
-      rememberLog(`Robin backend exited (${signal || code})`)
+      rememberLog(`Emmy backend exited (${signal || code})`)
       hermesProcess = null
       connectionPromise = null
       sendBackendExit({ code, signal })
       if (!backendReady) {
-        const message = `Robin backend exited before it became ready (${signal || code}).`
+        const message = `Emmy backend exited before it became ready (${signal || code}).`
         updateBootProgress(
           {
             error: message,
@@ -4829,19 +4829,19 @@ async function startHermes() {
         )
         rejectBackendStart?.(
           new Error(
-            `Robin backend exited before it became ready (${signal || code}). Log: ${DESKTOP_LOG_PATH}\n${recentRobinLog()}`
+            `Emmy backend exited before it became ready (${signal || code}). Log: ${DESKTOP_LOG_PATH}\n${recentRobinLog()}`
           )
         )
       }
     })
 
     const baseUrl = `http://127.0.0.1:${port}`
-    await advanceBootProgress('backend.wait', 'Waiting for Robin backend to become ready', 90)
+    await advanceBootProgress('backend.wait', 'Waiting for Emmy backend to become ready', 90)
     await Promise.race([waitForHermes(baseUrl, token), backendStartFailed])
     backendReady = true
     updateBootProgress({
       phase: 'backend.ready',
-      message: 'Robin backend is ready. Finalizing desktop startup',
+      message: 'Emmy backend is ready. Finalizing desktop startup',
       progress: 94,
       running: true,
       error: null
@@ -4882,7 +4882,7 @@ function createWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 620,
-    title: 'Robin',
+    title: 'Emmy',
     // Frameless title bar on every platform so the renderer can paint the
     // "hide sidebar" button (and other left-side titlebar tools) flush with
     // the top edge — matching the macOS layout where the traffic lights sit
@@ -5297,7 +5297,7 @@ ipcMain.handle('hermes:api', async (_event, request) => {
 ipcMain.handle('hermes:notify', (_event, payload) => {
   if (!Notification.isSupported()) return false
   new Notification({
-    title: payload?.title || 'Robin',
+    title: payload?.title || 'Emmy',
     body: payload?.body || '',
     silent: Boolean(payload?.silent)
   }).show()
@@ -5553,7 +5553,7 @@ function terminalShellEnv() {
 
   // Strip color/theme-detection vars that ride along when Electron is launched
   // from a non-tty agent shell (Cursor's runner sets NO_COLOR/FORCE_COLOR=0
-  // /TERM=dumb; some terminals set COLORFGBG which would flip Robin' TUI into
+  // /TERM=dumb; some terminals set COLORFGBG which would flip Emmy' TUI into
   // light-mode). Our PTY is a real xterm-compat terminal — force truecolor.
   delete env.NO_COLOR
   delete env.FORCE_COLOR
@@ -5562,7 +5562,7 @@ function terminalShellEnv() {
   env.COLORTERM = 'truecolor'
   env.LC_CTYPE = env.LC_CTYPE || 'UTF-8'
   env.TERM = 'xterm-256color'
-  env.TERM_PROGRAM = 'Robin'
+  env.TERM_PROGRAM = 'Emmy'
   env.TERM_PROGRAM_VERSION = app.getVersion()
 
   return env
@@ -5591,7 +5591,7 @@ function disposeTerminalSession(id) {
 }
 
 // Resolve the effective workspace folder for the file browser / sessions.
-// Robin (by EnergyIR) NEVER defaults a non-technical user to their entire home
+// Emmy (by EnergyIR) NEVER defaults a non-technical user to their entire home
 // folder: an empty, missing, or home-root remembered workspace is redirected to
 // the safe Desktop default. A real folder the user explicitly chose is honoured.
 ipcMain.handle('hermes:fs:resolveWorkspace', async (_event, rememberedCwd) => {
@@ -5653,7 +5653,7 @@ ipcMain.handle('hermes:fs:gitRoot', async (_event, startPath) => {
 
 ipcMain.handle('hermes:terminal:start', async (event, payload = {}) => {
   if (!nodePty) {
-    throw new Error('PTY support is unavailable. Reinstall desktop dependencies and restart Robin.')
+    throw new Error('PTY support is unavailable. Reinstall desktop dependencies and restart Emmy.')
   }
 
   const id = crypto.randomUUID()
@@ -5743,8 +5743,8 @@ ipcMain.handle('hermes:updates:branch:set', async (_event, name) => {
   return { branch }
 })
 
-// Resolve the canonical Robin version (the one `release.py` bumps in
-// The About panel shows the Robin DESKTOP release version (package.json /
+// Resolve the canonical Emmy version (the one `release.py` bumps in
+// The About panel shows the Emmy DESKTOP release version (package.json /
 // app.getVersion()) — the number that matches the installer, the GitHub
 // release tag, and the backend-asset download URL. We deliberately do NOT read
 // robin/__init__.py's __version__ here: that's the Python backend's own version

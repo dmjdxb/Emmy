@@ -207,7 +207,7 @@ export async function initialize(): Promise<void> {
           installRoot: payload.installRoot,
           currentStage: null
         })
-        // Install: show the "launch Robin" success screen. Update: this is a
+        // Install: show the "launch Emmy" success screen. Update: this is a
         // hand-off — the installer relaunches the desktop and exits within a
         // few hundred ms, so routing to success just flashes that screen
         // before the window closes. Stay on progress until we exit.

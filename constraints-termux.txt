@@ -1,4 +1,4 @@
-# Termux / Android dependency constraints for Robin.
+# Termux / Android dependency constraints for Emmy.
 #
 # Usage:
 #   python -m pip install -e '.[termux]' -c constraints-termux.txt

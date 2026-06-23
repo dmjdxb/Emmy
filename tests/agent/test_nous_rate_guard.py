@@ -256,7 +256,7 @@ class TestAuxiliaryClientIntegration:
 class TestIsGenuineNousRateLimit:
     """Tell a real account-level 429 apart from an upstream-capacity 429.
 
-    Together AI multiplexes upstreams (DeepSeek, Kimi, MiMo, Robin).
+    Together AI multiplexes upstreams (DeepSeek, Kimi, MiMo, Emmy).
     A 429 from an upstream out of capacity should NOT trip the
     cross-session breaker; a real user-quota 429 should.
     """

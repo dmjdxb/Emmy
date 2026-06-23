@@ -128,7 +128,7 @@ def _camofox_identity_override(task_id: Optional[str], camofox_cfg: Dict[str, An
     """Return an externally configured Camofox identity, if one is set.
 
     Integrations that own the visible Camofox browser can set a shared user ID
-    so Robin operates in the same browser profile instead of creating a
+    so Emmy operates in the same browser profile instead of creating a
     separate private session.
     """
     user_id = os.getenv("CAMOFOX_USER_ID", "").strip() or str(camofox_cfg.get("user_id") or "").strip()
@@ -156,7 +156,7 @@ def _env_flag(name: str) -> Optional[bool]:
 
 
 def _adopt_existing_tab_enabled(camofox_cfg: Dict[str, Any]) -> bool:
-    """Return whether Robin should recover an existing Camofox tab ID."""
+    """Return whether Emmy should recover an existing Camofox tab ID."""
     env_value = _env_flag("CAMOFOX_ADOPT_EXISTING_TAB")
     if env_value is not None:
         return env_value
@@ -167,7 +167,7 @@ def _loopback_rewrite_enabled(camofox_cfg: Dict[str, Any]) -> bool:
     """Return whether loopback navigation URLs should be rewritten for Docker.
 
     ``CAMOFOX_URL`` itself often points at a host-published Docker port such as
-    ``http://127.0.0.1:9377``.  That is correct for Robin talking to the
+    ``http://127.0.0.1:9377``.  That is correct for Emmy talking to the
     Camofox control API, but a page URL like ``http://127.0.0.1:3000`` is opened
     by the browser *inside* the Docker container.  In that context loopback
     points at the container, not the host running the web app.
@@ -257,7 +257,7 @@ _sessions_lock = threading.Lock()
 def _adopt_existing_tab(session: Dict[str, Any]) -> Dict[str, Any]:
     """Attach process-local state to an already-open managed Camofox tab.
 
-    Some integrations own the visible Camofox tab outside Robin. Gateway
+    Some integrations own the visible Camofox tab outside Emmy. Gateway
     restarts can leave this module's in-memory session cache empty even though
     Camofox still has that tab, so rehydrate tab_id before creating a new tab.
     """
@@ -296,7 +296,7 @@ def _get_session(task_id: Optional[str]) -> Dict[str, Any]:
     """Get or create a camofox session for the given task.
 
     When managed persistence is enabled, uses a deterministic userId
-    derived from the Robin profile so the Camofox server can map it
+    derived from the Emmy profile so the Camofox server can map it
     to the same persistent browser profile across restarts.
     """
     task_id = task_id or "default"

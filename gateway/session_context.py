@@ -1,5 +1,5 @@
 """
-Session-scoped context variables for the Robin gateway.
+Session-scoped context variables for the Emmy gateway.
 
 Replaces the previous ``os.environ``-based session state
 (``HERMES_SESSION_PLATFORM``, ``HERMES_SESSION_CHAT_ID``, etc.) with

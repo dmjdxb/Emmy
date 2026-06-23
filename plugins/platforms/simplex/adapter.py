@@ -1,11 +1,11 @@
-"""SimpleX Chat platform adapter (Robin plugin).
+"""SimpleX Chat platform adapter (Emmy plugin).
 
 Connects to a simplex-chat daemon running in WebSocket mode.
 Inbound messages arrive via a persistent WebSocket connection.
 Outbound messages use the same WebSocket with JSON commands.
 
-This adapter ships as a Robin platform plugin under
-``plugins/platforms/simplex/``. The Robin plugin loader scans the
+This adapter ships as a Emmy platform plugin under
+``plugins/platforms/simplex/``. The Emmy plugin loader scans the
 directory at startup, calls ``register(ctx)``, and the platform
 becomes available to ``gateway/run.py`` and ``tools/send_message_tool``
 through the registry — no edits to core files are required.
@@ -41,7 +41,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 # Lazy import: BasePlatformAdapter and friends live in the main repo.
-# Imported at module top because they're stdlib-only inside Robin — no
+# Imported at module top because they're stdlib-only inside Emmy — no
 # external dependency that would block the plugin from loading.
 from gateway.config import Platform, PlatformConfig
 from gateway.platforms.base import (
@@ -712,7 +712,7 @@ def interactive_setup() -> None:
 
 
 def register(ctx) -> None:
-    """Plugin entry point — called by the Robin plugin system at startup."""
+    """Plugin entry point — called by the Emmy plugin system at startup."""
     ctx.register_platform(
         name="simplex",
         label="SimpleX Chat",

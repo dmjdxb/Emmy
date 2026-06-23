@@ -84,7 +84,7 @@ const POLL_MS = 2000
 const COPY_FLASH_MS = 1500
 const DEFAULT_ONBOARDING_REASON = 'No inference provider is configured.'
 
-// Robin ships a single, locked default model (the UI has no model picker by
+// Emmy ships a single, locked default model (the UI has no model picker by
 // design). Onboarding always persists THIS model after a provider connects, so
 // the underlying vendor's "recommended" default (e.g. MiniMax) never leaks in.
 const ROBIN_DEFAULT_MODEL = 'deepseek-ai/DeepSeek-V4-Pro'
@@ -186,7 +186,7 @@ async function checkRuntime(ctx: OnboardingContext): Promise<RuntimeReadinessRes
 }
 
 function notifyReady(provider: string) {
-  notify({ kind: 'success', title: 'Robin is ready', message: `${provider} connected.` })
+  notify({ kind: 'success', title: 'Emmy is ready', message: `${provider} connected.` })
 }
 
 // Human-friendly labels for tools auto-routed through the Tool Gateway,
@@ -253,10 +253,10 @@ async function fetchProviderDefaultModel(
   const matched =
     providers.find((p: ModelOptionProvider) => lower.includes(String(p.slug).toLowerCase())) ?? providers[0]
 
-  // Robin ships ONE locked default model by design (no model selection in the
+  // Emmy ships ONE locked default model by design (no model selection in the
   // UI). We do NOT honor the backend's recommended default here — that returned
-  // whatever the provider curated (e.g. MiniMax), which is wrong for Robin and
-  // also leaks a vendor name. Always pin Robin's default.
+  // whatever the provider curated (e.g. MiniMax), which is wrong for Emmy and
+  // also leaks a vendor name. Always pin Emmy's default.
   return {
     providerSlug: String(matched.slug),
     defaultModel: ROBIN_DEFAULT_MODEL
@@ -334,8 +334,8 @@ function providerResolutionFailure(reason: null | string) {
   const detail = reason?.trim()
 
   return detail
-    ? `Connected, but Robin still cannot resolve a usable provider. ${detail}`
-    : 'Connected, but Robin still cannot resolve a usable provider.'
+    ? `Connected, but Emmy still cannot resolve a usable provider. ${detail}`
+    : 'Connected, but Emmy still cannot resolve a usable provider.'
 }
 
 async function refreshProviders() {
@@ -676,7 +676,7 @@ export async function recheckExternalSignin(ctx: OnboardingContext) {
       provider,
       message:
         reason?.trim() ||
-        `Robin still cannot reach ${provider.name}. Run \`${provider.cli_command}\` in a terminal first.`
+        `Emmy still cannot reach ${provider.name}. Run \`${provider.cli_command}\` in a terminal first.`
     })
   )
 }
@@ -778,7 +778,7 @@ export async function saveOnboardingLocalEndpoint(baseUrl: string, ctx: Onboardi
     if (!runtime.ready) {
       const detail = (runtime.reason ?? '').trim()
 
-      return { ok: false, message: detail || `Saved, but Robin still cannot reach ${url}.` }
+      return { ok: false, message: detail || `Saved, but Emmy still cannot reach ${url}.` }
     }
 
     notifyReady('Local / custom endpoint')

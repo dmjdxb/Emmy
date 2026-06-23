@@ -1,4 +1,4 @@
-"""``hermes debug`` debug tools for Robin.
+"""``hermes debug`` debug tools for Emmy.
 
 Currently supports:
     hermes debug share    Upload debug report (system info + logs) to a
@@ -189,7 +189,7 @@ def _best_effort_sweep_expired_pastes() -> None:
 
 _PRIVACY_NOTICE = """\
 ⚠️  This will upload the following to a public paste service:
-  • System info (OS, Python version, Robin version, provider, which API keys
+  • System info (OS, Python version, Emmy version, provider, which API keys
     are configured — NOT the actual keys)
   • Recent log lines (agent.log, errors.log, gateway.log, desktop.log — may
     contain conversation fragments and file paths)
@@ -770,7 +770,7 @@ def run_debug_share(args):
     # Manual delete fallback
     print(f"To delete now:  hermes debug delete <url>")
 
-    print(f"\nShare these links with the Robin team for support.")
+    print(f"\nShare these links with the Emmy team for support.")
 
 
 def run_debug_delete(args):

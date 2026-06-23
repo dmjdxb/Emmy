@@ -25,7 +25,7 @@ export const PROVIDER_VIEWS = ['accounts', 'keys'] as const
 
 export type ProviderView = (typeof PROVIDER_VIEWS)[number]
 
-// Robin (by EnergyIR) surfaces exactly ONE provider credential: the EnergyIR
+// Emmy (by EnergyIR) surfaces exactly ONE provider credential: the EnergyIR
 // API key (stored as TOGETHER_API_KEY). We ALWAYS render its row — so users can
 // see whether they're connected, get a key, or remove it — without gating on
 // the backend env-catalog `category` (gating there made the row disappear).
@@ -48,7 +48,7 @@ function buildProviderKeyGroups(vars: Record<string, EnvVarInfo>): ProviderKeyGr
     {
       advanced: [],
       // Description + docs link drive the expandable "Your EnergyIR API key
-      // powers Robin" + "Get a key" affordances.
+      // powers Emmy" + "Get a key" affordances.
       description: meta?.description ?? info.description,
       docsUrl: meta?.docsUrl ?? info.url ?? undefined,
       hasAnySet: Boolean(info.is_set),
@@ -100,7 +100,7 @@ function OAuthPicker({ onWantApiKey, providers }: { onWantApiKey: () => void; pr
         </Button>
       </div>
       <p className="-mt-2 mb-1 text-[length:var(--conversation-caption-font-size)] leading-(--conversation-caption-line-height) text-(--ui-text-tertiary)">
-        Sign in with a subscription — no API key to copy. Robin runs the browser sign-in for you, right here in the
+        Sign in with a subscription — no API key to copy. Emmy runs the browser sign-in for you, right here in the
         app.
       </p>
       {featured && <FeaturedProviderRow onSelect={select} provider={featured} />}
@@ -181,7 +181,7 @@ export function ProvidersSettings({ onViewChange, view }: ProvidersSettingsProps
     return <LoadingState label="Loading providers..." />
   }
 
-  // White-label: Robin only ever offers the EnergyIR API key. The third-party
+  // White-label: Emmy only ever offers the EnergyIR API key. The third-party
   // OAuth account picker (OpenAI/Anthropic/xAI sign-in) is never shown, even if
   // something deep-links to the old `accounts` sub-view. Always render keys.
   const showApiKeys = true

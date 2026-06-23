@@ -313,7 +313,7 @@ function onFocus() {
   lastFocusAt = now
   void checkUpdates()
   // Cheap and safe to re-read on every (throttled) focus: the user may have
-  // updated Robin from another window/CLI between focuses, and About should
+  // updated Emmy from another window/CLI between focuses, and About should
   // catch up without forcing a restart.
   void refreshDesktopVersion()
 }

@@ -1,4 +1,4 @@
-"""Robin CLI skin/theme engine.
+"""Emmy CLI skin/theme engine.
 
 A data-driven skin system that lets users customize the CLI's visual appearance.
 Skins are defined as YAML files in ~/.hermes/skins/ or as built-in presets.
@@ -65,10 +65,10 @@ All fields are optional. Missing values inherit from the ``default`` skin.
 
     # Branding: text strings used throughout the CLI
     branding:
-      agent_name: "Robin"          # Banner title, status display
+      agent_name: "Emmy"          # Banner title, status display
       welcome: "Welcome message"          # Shown at CLI startup
       goodbye: "Goodbye! ⚕"              # Shown on exit
-      response_label: " ⚕ Robin "       # Response box header label
+      response_label: " ⚕ Emmy "       # Response box header label
       prompt_symbol: "❯"                 # Input prompt symbol (bare token; renderers add trailing space)
       help_header: "(^_^)? Commands"      # /help header text
 
@@ -90,7 +90,7 @@ USAGE
 
     skin = get_active_skin()
     print(skin.colors["banner_title"])    # "#FFD700"
-    print(skin.get_branding("agent_name"))  # "Robin"
+    print(skin.get_branding("agent_name"))  # "Emmy"
 
     set_active_skin("ares")               # Switch to built-in ares skin
     set_active_skin("mytheme")            # Switch to user skin from ~/.hermes/skins/
@@ -98,7 +98,7 @@ USAGE
 BUILT-IN SKINS
 ==============
 
-- ``default`` — Classic Robin gold/kawaii (the current look)
+- ``default`` — Classic Emmy gold/kawaii (the current look)
 - ``ares``    — Crimson/bronze war-god theme with custom spinner wings
 - ``mono``    — Clean grayscale monochrome
 - ``slate``   — Cool blue developer-focused theme
@@ -164,7 +164,7 @@ class SkinConfig:
 _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
     "default": {
         "name": "default",
-        "description": "Robin — EnergyIR brand skin (green)",
+        "description": "Emmy — EnergyIR brand skin (green)",
         "colors": {
             "banner_border": "#3aa676",
             "banner_title": "#55c392",
@@ -187,10 +187,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
             "thinking_verbs": ["thinking", "working", "helping", "planning"],
         },
         "branding": {
-            "agent_name": "Robin",
-            "welcome": "Robin — Because every superhero needs a sidekick.",
-            "goodbye": "See you soon. — Robin",
-            "response_label": " ✦ Robin ",
+            "agent_name": "Emmy",
+            "welcome": "Emmy — Because every superhero needs a sidekick.",
+            "goodbye": "See you soon. — Emmy",
+            "response_label": " ✦ Emmy ",
             "prompt_symbol": "❯",
             "help_header": "(^_^)? Available Commands",
         },
@@ -198,7 +198,7 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
     },
     "robin": {
         "name": "robin",
-        "description": "Robin — EnergyIR brand skin (green)",
+        "description": "Emmy — EnergyIR brand skin (green)",
         "colors": {
             "banner_border": "#3aa676",
             "banner_title": "#55c392",
@@ -221,10 +221,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
             "thinking_verbs": ["thinking", "working", "helping", "planning"],
         },
         "branding": {
-            "agent_name": "Robin",
-            "welcome": "Robin — Because every superhero needs a sidekick.",
-            "goodbye": "See you soon. — Robin",
-            "response_label": " ✦ Robin ",
+            "agent_name": "Emmy",
+            "welcome": "Emmy — Because every superhero needs a sidekick.",
+            "goodbye": "See you soon. — Emmy",
+            "response_label": " ✦ Emmy ",
             "prompt_symbol": "❯",
             "help_header": "(^_^)? Available Commands",
         },
@@ -332,10 +332,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Robin",
-            "welcome": "Robin — Because every superhero needs a sidekick.",
-            "goodbye": "See you soon. — Robin",
-            "response_label": " ✦ Robin ",
+            "agent_name": "Emmy",
+            "welcome": "Emmy — Because every superhero needs a sidekick.",
+            "goodbye": "See you soon. — Emmy",
+            "response_label": " ✦ Emmy ",
             "prompt_symbol": "❯",
             "help_header": "[?] Available Commands",
         },
@@ -371,10 +371,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Robin",
-            "welcome": "Robin — Because every superhero needs a sidekick.",
-            "goodbye": "See you soon. — Robin",
-            "response_label": " ✦ Robin ",
+            "agent_name": "Emmy",
+            "welcome": "Emmy — Because every superhero needs a sidekick.",
+            "goodbye": "See you soon. — Emmy",
+            "response_label": " ✦ Emmy ",
             "prompt_symbol": "❯",
             "help_header": "(^_^)? Available Commands",
         },
@@ -408,10 +408,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Robin",
-            "welcome": "Robin — Because every superhero needs a sidekick.",
-            "goodbye": "See you soon. — Robin",
-            "response_label": " ✦ Robin ",
+            "agent_name": "Emmy",
+            "welcome": "Emmy — Because every superhero needs a sidekick.",
+            "goodbye": "See you soon. — Emmy",
+            "response_label": " ✦ Emmy ",
             "prompt_symbol": "❯",
             "help_header": "[?] Available Commands",
         },
@@ -445,10 +445,10 @@ _BUILTIN_SKINS: Dict[str, Dict[str, Any]] = {
         },
         "spinner": {},
         "branding": {
-            "agent_name": "Robin",
-            "welcome": "Robin \u2014 your everyday sidekick. Because every superhero needs a sidekick.",
-            "goodbye": "See you soon. \u2014 Robin",
-            "response_label": " \u2726 Robin ",
+            "agent_name": "Emmy",
+            "welcome": "Emmy \u2014 your everyday sidekick. Because every superhero needs a sidekick.",
+            "goodbye": "See you soon. \u2014 Emmy",
+            "response_label": " \u2726 Emmy ",
             "prompt_symbol": "\u276f",
             "help_header": "(^_^)? Available Commands",
         },

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Download Robin — by EnergyIR</title>
-  <meta name="description" content="Robin — your everyday sidekick. A desktop AI assistant by EnergyIR. One click to install." />
+  <title>Download Emmy — by EnergyIR</title>
+  <meta name="description" content="Emmy — your everyday sidekick. A desktop AI assistant by EnergyIR. One click to install." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f1115'/%3E%3Cpath d='M20 50 C40 30 70 38 80 52' stroke='%233aa676' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='74' cy='44' r='7' fill='%2355c392'/%3E%3C/svg%3E" />
   <style>
     :root {
@@ -46,7 +46,7 @@
   </style>
 </head>
 <body>
-  <svg class="logo" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" aria-label="Robin">
+  <svg class="logo" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" aria-label="Emmy">
     <defs>
       <radialGradient id="tile" cx="38%" cy="32%" r="80%">
         <stop offset="0%" stop-color="#143a2b"/><stop offset="55%" stop-color="#102d22"/><stop offset="100%" stop-color="#0f1115"/>
@@ -64,11 +64,11 @@
     </g>
   </svg>
 
-  <h1>Robin</h1>
+  <h1>Emmy</h1>
   <p class="tagline">Your sidekick.</p>
-  <p class="sub">Because every superhero needs a sidekick. Install Robin to your desktop and start — drafting, rewriting, parsing documents, and brainstorming. No technical setup.</p>
+  <p class="sub">Because every superhero needs a sidekick. Install Emmy to your desktop and start — drafting, rewriting, parsing documents, and brainstorming. No technical setup.</p>
 
-  <a class="primary-btn" id="primary" href="https://github.com/dmjdxb/Robin/releases/latest">Download Robin</a>
+  <a class="primary-btn" id="primary" href="https://github.com/dmjdxb/Robin/releases/latest">Download Emmy</a>
   <div class="sublink" id="sublink"></div>
 
   <div class="others">
@@ -79,10 +79,10 @@
 
   <div class="steps" id="mac-steps" style="display:none">
     <b>To install on a Mac:</b><br/>
-    1. Click <b>Download Robin for Mac</b> above.<br/>
-    2. Open the downloaded <b>Robin.dmg</b>.<br/>
-    3. Drag <b>Robin</b> into the <b>Applications</b> folder.<br/>
-    4. Open <b>Robin</b> from Applications and paste your <b>EnergyIR API key</b>.
+    1. Click <b>Download Emmy for Mac</b> above.<br/>
+    2. Open the downloaded <b>Emmy.dmg</b>.<br/>
+    3. Drag <b>Emmy</b> into the <b>Applications</b> folder.<br/>
+    4. Open <b>Emmy</b> from Applications and paste your <b>EnergyIR API key</b>.
   </div>
 
   <p class="note">Signed &amp; notarized — opens cleanly, no security warnings. For Apple Silicon Macs (M1/M2/M3/M4). Served over HTTPS with published SHA-256 checksums on each release.</p>
@@ -102,8 +102,8 @@
     const dlMac = document.getElementById('dl-mac');
     const dlWin = document.getElementById('dl-win');
 
-    if (isMac) { primary.textContent = 'Download Robin for Mac'; document.getElementById('mac-steps').style.display = 'block'; }
-    else if (isWin) { primary.textContent = 'Download Robin for Windows'; }
+    if (isMac) { primary.textContent = 'Download Emmy for Mac'; document.getElementById('mac-steps').style.display = 'block'; }
+    else if (isWin) { primary.textContent = 'Download Emmy for Windows'; }
 
     fetch('https://api.github.com/repos/' + REPO + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
       .then(r => r.ok ? r.json() : Promise.reject())

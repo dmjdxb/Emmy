@@ -39,7 +39,7 @@ The script supports **any of the ~100 popular imgflip templates** by name or ID,
 | `woman-yelling-at-cat` | Woman Yelling at Cat | woman, cat | arguments |
 | `one-does-not-simply` | One Does Not Simply | top, bottom | deceptively hard things |
 | `grus-plan` | Gru's Plan | step1-3, realization | plans that backfire |
-| `batman-slapping-robin` | Batman Slapping Robin | robin, batman | shutting down bad ideas |
+| `batman-slapping-robin` | Batman Slapping Emmy | robin, batman | shutting down bad ideas |
 
 ### Dynamic Templates (from imgflip API)
 

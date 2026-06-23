@@ -9,7 +9,7 @@ import { asText, includesQuery, redactedValue, withoutKey } from './helpers'
 import { Pill } from './primitives'
 import type { EnvRowProps } from './types'
 
-// Friendly, user-facing name for a credential in toasts. Robin never surfaces
+// Friendly, user-facing name for a credential in toasts. Emmy never surfaces
 // the raw env-var name (e.g. TOGETHER_API_KEY) — the EnergyIR key is the only
 // provider credential and it is always shown as "EnergyIR API key".
 export function credentialToastLabel(key: string): string {

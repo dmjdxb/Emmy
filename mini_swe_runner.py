@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SWE Runner with Robin Trajectory Format
+SWE Runner with Emmy Trajectory Format
 
 A runner that uses Robin-Agent's built-in execution environments
 (local, docker, modal) and outputs trajectories in the Robin-Agent format
@@ -8,7 +8,7 @@ compatible with batch_runner.py and trajectory_compressor.py.
 
 Features:
 - Uses Robin-Agent's Docker, Modal, or Local environments for command execution
-- Outputs trajectories in Robin format (from/value pairs with <tool_call>/<tool_response> XML)
+- Outputs trajectories in Emmy format (from/value pairs with <tool_call>/<tool_response> XML)
 - Compatible with the trajectory compression pipeline
 - Supports batch processing from JSONL prompt files
 
@@ -151,7 +151,7 @@ def create_environment(
 
 
 # ============================================================================
-# Mini-SWE Runner with Robin Trajectory Format
+# Mini-SWE Runner with Emmy Trajectory Format
 # ============================================================================
 
 class MiniSWERunner:
@@ -308,7 +308,7 @@ class MiniSWERunner:
         completed: bool
     ) -> List[Dict[str, Any]]:
         """
-        Convert internal message format to Robin trajectory format.
+        Convert internal message format to Emmy trajectory format.
         
         This produces the exact format used by batch_runner.py.
         """
@@ -562,7 +562,7 @@ Complete the user's task step by step."""
             # Cleanup environment
             self._cleanup_env()
         
-        # Convert to Robin trajectory format
+        # Convert to Emmy trajectory format
         trajectory = self._convert_to_hermes_format(messages, task, completed)
         
         return {
@@ -648,7 +648,7 @@ def main(
     verbose: bool = False,
 ):
     """
-    Run SWE tasks with Robin trajectory format output.
+    Run SWE tasks with Emmy trajectory format output.
     
     Args:
         task: Single task to run (use this OR prompts_file)
@@ -674,7 +674,7 @@ def main(
         # Batch from file
         python mini_swe_runner.py --prompts_file tasks.jsonl --output_file results.jsonl
     """
-    print("🚀 Mini-SWE Runner with Robin Trajectory Format")
+    print("🚀 Mini-SWE Runner with Emmy Trajectory Format")
     print("=" * 60)
     
     # Initialize runner

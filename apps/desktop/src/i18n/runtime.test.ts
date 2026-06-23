@@ -14,7 +14,7 @@ describe('desktop i18n runtime translator', () => {
   it('translates string paths for the active runtime locale', () => {
     setRuntimeI18nLocale('zh')
 
-    expect(translateNow('boot.ready')).toBe('Robin 已就绪')
+    expect(translateNow('boot.ready')).toBe('Emmy 已就绪')
   })
 
   it('passes arguments to function translations', () => {

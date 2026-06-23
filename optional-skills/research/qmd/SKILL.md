@@ -2,7 +2,7 @@
 name: qmd
 description: Search personal knowledge bases, notes, docs, and meeting transcripts locally using qmd — a hybrid retrieval engine with BM25, vector search, and LLM reranking. Supports CLI and MCP integration.
 version: 1.0.0
-author: Robin + Teknium
+author: Emmy + Teknium
 license: MIT
 platforms: [macos, linux]
 metadata:
@@ -220,7 +220,7 @@ qmd multi-get "journals/*.md" --json  # Batch retrieve by glob
 ## MCP Integration (Recommended)
 
 qmd exposes an MCP server that provides search tools directly to
-Robin via the native MCP client. This is the preferred
+Emmy via the native MCP client. This is the preferred
 integration — once configured, the agent gets qmd tools automatically
 without needing to load this skill.
 
@@ -254,7 +254,7 @@ qmd mcp --http --daemon
 # Runs on http://localhost:8181 by default
 ```
 
-Then configure Robin to connect via HTTP:
+Then configure Emmy to connect via HTTP:
 
 ```yaml
 mcp_servers:

@@ -1,4 +1,4 @@
-"""ACP auth helpers — detect and advertise Robin authentication methods."""
+"""ACP auth helpers — detect and advertise Emmy authentication methods."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ TERMINAL_SETUP_AUTH_METHOD_ID = "hermes-setup"
 
 
 def detect_provider() -> Optional[str]:
-    """Resolve the active Robin runtime provider, or None if unavailable.
+    """Resolve the active Emmy runtime provider, or None if unavailable.
 
     Treats a ``Callable`` ``api_key`` (Azure Foundry Entra ID bearer
     token provider — see :mod:`agent.azure_identity_adapter`) as a valid
@@ -34,16 +34,16 @@ def detect_provider() -> Optional[str]:
 
 
 def has_provider() -> bool:
-    """Return True if Robin can resolve any runtime provider credentials."""
+    """Return True if Emmy can resolve any runtime provider credentials."""
     return detect_provider() is not None
 
 
 def build_auth_methods() -> list[Any]:
-    """Return registry-compatible ACP auth methods for Robin.
+    """Return registry-compatible ACP auth methods for Emmy.
 
     The official ACP registry validates that agents advertise at least one
     usable auth method during the initial handshake. A fresh Zed install may
-    not have Robin provider credentials configured yet, so Robin always
+    not have Emmy provider credentials configured yet, so Emmy always
     advertises a terminal setup method. When credentials are already present,
     it also advertises the resolved provider as the default agent-managed
     runtime credential method.
@@ -58,7 +58,7 @@ def build_auth_methods() -> list[Any]:
                 id=provider,
                 name=f"{provider} runtime credentials",
                 description=(
-                    "Authenticate Robin using the currently configured "
+                    "Authenticate Emmy using the currently configured "
                     f"{provider} runtime credentials."
                 ),
             )
@@ -67,10 +67,10 @@ def build_auth_methods() -> list[Any]:
     methods.append(
         TerminalAuthMethod(
             id=TERMINAL_SETUP_AUTH_METHOD_ID,
-            name="Configure Robin provider",
+            name="Configure Emmy provider",
             description=(
-                "Open Robin' interactive model/provider setup in a terminal. "
-                "Use this when Robin has not been configured on this machine yet."
+                "Open Emmy' interactive model/provider setup in a terminal. "
+                "Use this when Emmy has not been configured on this machine yet."
             ),
             type="terminal",
             args=["--setup"],

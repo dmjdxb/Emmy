@@ -1,15 +1,15 @@
 # Third-Party Notices
 
-Robin by EnergyIR incorporates open-source software. The principal components
+Emmy by EnergyIR incorporates open-source software. The principal components
 and their licences are listed below. This file is referenced from the in-app
 **Settings → About & Licences** screen and from `LICENSE`.
 
 ## Upstream base — Hermes Agent (MIT)
 
-Robin is built on **Hermes Agent** by Nous Research, used under the MIT License.
-Robin (the larger work) is proprietary to EnergyIR (see `LICENSE`), but the
+Emmy is built on **Hermes Agent** by Nous Research, used under the MIT License.
+Emmy (the larger work) is proprietary to EnergyIR (see `LICENSE`), but the
 Hermes Agent components remain under the MIT License, whose copyright and
-permission notice is retained verbatim below as that license requires. Robin and
+permission notice is retained verbatim below as that license requires. Emmy and
 EnergyIR are independent of, and not endorsed by, Nous Research; "Hermes" and
 "Nous Research" remain marks of Nous Research.
 
@@ -51,7 +51,7 @@ SOFTWARE.
 
 - **DeepSeek V4 Pro** is accessed through the **Together AI** API. The model and
   the inference service are operated by their respective owners under their own
-  terms; they are not redistributed with Robin.
+  terms; they are not redistributed with Emmy.
 
 ## Generating a full inventory
 
@@ -63,5 +63,5 @@ npx license-checker --production --summary    # Node dependencies
 pip-licenses                                   # Python dependencies
 ```
 
-If you redistribute Robin, include this file and the retained MIT notice in
+If you redistribute Emmy, include this file and the retained MIT notice in
 `LICENSE`, as those licences require.

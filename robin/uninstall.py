@@ -1,5 +1,5 @@
 """
-Robin Uninstaller.
+Emmy Uninstaller.
 
 Provides options for:
 - Full uninstall: Remove everything including configs and data
@@ -51,7 +51,7 @@ def find_shell_configs() -> list:
 
 
 def remove_path_from_shell_configs():
-    """Remove Robin PATH entries from shell configuration files."""
+    """Remove Emmy PATH entries from shell configuration files."""
     configs = find_shell_configs()
     removed_from = []
     
@@ -65,8 +65,8 @@ def remove_path_from_shell_configs():
             skip_next = False
             
             for line in content.split('\n'):
-                # Skip the "# Robin" comment and following line
-                if '# Robin' in line or '# hermes-agent' in line:
+                # Skip the "# Emmy" comment and following line
+                if '# Emmy' in line or '# hermes-agent' in line:
                     skip_next = True
                     continue
                 if skip_next and ('hermes' in line.lower() and 'PATH' in line):
@@ -144,7 +144,7 @@ def remove_node_symlinks(hermes_home: Path) -> list:
     We check all candidate directories so that uninstall works regardless of
     how the install was done (e.g. a root FHS install that placed links in
     ``/usr/local/bin``, or an older install that used ``~/.local/bin`` before
-    the FHS fix).  Only symlinks that resolve into this Robin home's ``node``
+    the FHS fix).  Only symlinks that resolve into this Emmy home's ``node``
     directory are removed — links the user has repointed elsewhere (nvm, fnm,
     etc.) are left untouched.
     """
@@ -511,7 +511,7 @@ def run_uninstall(args):
 
     print()
     print(color("┌─────────────────────────────────────────────────────────┐", Colors.MAGENTA, Colors.BOLD))
-    print(color("│            ⚕ Robin Uninstaller                  │", Colors.MAGENTA, Colors.BOLD))
+    print(color("│            ⚕ Emmy Uninstaller                  │", Colors.MAGENTA, Colors.BOLD))
     print(color("└─────────────────────────────────────────────────────────┘", Colors.MAGENTA, Colors.BOLD))
     print()
     
@@ -581,7 +581,7 @@ def run_uninstall(args):
     # Final confirmation
     print()
     if full_uninstall:
-        print(color("⚠️  WARNING: This will permanently delete ALL Robin data!", Colors.RED, Colors.BOLD))
+        print(color("⚠️  WARNING: This will permanently delete ALL Emmy data!", Colors.RED, Colors.BOLD))
         print(color("   Including: configs, API keys, sessions, scheduled jobs, logs", Colors.RED))
         if remove_profiles:
             print(color(
@@ -590,7 +590,7 @@ def run_uninstall(args):
                 Colors.RED
             ))
     else:
-        print("This will remove the Robin code but keep your configuration and data.")
+        print("This will remove the Emmy code but keep your configuration and data.")
     
     print()
     try:
@@ -655,7 +655,7 @@ def run_uninstall(args):
         log_info("No wrapper script found")
 
     # 3b. Remove node/npm/npx symlinks the installer left in ~/.local/bin
-    #     (only when they still point into this Robin home's node dir, so we
+    #     (only when they still point into this Emmy home's node dir, so we
     #     never clobber an existing nvm / user-managed Node).
     log_info("Removing Robin-managed node/npm/npx symlinks...")
     removed_node_links = remove_node_symlinks(hermes_home)
@@ -746,5 +746,5 @@ def run_uninstall(args):
         print(color("Reload your shell to complete the process:", Colors.YELLOW))
         print("  source ~/.bashrc  # or ~/.zshrc")
     print()
-    print("Thank you for using Robin! ⚕")
+    print("Thank you for using Emmy! ⚕")
     print()

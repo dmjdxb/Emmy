@@ -1,6 +1,6 @@
-name: Release Robin
+name: Release Emmy
 
-# Builds the branded, signed Robin desktop installers and publishes them to
+# Builds the branded, signed Emmy desktop installers and publishes them to
 # this repo's GitHub Releases — which is also the electron-updater auto-update
 # feed (see apps/desktop/package.json -> build.publish). All heavy work runs in
 # CI; nothing is built locally.

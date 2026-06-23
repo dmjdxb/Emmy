@@ -179,7 +179,7 @@ def format_nous_portal_entitlement_message(
 
     if account_info is None:
         return (
-            f"Robin could not verify your Together AI entitlement, so {capability} "
+            f"Emmy could not verify your Together AI entitlement, so {capability} "
             f"is unavailable. Run `hermes model` to refresh your login, or check "
             f"billing at {billing_url}."
         )
@@ -187,7 +187,7 @@ def format_nous_portal_entitlement_message(
     if not account_info.logged_in:
         if account_info.inference_credential_present:
             return (
-                f"EnergyIR inference credentials are configured, but Robin cannot verify "
+                f"EnergyIR inference credentials are configured, but Emmy cannot verify "
                 f"your Together AI paid access for {capability}. Log in with "
                 f"`hermes model` to enable Portal-managed features. Billing and "
                 f"credits are managed at {billing_url}."
@@ -199,7 +199,7 @@ def format_nous_portal_entitlement_message(
 
     if account_info.paid_service_access is None:
         detail = (
-            f"Robin could not verify your Together AI paid access, so {capability} "
+            f"Emmy could not verify your Together AI paid access, so {capability} "
             f"is unavailable."
         )
         if account_info.error:
@@ -213,7 +213,7 @@ def format_nous_portal_entitlement_message(
     reason = access.reason if access else None
     if reason == "account_missing":
         return (
-            f"Robin could not find a Together AI account or organisation for this "
+            f"Emmy could not find a Together AI account or organisation for this "
             f"login, so {capability} is unavailable. Run `hermes model` to "
             f"authenticate again; if the problem persists, contact EnergyIR support."
         )
@@ -221,7 +221,7 @@ def format_nous_portal_entitlement_message(
     if reason == "no_usable_credits" or account_info.paid_service_access is False:
         message = _no_paid_access_message(account_info, capability, billing_url)
         if include_refresh_hint and not account_info.fresh:
-            message += " If you recently bought credits, run `hermes model` to refresh Robin."
+            message += " If you recently bought credits, run `hermes model` to refresh Emmy."
         return message
 
     return (

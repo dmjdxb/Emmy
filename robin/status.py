@@ -1,7 +1,7 @@
 """
 Status command for hermes CLI.
 
-Shows the status of all Robin components.
+Shows the status of all Emmy components.
 """
 
 import os
@@ -90,13 +90,13 @@ from hermes_constants import is_termux as _is_termux
 
 
 def show_status(args):
-    """Show status of all Robin components."""
+    """Show status of all Emmy components."""
     show_all = getattr(args, 'all', False)
     deep = getattr(args, 'deep', False)
 
     print()
     print(color("┌─────────────────────────────────────────────────────────┐", Colors.CYAN))
-    print(color("│                 ⚕ Robin Status                  │", Colors.CYAN))
+    print(color("│                 ⚕ Emmy Status                  │", Colors.CYAN))
     print(color("└─────────────────────────────────────────────────────────┘", Colors.CYAN))
 
     # =========================================================================

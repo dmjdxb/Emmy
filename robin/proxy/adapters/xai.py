@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 _POOL_PROVIDER = "xai-oauth"
 
-# xAI's public API is OpenAI-compatible for the endpoints Robin commonly
-# uses. The Responses endpoint is included because Robin' native xAI runtime
+# xAI's public API is OpenAI-compatible for the endpoints Emmy commonly
+# uses. The Responses endpoint is included because Emmy' native xAI runtime
 # uses codex_responses mode.
 _ALLOWED_PATHS: FrozenSet[str] = frozenset(
     {

@@ -103,10 +103,10 @@ export type {
 export class RobinGateway extends JsonRpcGatewayClient {
   constructor() {
     super({
-      closedErrorMessage: 'Robin gateway connection closed',
-      connectErrorMessage: 'Could not connect to Robin gateway',
+      closedErrorMessage: 'Emmy gateway connection closed',
+      connectErrorMessage: 'Could not connect to Emmy gateway',
       createRequestId: nextId => nextId,
-      notConnectedErrorMessage: 'Robin gateway is not connected',
+      notConnectedErrorMessage: 'Emmy gateway is not connected',
       requestTimeoutMs: DEFAULT_GATEWAY_REQUEST_TIMEOUT_MS
     })
   }

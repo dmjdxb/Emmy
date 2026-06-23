@@ -644,7 +644,7 @@ class AIAgent:
 
     def _ensure_lmstudio_runtime_loaded(self, config_context_length: Optional[int] = None) -> None:
         """
-        Preload the LM Studio model with at least Robin' minimum context.
+        Preload the LM Studio model with at least Emmy' minimum context.
         """
         if (self.provider or "").strip().lower() != "lmstudio":
             return
@@ -1704,7 +1704,7 @@ class AIAgent:
         That body covers several real causes we cannot distinguish without
         more info from xAI.  The most common (and least obvious) one is
         that **X Premium+ does NOT include API access** — only standalone
-        SuperGrok subscribers can use Robin against xai-oauth.  Lots of
+        SuperGrok subscribers can use Emmy against xai-oauth.  Lots of
         users see Grok in their X app, assume it works here too, and hit
         this 403 with no idea why.  Lead the hint with that.
 

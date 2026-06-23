@@ -1,5 +1,5 @@
 """
-Baked-in build metadata for Robin.
+Baked-in build metadata for Emmy.
 
 Source installs report their git revision live via ``git rev-parse`` (see
 ``robin/dump.py`` and ``robin/banner.py``).  That doesn't work inside

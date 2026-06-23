@@ -53,7 +53,7 @@ export const en: Translations = {
   },
 
   app: {
-    brand: "Robin",
+    brand: "Emmy",
     brandShort: "HA",
     closeNavigation: "Close navigation",
     closeModelTools: "Close model and tools",
@@ -123,8 +123,8 @@ export const en: Translations = {
     starting: "Starting",
     startedInBackground: "Started in background — check logs for progress",
     stopped: "Stopped",
-    updateHermes: "Update Robin",
-    updatingHermes: "Updating Robin…",
+    updateHermes: "Update Emmy",
+    updatingHermes: "Updating Emmy…",
     waitingForOutput: "Waiting for output…",
   },
 
@@ -354,7 +354,7 @@ export const en: Translations = {
     enableRuntime: "Enable",
     forceReinstall: "Force reinstall (delete existing folder first)",
     headline:
-      "Discover, install, enable, and update Robin plugins (`robin plugins` parity).",
+      "Discover, install, enable, and update Emmy plugins (`robin plugins` parity).",
     identifierLabel: "Git URL or owner/repo",
     inactive: "inactive",
     installBtn: "Install",
@@ -520,11 +520,11 @@ export const en: Translations = {
   achievements: {
     hero: {
       kicker: "Agentic Gamerscore",
-      title: "Robin Achievements",
+      title: "Emmy Achievements",
       subtitle:
-        "Collectible Robin badges earned from real session history. Known unfinished achievements are shown as Discovered; Secret achievements stay hidden until the first matching behavior appears.",
+        "Collectible Emmy badges earned from real session history. Known unfinished achievements are shown as Discovered; Secret achievements stay hidden until the first matching behavior appears.",
       scan_subtitle:
-        "Scanning Robin session history. First scan can take 5–10 seconds on large histories.",
+        "Scanning Emmy session history. First scan can take 5–10 seconds on large histories.",
     },
     actions: {
       rescan: "Rescan",
@@ -539,7 +539,7 @@ export const en: Translations = {
       highest_tier: "Highest tier",
       highest_tier_hint: "Copper → Silver → Gold → Diamond → Olympian",
       latest: "Latest",
-      latest_hint_empty: "run Robin more",
+      latest_hint_empty: "run Emmy more",
       none_yet: "None yet",
     },
     state: {
@@ -570,10 +570,10 @@ export const en: Translations = {
       tiers_header: "Tiers",
       secret_header: "Secret achievements",
       secret_body:
-        "Secrets hide their exact trigger. Once Robin sees a related signal, the card becomes Discovered and shows its requirement.",
+        "Secrets hide their exact trigger. Once Emmy sees a related signal, the card becomes Discovered and shows its requirement.",
       scan_status_header: "Scan status",
       scan_status_body:
-        "Robin is scanning local history once, then cards will appear automatically. Nothing is stuck if this takes a few seconds.",
+        "Emmy is scanning local history once, then cards will appear automatically. Nothing is stuck if this takes a few seconds.",
       what_scanned_header: "What is scanned",
       what_scanned_body:
         "Sessions, tool calls, model metadata, errors, achievements, and local unlock state.",
@@ -620,7 +620,7 @@ export const en: Translations = {
         "Share on X opens a pre-filled post in a new tab. Click Copy image first if you want the 1200×630 badge attached — X lets you paste it right into the tweet composer. Download PNG saves the file for use anywhere.",
       clipboard_unsupported:
         "Clipboard image copy not supported in this browser — use Download instead.",
-      tweet_text: "Just unlocked {tier_part}\"{name}\" in Robin ☤",
+      tweet_text: "Just unlocked {tier_part}\"{name}\" in Emmy ☤",
     },
   },
 

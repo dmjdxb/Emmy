@@ -150,11 +150,11 @@ class TestInitialize:
             {
                 "args": ["--setup"],
                 "description": (
-                    "Open Robin' interactive model/provider setup in a terminal. "
-                    "Use this when Robin has not been configured on this machine yet."
+                    "Open Emmy' interactive model/provider setup in a terminal. "
+                    "Use this when Emmy has not been configured on this machine yet."
                 ),
                 "id": TERMINAL_SETUP_AUTH_METHOD_ID,
-                "name": "Configure Robin provider",
+                "name": "Configure Emmy provider",
                 "type": "terminal",
             }
         ]

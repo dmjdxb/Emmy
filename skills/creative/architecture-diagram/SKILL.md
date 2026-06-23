@@ -2,7 +2,7 @@
 name: architecture-diagram
 description: "Dark-themed SVG architecture/cloud/infra diagrams as HTML."
 version: 1.0.0
-author: Cocoon AI (hello@cocoon-ai.com), ported by Robin
+author: Cocoon AI (hello@cocoon-ai.com), ported by Emmy
 license: MIT
 dependencies: []
 platforms: [linux, macos, windows]

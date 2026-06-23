@@ -212,7 +212,7 @@ export function ChatView({
       }
 
       if (!gateway) {
-        throw new Error('Robin gateway unavailable')
+        throw new Error('Emmy gateway unavailable')
       }
 
       return gateway.request<ModelOptionsResponse>('model.options', { session_id: activeSessionId })

@@ -18,7 +18,7 @@ Edit PDFs using natural-language instructions. Point it at a page and describe w
 ## Prerequisites
 
 ```bash
-# Install with uv (recommended — already available in Robin)
+# Install with uv (recommended — already available in Emmy)
 uv pip install nano-pdf
 
 # Or with pip

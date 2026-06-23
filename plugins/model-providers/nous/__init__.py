@@ -41,7 +41,7 @@ nous = NousProfile(
     aliases=("nous-portal", "nousresearch"),
     env_vars=("NOUS_API_KEY",),
     display_name="EnergyIR",
-    description="EnergyIR — Robin model family",
+    description="EnergyIR — Emmy model family",
     signup_url="https://energyir.com/",
     fallback_models=(
         "hermes-3-405b",

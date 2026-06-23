@@ -1,4 +1,4 @@
-"""disk_cleanup — ephemeral file cleanup for Robin.
+"""disk_cleanup — ephemeral file cleanup for Emmy.
 
 Library module wrapping the deterministic cleanup rules written by
 @LVT382009 in PR #12212. The plugin ``__init__.py`` wires these

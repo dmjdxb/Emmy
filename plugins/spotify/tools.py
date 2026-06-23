@@ -1,4 +1,4 @@
-"""Native Spotify tools for Robin (registered via plugins/spotify)."""
+"""Native Spotify tools for Emmy (registered via plugins/spotify)."""
 
 from __future__ import annotations
 

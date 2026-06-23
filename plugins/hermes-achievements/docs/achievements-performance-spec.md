@@ -1,4 +1,4 @@
-# Robin Achievements Performance Spec (Post-Hackathon)
+# Emmy Achievements Performance Spec (Post-Hackathon)
 
 Status: Draft (no code changes yet)
 Owner: hermes-achievements plugin

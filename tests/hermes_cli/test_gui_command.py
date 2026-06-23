@@ -40,9 +40,9 @@ def _make_packaged_executable(root: Path, monkeypatch, platform: str = "darwin")
     monkeypatch.setattr(cli_main.sys, "platform", platform)
     desktop_dir = root / "apps" / "desktop"
     if platform == "darwin":
-        exe = desktop_dir / "release" / "mac-arm64" / "Robin.app" / "Contents" / "MacOS" / "Robin"
+        exe = desktop_dir / "release" / "mac-arm64" / "Emmy.app" / "Contents" / "MacOS" / "Emmy"
     elif platform == "win32":
-        exe = desktop_dir / "release" / "win-unpacked" / "Robin.exe"
+        exe = desktop_dir / "release" / "win-unpacked" / "Emmy.exe"
     else:
         exe = desktop_dir / "release" / "linux-unpacked" / "hermes"
     exe.parent.mkdir(parents=True)

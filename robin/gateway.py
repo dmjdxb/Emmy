@@ -566,7 +566,7 @@ def find_gateway_pids(
             profiles (the pre-7923 global behaviour).  ``hermes update``
             needs this because a code update affects every profile.
             When ``False`` (default), only PIDs belonging to the current
-            Robin profile are returned.
+            Emmy profile are returned.
     """
     _exclude = set(exclude_pids or set())
     pids: list[int] = []
@@ -587,7 +587,7 @@ def find_gateway_pids(
 def find_profile_gateway_processes(
     exclude_pids: set | None = None,
 ) -> list[ProfileGatewayProcess]:
-    """Return running gateway PIDs mapped to Robin profiles via PID files."""
+    """Return running gateway PIDs mapped to Emmy profiles via PID files."""
     _exclude = set(exclude_pids or set())
     processes: list[ProfileGatewayProcess] = []
     try:
@@ -1295,7 +1295,7 @@ def _systemd_operational(system: bool = False) -> bool:
 def _container_systemd_operational() -> bool:
     """Return True when a container exposes working user or system systemd.
 
-    This is NOT our Robin Docker image — that one runs s6-overlay as
+    This is NOT our Emmy Docker image — that one runs s6-overlay as
     PID 1 (since Phase 2 of the s6-overlay supervision plan) and is
     detected via ``service_manager.detect_service_manager() == "s6"``.
     This function handles the "container managed by something else"
@@ -1357,7 +1357,7 @@ def _windows_gateway_should_absorb_console_controls() -> bool:
 # =============================================================================
 
 _SERVICE_BASE = "hermes-gateway"
-SERVICE_DESCRIPTION = "Robin Gateway - Messaging Platform Integration"
+SERVICE_DESCRIPTION = "Emmy Gateway - Messaging Platform Integration"
 
 
 def _profile_suffix() -> str:
@@ -1684,7 +1684,7 @@ def has_conflicting_systemd_units() -> bool:
     return len(get_installed_systemd_scopes()) > 1
 
 
-# Legacy service names from older Robin installs that predate the
+# Legacy service names from older Emmy installs that predate the
 # hermes-gateway rename. Kept as an explicit allowlist (NOT a glob) so
 # profile units (hermes-gateway-*.service) and unrelated third-party
 # "hermes" units are never matched.
@@ -1714,9 +1714,9 @@ def _legacy_unit_search_paths() -> list[tuple[bool, Path]]:
 
 
 def _find_legacy_hermes_units() -> list[tuple[str, Path, bool]]:
-    """Return ``[(unit_name, unit_path, is_system)]`` for legacy Robin gateway units.
+    """Return ``[(unit_name, unit_path, is_system)]`` for legacy Emmy gateway units.
 
-    Detects unit files installed by older Robin versions that used a
+    Detects unit files installed by older Emmy versions that used a
     different service name (e.g. ``hermes.service`` before the rename to
     ``hermes-gateway.service``). When both a legacy unit and the current
     ``hermes-gateway.service`` are active, they fight over the same bot
@@ -1752,12 +1752,12 @@ def _find_legacy_hermes_units() -> list[tuple[str, Path, bool]]:
 
 
 def has_legacy_hermes_units() -> bool:
-    """Return True when any legacy Robin gateway unit files exist."""
+    """Return True when any legacy Emmy gateway unit files exist."""
     return bool(_find_legacy_hermes_units())
 
 
 def print_legacy_unit_warning() -> None:
-    """Warn about legacy Robin gateway unit files if any are installed.
+    """Warn about legacy Emmy gateway unit files if any are installed.
 
     Idempotent: prints nothing when no legacy units are detected. Safe to
     call from any status/install/setup path.
@@ -1765,7 +1765,7 @@ def print_legacy_unit_warning() -> None:
     legacy = _find_legacy_hermes_units()
     if not legacy:
         return
-    print_warning("Legacy Robin gateway unit(s) detected from an older install:")
+    print_warning("Legacy Emmy gateway unit(s) detected from an older install:")
     for name, path, is_system in legacy:
         scope = "system" if is_system else "user"
         print_info(f"    {path}  ({scope} scope)")
@@ -1779,7 +1779,7 @@ def remove_legacy_hermes_units(
     interactive: bool = True,
     dry_run: bool = False,
 ) -> tuple[int, list[Path]]:
-    """Stop, disable, and remove legacy Robin gateway unit files.
+    """Stop, disable, and remove legacy Emmy gateway unit files.
 
     Iterates over whatever ``_find_legacy_hermes_units()`` returns — which is
     an explicit allowlist of legacy names (not a glob). Profile units and
@@ -1797,14 +1797,14 @@ def remove_legacy_hermes_units(
     """
     legacy = _find_legacy_hermes_units()
     if not legacy:
-        print("No legacy Robin gateway units found.")
+        print("No legacy Emmy gateway units found.")
         return 0, []
 
     user_units = [(n, p) for n, p, is_sys in legacy if not is_sys]
     system_units = [(n, p) for n, p, is_sys in legacy if is_sys]
 
     print()
-    print("Legacy Robin gateway unit(s) found:")
+    print("Legacy Emmy gateway unit(s) found:")
     for name, path, is_system in legacy:
         scope = "system" if is_system else "user"
         print(f"  {path}  ({scope} scope)")
@@ -1978,7 +1978,7 @@ def install_linux_gateway_from_setup(force: bool = False, enable_on_startup: boo
         run_as_user = _default_system_service_user()
         if os.geteuid() != 0:  # windows-footgun: ok — Linux systemd install wizard, never invoked on Windows
             print_warning(
-                "  System service install requires sudo, so Robin can't create it from this user session."
+                "  System service install requires sudo, so Emmy can't create it from this user session."
             )
             if run_as_user:
                 print_info(
@@ -2075,7 +2075,7 @@ def print_systemd_linger_guidance() -> None:
 def _launchd_user_home() -> Path:
     """Return the real macOS user home for launchd artifacts.
 
-    Profile-mode Robin often sets ``HOME`` to a profile-scoped directory, but
+    Profile-mode Emmy often sets ``HOME`` to a profile-scoped directory, but
     launchd user agents still live under the actual account home.
     """
     import pwd
@@ -2496,7 +2496,7 @@ def refresh_systemd_unit_if_needed(system: bool = False) -> bool:
     unit_path.write_text(new_unit, encoding="utf-8")
     _run_systemctl(["daemon-reload"], system=system, check=True, timeout=30)
     print(
-        f"↻ Updated gateway {_service_scope_label(system)} service definition to match the current Robin install"
+        f"↻ Updated gateway {_service_scope_label(system)} service definition to match the current Emmy install"
     )
     return True
 
@@ -3132,7 +3132,7 @@ def refresh_launchd_plist_if_needed() -> bool:
         timeout=30,
     )
     print(
-        "↻ Updated gateway launchd service definition to match the current Robin install"
+        "↻ Updated gateway launchd service definition to match the current Emmy install"
     )
     return True
 
@@ -3367,9 +3367,9 @@ def launchd_status(deep: bool = False):
 
     print(f"Launchd plist: {plist_path}")
     if launchd_plist_is_current():
-        print("✓ Service definition matches the current Robin install")
+        print("✓ Service definition matches the current Emmy install")
     else:
-        print("⚠ Service definition is stale relative to the current Robin install")
+        print("⚠ Service definition is stale relative to the current Emmy install")
         print("  Run: hermes gateway start")
 
     if loaded:
@@ -3414,12 +3414,12 @@ def _guard_official_docker_root_gateway() -> None:
         return
 
     print_error(
-        "Refusing to run the Robin gateway as root inside the official Docker image."
+        "Refusing to run the Emmy gateway as root inside the official Docker image."
     )
     print(
         "  The image entrypoint normally drops privileges to the 'hermes' user. "
         "If you override entrypoint in Docker Compose, include "
-        "/opt/hermes/docker/entrypoint.sh before the Robin command."
+        "/opt/hermes/docker/entrypoint.sh before the Emmy command."
     )
     print(
         "  Running the gateway as root can leave root-owned files in "
@@ -3501,7 +3501,7 @@ def run_gateway(verbose: int = 0, quiet: bool = False, replace: bool = False):
     from gateway.run import start_gateway
 
     print("┌─────────────────────────────────────────────────────────┐")
-    print("│           ⚕ Robin Gateway Starting...                 │")
+    print("│           ⚕ Emmy Gateway Starting...                 │")
     print("├─────────────────────────────────────────────────────────┤")
     print("│  Messaging platforms + cron scheduler                    │")
     print("│  Press Ctrl+C to stop                                   │")
@@ -3696,7 +3696,7 @@ _PLATFORMS = [
             "3. Get an access token: Element → Settings → Help & About → Access Token",
             "   Or via API: curl -X POST https://your-server/_matrix/client/v3/login \\",
             '     -d \'{"type":"m.login.password","user":"@bot:server","password":"..."}\'',
-            "4. Alternatively, provide user ID + password and Robin will log in directly",
+            "4. Alternatively, provide user ID + password and Emmy will log in directly",
             "5. For E2EE: set MATRIX_ENCRYPTION=true (requires pip install 'mautrix[encryption]')",
             "6. To find your user ID: it's @username:your-server (shown in Element profile)",
         ],
@@ -3773,7 +3773,7 @@ _PLATFORMS = [
                 "name": "MATTERMOST_HOME_CHANNEL",
                 "prompt": "Home channel ID (for cron/notification delivery, or empty to set later with /set-home)",
                 "password": False,
-                "help": "Channel ID where Robin delivers cron results and notifications.",
+                "help": "Channel ID where Emmy delivers cron results and notifications.",
             },
             {
                 "name": "MATTERMOST_REPLY_MODE",
@@ -3801,7 +3801,7 @@ _PLATFORMS = [
         "emoji": "📧",
         "token_var": "EMAIL_ADDRESS",
         "setup_instructions": [
-            "1. Use a dedicated email account for your Robin agent",
+            "1. Use a dedicated email account for your Emmy agent",
             "2. For Gmail: enable 2FA, then create an App Password at",
             "   https://myaccount.google.com/apppasswords",
             "3. For other providers: use your email password or app-specific password",
@@ -3812,7 +3812,7 @@ _PLATFORMS = [
                 "name": "EMAIL_ADDRESS",
                 "prompt": "Email address",
                 "password": False,
-                "help": "The email address Robin will use (e.g., hermes@gmail.com).",
+                "help": "The email address Emmy will use (e.g., hermes@gmail.com).",
             },
             {
                 "name": "EMAIL_PASSWORD",
@@ -4083,7 +4083,7 @@ _PLATFORMS = [
             "2. Complete the BlueBubbles setup wizard — sign in with your Apple ID",
             "3. In BlueBubbles Settings → API, note the Server URL and password",
             "4. The server URL is typically http://<your-mac-ip>:1234",
-            "5. Robin connects via the BlueBubbles REST API and receives",
+            "5. Emmy connects via the BlueBubbles REST API and receives",
             "   incoming messages via a local webhook",
             "6. To authorize users, use DM pairing: hermes pairing generate bluebubbles",
             "   Share the code — the user sends it via iMessage to get approved",
@@ -4164,7 +4164,7 @@ _PLATFORMS = [
             "1. Download the Yuanbao app from https://yuanbao.tencent.com/",
             "2. In the app, go to PAI → My Bot and create a new bot",
             "3. After the bot is created, copy the App ID and App Secret",
-            "4. Enter them below and Robin will connect automatically over WebSocket",
+            "4. Enter them below and Emmy will connect automatically over WebSocket",
         ],
         "vars": [
             {
@@ -4789,10 +4789,10 @@ def _setup_weixin():
     print()
     print(color("  ─── 💬 Weixin / WeChat Setup ───", Colors.CYAN))
     print()
-    print_info("  1. Robin will open Tencent iLink QR login in this terminal.")
+    print_info("  1. Emmy will open Tencent iLink QR login in this terminal.")
     print_info("  2. Use WeChat to scan and confirm the QR code.")
     print_info(
-        "  3. Robin will store the returned account_id/token in ~/.hermes/.env."
+        "  3. Emmy will store the returned account_id/token in ~/.hermes/.env."
     )
     print_info(
         "  4. This adapter supports native text, image, video, and document delivery."
@@ -6546,7 +6546,7 @@ def _gateway_command_inner(args):
         _gateway_list()
 
     elif subcmd == "migrate-legacy":
-        # Stop, disable, and remove legacy Robin gateway unit files from
+        # Stop, disable, and remove legacy Emmy gateway unit files from
         # pre-rename installs (e.g. hermes.service). Profile units and
         # unrelated third-party services are never touched.
         dry_run = getattr(args, "dry_run", False)

@@ -51,13 +51,13 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 _HERMES_MODEL_WARNING = (
-    "EnergyIR Robin 3 & 4 models are NOT agentic and are not designed "
-    "for use with Robin. They lack the tool-calling capabilities "
+    "EnergyIR Emmy 3 & 4 models are NOT agentic and are not designed "
+    "for use with Emmy. They lack the tool-calling capabilities "
     "required for agent workflows. Consider using an agentic model instead "
     "(Claude, GPT, Gemini, DeepSeek, etc.)."
 )
 
-# Match only the real EnergyIR Robin 3 / Robin 4 chat families.
+# Match only the real EnergyIR Emmy 3 / Emmy 4 chat families.
 # The previous substring check (`"hermes" in name.lower()`) false-positived on
 # unrelated local Modelfiles like ``hermes-brain:qwen3-14b-ctx16k`` that just
 # happen to carry "hermes" in their tag but are fully tool-capable.
@@ -73,7 +73,7 @@ _NOUS_HERMES_NON_AGENTIC_RE = re.compile(
 
 
 def is_nous_hermes_non_agentic(model_name: str) -> bool:
-    """Return True if *model_name* is a real EnergyIR Robin 3/4 chat model.
+    """Return True if *model_name* is a real EnergyIR Emmy 3/4 chat model.
 
     Used to decide whether to surface the non-agentic warning at startup.
     Callers in :mod:`cli.py` and here should go through this single helper
@@ -85,7 +85,7 @@ def is_nous_hermes_non_agentic(model_name: str) -> bool:
 
 
 def _check_hermes_model_warning(model_name: str) -> str:
-    """Return a warning string if *model_name* is a EnergyIR Robin 3/4 chat model."""
+    """Return a warning string if *model_name* is a EnergyIR Emmy 3/4 chat model."""
     if is_nous_hermes_non_agentic(model_name):
         return _HERMES_MODEL_WARNING
     return ""
@@ -1293,7 +1293,7 @@ def list_authenticated_providers(
     # "nous" pulls from the remote model-catalog manifest published at
     # https://robin.energyir.com/docs/api/model-catalog.json so
     # newly added Portal models surface in the /model picker without
-    # requiring a Robin release. Falls back to the in-repo
+    # requiring a Emmy release. Falls back to the in-repo
     # _PROVIDER_MODELS["nous"] snapshot when the manifest is unreachable.
     curated["nous"] = get_curated_nous_model_ids()
     # Ollama Cloud uses dynamic discovery (no static curated list)
@@ -1418,16 +1418,16 @@ def list_authenticated_providers(
     from robin.providers import HERMES_OVERLAYS
     from robin.auth import PROVIDER_REGISTRY as _auth_registry
 
-    # Build reverse mapping: models.dev ID → Robin provider ID.
+    # Build reverse mapping: models.dev ID → Emmy provider ID.
     # HERMES_OVERLAYS keys may be models.dev IDs (e.g. "github-copilot")
-    # while _PROVIDER_MODELS and config.yaml use Robin IDs ("copilot").
+    # while _PROVIDER_MODELS and config.yaml use Emmy IDs ("copilot").
     _mdev_to_hermes = {v: k for k, v in PROVIDER_TO_MODELS_DEV.items()}
 
     for pid, overlay in HERMES_OVERLAYS.items():
         if pid.lower() in seen_slugs:
             continue
 
-        # Resolve Robin slug — e.g. "github-copilot" → "copilot"
+        # Resolve Emmy slug — e.g. "github-copilot" → "copilot"
         hermes_slug = _mdev_to_hermes.get(pid, pid)
         if hermes_slug.lower() in seen_slugs:
             continue
@@ -1664,7 +1664,7 @@ def list_authenticated_providers(
             if ep_name.lower() in seen_slugs:
                 continue
             display_name = ep_cfg.get("name", "") or ep_name
-            # ``base_url`` is Robin's canonical write key (matches
+            # ``base_url`` is Emmy's canonical write key (matches
             # custom_providers and _save_custom_provider); ``api`` / ``url``
             # remain as fallbacks for hand-edited / legacy configs.
             api_url = (
@@ -1682,7 +1682,7 @@ def list_authenticated_providers(
             if default_model:
                 models_list.append(default_model)
             # Also include the full models list from config.
-            # Robin writes ``models:`` as a dict keyed by model id
+            # Emmy writes ``models:`` as a dict keyed by model id
             # (see robin/main.py::_save_custom_provider); older
             # configs or hand-edited files may still use a list.
             cfg_models = ep_cfg.get("models", [])
@@ -1801,7 +1801,7 @@ def list_authenticated_providers(
             if group_key not in groups:
                 # Strip per-model suffix so "Ollama — GLM 5.1" becomes
                 # "Ollama" for the grouped row. Em dash is the convention
-                # Robin's own writer uses; a hyphen variant is accepted
+                # Emmy's own writer uses; a hyphen variant is accepted
                 # for hand-edited configs.
                 display_name = raw_name
                 for sep in ("—", " - "):
@@ -1828,7 +1828,7 @@ def list_authenticated_providers(
                     groups[group_key]["discover_models"] = False
 
             # The singular ``model:`` field only holds the currently
-            # active model. Robin's own writer (main.py::_save_custom_provider)
+            # active model. Emmy's own writer (main.py::_save_custom_provider)
             # stores every configured model as a dict under ``models:``;
             # downstream readers (agent/models_dev.py, gateway/run.py,
             # run_agent.py, robin/config.py) already consume that dict.

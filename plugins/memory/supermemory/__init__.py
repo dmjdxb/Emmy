@@ -277,7 +277,7 @@ class _SupermemoryClient:
         )
 
     def _merge_metadata(self, metadata: Optional[dict]) -> dict:
-        # sm_source routes Robin writes into the "Robin" Space in the Supermemory
+        # sm_source routes Emmy writes into the "Emmy" Space in the Supermemory
         # app so the user can filter / bulk-manage them per source agent. This is a
         # functional routing key for the user, not vendor telemetry.
         merged = {"sm_source": "hermes", **(metadata or {})}
