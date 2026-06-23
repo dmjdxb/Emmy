@@ -1,0 +1,209 @@
+name: Release Robin
+
+# Builds the branded, signed Robin desktop installers and publishes them to
+# this repo's GitHub Releases — which is also the electron-updater auto-update
+# feed (see apps/desktop/package.json -> build.publish). All heavy work runs in
+# CI; nothing is built locally.
+#
+# Trigger by pushing a tag like `v1.0.0`, or run manually.
+#
+# Code signing activates only when the relevant secrets are configured;
+# otherwise the build still produces (unsigned) artifacts and notarization is
+# skipped, so the pipeline is usable before certificates are in place.
+#
+# Secrets (all optional until you ship publicly):
+#   macOS Authenticode-equivalent: CSC_LINK (base64 .p12), CSC_KEY_PASSWORD
+#   macOS notarization:            APPLE_API_KEY (.p8 contents), APPLE_API_KEY_ID, APPLE_API_ISSUER
+#   Windows:                       WIN_CSC_LINK (base64 .pfx), WIN_CSC_KEY_PASSWORD
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  brand-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python scripts/robin_rebrand.py --check
+      - run: python scripts/check_brand.py
+
+  build:
+    needs: brand-gate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+          - os: windows-latest
+            platform: win
+          - os: ubuntu-latest
+            platform: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install workspace dependencies (root)
+        run: npm install --no-audit --no-fund
+
+      - name: Install uv (for the bundled backend)
+        uses: astral-sh/setup-uv@v5
+
+      # Build the self-contained Python backend bundle so the desktop app runs
+      # with ZERO developer tooling on the user's machine (no git/compiler/
+      # download). mac + linux use the bash bundler; Windows ships a placeholder
+      # for now (it falls back to the network bootstrap) so extraResources never
+      # references a missing file.
+      - name: Build backend bundle (mac/linux)
+        if: matrix.platform != 'win'
+        shell: bash
+        run: bash scripts/build-backend-bundle.sh
+
+      - name: Backend bundle placeholder (windows)
+        if: matrix.platform == 'win'
+        shell: bash
+        run: |
+          : > apps/desktop/backend.tar.gz
+          echo "placeholder backend.tar.gz (windows uses network bootstrap)"
+
+      # notarytool's --key wants a FILE PATH, and the notarize hook passes
+      # APPLE_API_KEY through verbatim. Write the secret's .p8 contents to a file
+      # and point APPLE_API_KEY at that path (robust regardless of how the key
+      # was pasted into the secret). No-op when the secret is unset.
+      - name: Prepare macOS notarization key
+        if: matrix.platform == 'mac'
+        shell: bash
+        env:
+          APPLE_API_KEY_CONTENT: ${{ secrets.APPLE_API_KEY }}
+        run: |
+          if [ -n "$APPLE_API_KEY_CONTENT" ]; then
+            printf '%s\n' "$APPLE_API_KEY_CONTENT" > "$RUNNER_TEMP/notary_key.p8"
+            echo "APPLE_API_KEY=$RUNNER_TEMP/notary_key.p8" >> "$GITHUB_ENV"
+          fi
+
+      # electron-builder reads CSC_LINK directly as a base64 string, so no
+      # separate decode step is needed. Signing + notarization activate only
+      # when the secrets below are set; otherwise the build is unsigned.
+      - name: Build and publish (${{ matrix.platform }})
+        working-directory: apps/desktop
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # macOS signing (skipped automatically if unset). APPLE_API_KEY is set
+          # to a file path by the previous step via $GITHUB_ENV.
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          # Windows signing (skipped automatically if unset)
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+        run: |
+          npm run build
+          if [ "${{ matrix.platform }}" = "win" ]; then
+            CSC_LINK="${WIN_CSC_LINK}" CSC_KEY_PASSWORD="${WIN_CSC_KEY_PASSWORD}" \
+              npx electron-builder --win --publish always
+          else
+            npx electron-builder --${{ matrix.platform }} --publish always
+          fi
+
+      # Upload the prebuilt backend bundle to THIS release as a platform-named
+      # asset. The desktop app downloads it on first launch (zero developer
+      # tooling). Name must match main.cjs: robin-backend-<process.platform>-<arch>.
+      - name: Upload backend bundle to release
+        if: matrix.platform != 'win' && startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ matrix.platform }}" = "mac" ]; then NAME="robin-backend-darwin-arm64.tar.gz"; else NAME="robin-backend-linux-x64.tar.gz"; fi
+          cp apps/desktop/backend.tar.gz "$NAME"
+          # Retry in case the release was just created by electron-builder publish.
+          for i in 1 2 3 4 5; do
+            if gh release upload "${{ github.ref_name }}" "$NAME" --clobber --repo dmjdxb/Robin; then
+              echo "uploaded $NAME"; break
+            fi
+            echo "release not ready, retrying ($i)..."; sleep 10
+          done
+
+      # GUARD (download-link stability): publish version-LESS alias copies of
+      # each installer so external links — e.g. the EnergyIR site's "Download"
+      # button — can use a STABLE URL that never 404s when a new release becomes
+      # `latest`:
+      #   https://github.com/dmjdxb/Robin/releases/latest/download/Robin-mac-arm64.dmg
+      # Every release republishes these fixed names pointing at that version's
+      # installer. This is what prevents the "button redirects to the tag page
+      # instead of downloading" regression when a version is promoted.
+      # (The website button must point at these stable names — versioned
+      #  Robin-<version>-... links remain version-pinned and will break on bump.)
+      - name: Upload version-less alias installers
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: apps/desktop/release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          case "${{ matrix.platform }}" in
+            mac)   pairs=( "Robin-*-mac-arm64.dmg:Robin-mac-arm64.dmg"
+                           "Robin-*-mac-arm64.zip:Robin-mac-arm64.zip" ) ;;
+            win)   pairs=( "Robin-*-win-x64.exe:Robin-win-x64.exe"
+                           "Robin-*-win-x64.msi:Robin-win-x64.msi" ) ;;
+            linux) pairs=( "Robin-*-linux-x86_64.AppImage:Robin-linux-x86_64.AppImage"
+                           "Robin-*-linux-amd64.deb:Robin-linux-amd64.deb"
+                           "Robin-*-linux-x86_64.rpm:Robin-linux-x86_64.rpm" ) ;;
+            *)     pairs=() ;;
+          esac
+          for p in "${pairs[@]}"; do
+            glob="${p%%:*}"; stable="${p##*:}"
+            src="$(find . -type f -name "$glob" 2>/dev/null | head -1)"
+            if [ -z "$src" ]; then echo "no match for $glob (skip)"; continue; fi
+            cp "$src" "$stable"
+            for i in 1 2 3 4 5; do
+              if gh release upload "${{ github.ref_name }}" "$stable" --clobber --repo dmjdxb/Robin; then
+                echo "uploaded alias $stable (<- $src)"; break
+              fi
+              echo "release not ready, retrying ($i)..."; sleep 10
+            done
+          done
+
+      - name: Publish SHA-256 checksums
+        if: always()
+        working-directory: apps/desktop
+        shell: bash
+        run: |
+          cd release || exit 0
+          find . -maxdepth 2 -type f \( -name '*.dmg' -o -name '*.exe' -o -name '*.AppImage' -o -name '*.deb' -o -name '*.zip' \) -print0 \
+            | while IFS= read -r -d '' f; do
+                if command -v sha256sum >/dev/null; then sha256sum "$f"; else shasum -a 256 "$f"; fi
+              done > SHA256SUMS-${{ matrix.platform }}.txt
+          cat SHA256SUMS-${{ matrix.platform }}.txt || true
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robin-${{ matrix.platform }}
+          path: |
+            apps/desktop/release/**/*.dmg
+            apps/desktop/release/**/*.zip
+            apps/desktop/release/**/*.exe
+            apps/desktop/release/**/*.AppImage
+            apps/desktop/release/**/*.deb
+            apps/desktop/release/**/*.yml
+            apps/desktop/release/SHA256SUMS-*.txt
+          if-no-files-found: ignore

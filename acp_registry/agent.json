@@ -1,0 +1,16 @@
+{
+  "id": "hermes-agent",
+  "name": "Robin",
+  "version": "0.16.0",
+  "description": "Self-improving open-source AI agent by EnergyIR with ACP editor integration, persistent memory, skills, and rich tool support.",
+  "repository": "https://github.com/dmjdxb/Robin",
+  "website": "https://robin.energyir.com/docs/user-guide/features/acp",
+  "authors": ["EnergyIR"],
+  "license": "MIT",
+  "distribution": {
+    "uvx": {
+      "package": "hermes-agent[acp]==0.16.0",
+      "args": ["hermes-acp"]
+    }
+  }
+}

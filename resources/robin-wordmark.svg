@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="420" height="120" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Robin product wordmark — the bird mark + "Robin" + tagline. -->
+  <defs>
+    <linearGradient id="rb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#55c392"/>
+      <stop offset="100%" stop-color="#3aa676"/>
+    </linearGradient>
+  </defs>
+  <!-- compact bird glyph -->
+  <g transform="translate(58 52) scale(0.16)">
+    <path d="M -250 -40 C -150 -180, 40 -210, 150 -120 C 70 -150, -40 -120, -110 -30 C -60 -70, 30 -78, 96 -40 C 18 -60, -70 -36, -118 38 Z" fill="url(#rb)"/>
+    <path d="M -250 -40 C -170 70, -40 168, 120 150 C 210 138, 268 70, 286 -18 C 250 60, 170 104, 86 96 C 6 88, -56 40, -86 -24 C -140 6, -210 0, -250 -40 Z" fill="url(#rb)" fill-opacity="0.92"/>
+    <circle cx="196" cy="-104" r="58" fill="url(#rb)"/>
+    <circle cx="214" cy="-118" r="16" fill="#0f1115"/>
+    <path d="M 250 -104 L 320 -86 L 252 -72 Z" fill="#d8a657"/>
+  </g>
+  <text x="108" y="60" font-family="'Segoe UI', -apple-system, system-ui, sans-serif"
+        font-size="52" font-weight="700" fill="#f4f2eb">Robin</text>
+  <text x="110" y="90" font-family="'Segoe UI', -apple-system, system-ui, sans-serif"
+        font-size="18" font-weight="500" fill="#55c392">Because every superhero needs a sidekick.</text>
+</svg>

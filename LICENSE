@@ -1,0 +1,46 @@
+Robin — Proprietary Software License
+Copyright © 2026 EnergyIR. All rights reserved.
+
+1. PROPRIETARY. Robin (the "Software"), including its source code, design,
+   branding, and documentation, is the proprietary and confidential property of
+   EnergyIR. The Software is licensed, not sold. No title to or ownership of the
+   Software is transferred.
+
+2. RESTRICTIONS. Except (a) as expressly permitted by a separate written
+   agreement signed by EnergyIR, or (b) to the extent such restriction is
+   prohibited by applicable law, you may NOT copy, modify, adapt, translate,
+   distribute, sublicense, sell, rent, lease, publicly display, reverse
+   engineer, decompile, disassemble, or create derivative works of the Software
+   or its source code, and you may not remove or alter any proprietary notices.
+
+3. END-USER LICENSE. End users who obtain an official distributed build of
+   Robin from EnergyIR are granted a limited, non-exclusive, non-transferable,
+   revocable license to install and use that build in accordance with EnergyIR's
+   Terms of Use (docs/TERMS.md) and Privacy Policy (docs/PRIVACY.md), for so long
+   as those terms are observed.
+
+4. THIRD-PARTY COMPONENTS. The Software incorporates third-party open-source
+   components, each licensed under its own terms. Those components remain
+   governed by their original licenses, and nothing in this license restricts,
+   or is intended to restrict, your rights under them. In particular, Robin is
+   built on Hermes Agent (MIT License, © Nous Research). The required copyright
+   and permission notices for Hermes Agent and for every other bundled
+   component are reproduced in docs/THIRD_PARTY_NOTICES.md, which forms part of
+   this distribution and is incorporated here by reference. Robin and EnergyIR
+   are independent of, and not endorsed by, those projects.
+
+5. NO WARRANTY. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+6. LIMITATION OF LIABILITY. TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT
+   SHALL ENERGYIR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+   IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. CONTACT. EnergyIR — hello@energyir.com
+
+────────────────────────────────────────────────────────────────────────────
+This license governs Robin as a whole. It does not, and cannot, relicense the
+third-party open-source components Robin includes; those keep their own licenses
+(see docs/THIRD_PARTY_NOTICES.md).

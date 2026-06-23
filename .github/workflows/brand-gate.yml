@@ -1,0 +1,65 @@
+name: Brand gate
+
+# Falsification instrument for the Robin acceptance gate (PRD §18.7):
+# zero user-visible "Hermes"/"Nous" strings in the shipped UI, and the
+# deterministic rebrand is fully applied. Also runs a fast TypeScript typecheck
+# (no build/publish) so refactors — e.g. the hermes_cli -> robin /
+# Hermes* -> Robin* rename — are validated in CI without producing a release.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  brand-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Rebrand is fully applied (idempotent re-run is a no-op)
+        run: python scripts/robin_rebrand.py --check
+      - name: No user-visible Hermes/Nous strings in shipped UI
+        run: python scripts/check_brand.py
+      - name: Retained MIT attribution is present
+        run: |
+          grep -q "Nous Research" docs/THIRD_PARTY_NOTICES.md && echo "✅ upstream MIT notice retained" || (echo "❌ upstream MIT notice missing from THIRD_PARTY_NOTICES" && exit 1)
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install workspace dependencies (root)
+        run: npm install --no-audit --no-fund
+      - name: TypeScript typecheck (desktop + @hermes/shared)
+        working-directory: apps/desktop
+        run: npm run type-check
+
+  document-tool:
+    # Validates the "Ask your document" tool: that the lazy `[document]` extra's
+    # pins actually wheel-install (a wrong pin would otherwise only surface when
+    # a user opens their first document), and that extraction works for every
+    # format end-to-end (incl. .docx, which the local dev env can't run).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install document extra (wheel-only) + test deps
+        run: |
+          python -m pip install --upgrade pip
+          # --only-binary=:all: proves the pins ship wheels on Linux (the
+          # relocatable-bundle requirement: no system build deps).
+          pip install --only-binary=:all: pypdf==5.1.0 pdfplumber==0.11.4 \
+            python-docx==1.1.2 python-pptx==1.0.2 openpyxl==3.1.5
+          pip install reportlab pytest pytest-asyncio pytest-timeout
+      - name: Install Robin (base, for tool registry imports)
+        run: pip install -e .
+      - name: Run document tool tests
+        run: python -m pytest tests/tools/test_document_tools.py -q
