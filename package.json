@@ -14,13 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dmjdxb/Robin.git"
+    "url": "git+https://github.com/dmjdxb/Emmy.git"
   },
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/dmjdxb/Robin/issues"
+    "url": "https://github.com/dmjdxb/Emmy/issues"
   },
-  "homepage": "https://github.com/dmjdxb/Robin#readme",
+  "homepage": "https://github.com/dmjdxb/Emmy#readme",
   "dependencies": {
     "@streamdown/math": "^1.0.2",
     "agent-browser": "^0.26.0"

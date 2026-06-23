@@ -169,7 +169,7 @@ const FIELD_COPY: Record<string, { advanced?: boolean; help?: string; label: str
   },
   MATRIX_USER_ID: {
     label: 'Bot user ID',
-    placeholder: '@robin:example.org'
+    placeholder: '@emmy:example.org'
   },
   MATRIX_ALLOWED_USERS: {
     label: 'Allowed Matrix user IDs',

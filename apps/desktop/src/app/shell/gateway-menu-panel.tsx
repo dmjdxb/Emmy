@@ -37,7 +37,7 @@ const RUNTIME_BRACKET_RE = /^\[[^\]]+]\s+/
 const INTERNAL_LOGGER_RE =
   /\b(robin|tui_gateway|hermes_constants|hermes_logging|hermes_state|run_agent|acp_adapter|tui_gateway)\b(\.\w+)*/g
 const sanitizeLogLine = (raw: string) =>
-  raw.replace(INTERNAL_LOGGER_RE, 'robin').replace(/\bhermes\b/gi, 'robin')
+  raw.replace(INTERNAL_LOGGER_RE, 'emmy').replace(/\bhermes\b/gi, 'emmy')
 const trimLogLine = (raw: string) =>
   sanitizeLogLine(raw.trim()).replace(TIMESTAMP_RE, '').replace(RUNTIME_BRACKET_RE, '')
 

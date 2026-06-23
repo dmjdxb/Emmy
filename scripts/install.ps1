@@ -92,8 +92,8 @@ try {
 # Configuration
 # ============================================================================
 
-$RepoUrlSsh = "git@github.com:dmjdxb/Robin.git"
-$RepoUrlHttps = "https://github.com/dmjdxb/Robin.git"
+$RepoUrlSsh = "git@github.com:dmjdxb/Emmy.git"
+$RepoUrlHttps = "https://github.com/dmjdxb/Emmy.git"
 $PythonVersion = "3.11"
 $NodeVersion = "22"
 
@@ -1225,13 +1225,13 @@ function Install-Repository {
                 # for.  GitHub supports archive URLs for commits, tags, and
                 # branches; we honour Commit > Tag > Branch.
                 if ($Commit) {
-                    $zipUrl = "https://github.com/dmjdxb/Robin/archive/$Commit.zip"
+                    $zipUrl = "https://github.com/dmjdxb/Emmy/archive/$Commit.zip"
                     $zipLabel = $Commit
                 } elseif ($Tag) {
-                    $zipUrl = "https://github.com/dmjdxb/Robin/archive/refs/tags/$Tag.zip"
+                    $zipUrl = "https://github.com/dmjdxb/Emmy/archive/refs/tags/$Tag.zip"
                     $zipLabel = $Tag
                 } else {
-                    $zipUrl = "https://github.com/dmjdxb/Robin/archive/refs/heads/$Branch.zip"
+                    $zipUrl = "https://github.com/dmjdxb/Emmy/archive/refs/heads/$Branch.zip"
                     $zipLabel = $Branch
                 }
                 $zipPath = "$env:TEMP\hermes-agent-$zipLabel.zip"

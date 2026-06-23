@@ -41,7 +41,7 @@ export const PROVIDER_GROUPS: ProviderPrefix[] = [
     prefix: 'NOUS_',
     name: 'EnergyIR',
     description: 'Your EnergyIR API key powers Emmy',
-    docsUrl: 'https://energyir.io/robin',
+    docsUrl: 'https://energyir.io/emmy',
     priority: 0
   },
   {

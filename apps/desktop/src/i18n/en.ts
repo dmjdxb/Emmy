@@ -683,7 +683,7 @@ export const en: Translations = {
       '/resume': 'resume a prior session',
       '/details': 'control transcript detail level',
       '/copy': 'copy selection or last assistant message',
-      '/quit': 'exit robin'
+      '/quit': 'exit emmy'
     },
     hotkeyDescs: {
       '@': 'reference files, folders, urls, git',

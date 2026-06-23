@@ -45,17 +45,17 @@ def _get_platform_default_hermes_home() -> Path:
     """Return the platform-native default Emmy home path.
 
     Emmy (by EnergyIR) relocates the agent's config/data directory from the
-    upstream ``~/.hermes`` to ``~/.robin`` (``%LOCALAPPDATA%\\robin`` on
+    upstream ``~/.hermes`` to ``~/.emmy`` (``%LOCALAPPDATA%\\emmy`` on
     Windows) so it leaves zero traces under the upstream name and never
-    collides with a separate upstream install on the same machine. The
+    collides with a separate install (e.g. Robin) on the same machine. The
     ``HERMES_HOME`` environment variable name is retained internally (users
     never see it) for source-level compatibility with the upstream core.
     """
     if sys.platform == "win32":
         local_appdata = os.environ.get("LOCALAPPDATA", "").strip()
         base = Path(local_appdata) if local_appdata else Path.home() / "AppData" / "Local"
-        return base / "robin"
-    return Path.home() / ".robin"
+        return base / "emmy"
+    return Path.home() / ".emmy"
 
 
 def get_hermes_home() -> Path:

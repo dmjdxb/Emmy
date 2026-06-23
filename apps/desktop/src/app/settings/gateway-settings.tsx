@@ -509,7 +509,7 @@ export function GatewaySettings() {
               value={state.remoteUrl}
             />
           }
-          description="Base URL for the remote dashboard backend. Path prefixes are supported, for example /robin."
+          description="Base URL for the remote dashboard backend. Path prefixes are supported, for example /emmy."
           title="Remote URL"
         />
 

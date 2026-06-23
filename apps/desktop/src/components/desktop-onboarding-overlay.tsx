@@ -66,7 +66,7 @@ const API_KEY_OPTIONS: ApiKeyOption[] = [
     short: 'Your EnergyIR API key',
     envKey: 'TOGETHER_API_KEY',
     description: 'Connect Emmy with your EnergyIR API key to start.',
-    docsUrl: 'https://energyir.io/robin'
+    docsUrl: 'https://energyir.io/emmy'
   }
 ]
 

@@ -124,18 +124,18 @@ jobs:
 
       # Upload the prebuilt backend bundle to THIS release as a platform-named
       # asset. The desktop app downloads it on first launch (zero developer
-      # tooling). Name must match main.cjs: robin-backend-<process.platform>-<arch>.
+      # tooling). Name must match main.cjs: emmy-backend-<process.platform>-<arch>.
       - name: Upload backend bundle to release
         if: matrix.platform != 'win' && startsWith(github.ref, 'refs/tags/')
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ "${{ matrix.platform }}" = "mac" ]; then NAME="robin-backend-darwin-arm64.tar.gz"; else NAME="robin-backend-linux-x64.tar.gz"; fi
+          if [ "${{ matrix.platform }}" = "mac" ]; then NAME="emmy-backend-darwin-arm64.tar.gz"; else NAME="emmy-backend-linux-x64.tar.gz"; fi
           cp apps/desktop/backend.tar.gz "$NAME"
           # Retry in case the release was just created by electron-builder publish.
           for i in 1 2 3 4 5; do
-            if gh release upload "${{ github.ref_name }}" "$NAME" --clobber --repo dmjdxb/Robin; then
+            if gh release upload "${{ github.ref_name }}" "$NAME" --clobber --repo dmjdxb/Emmy; then
               echo "uploaded $NAME"; break
             fi
             echo "release not ready, retrying ($i)..."; sleep 10
@@ -145,12 +145,12 @@ jobs:
       # each installer so external links — e.g. the EnergyIR site's "Download"
       # button — can use a STABLE URL that never 404s when a new release becomes
       # `latest`:
-      #   https://github.com/dmjdxb/Robin/releases/latest/download/Robin-mac-arm64.dmg
+      #   https://github.com/dmjdxb/Emmy/releases/latest/download/Emmy-mac-arm64.dmg
       # Every release republishes these fixed names pointing at that version's
       # installer. This is what prevents the "button redirects to the tag page
       # instead of downloading" regression when a version is promoted.
       # (The website button must point at these stable names — versioned
-      #  Robin-<version>-... links remain version-pinned and will break on bump.)
+      #  Emmy-<version>-... links remain version-pinned and will break on bump.)
       - name: Upload version-less alias installers
         if: startsWith(github.ref, 'refs/tags/')
         working-directory: apps/desktop/release
@@ -159,13 +159,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           case "${{ matrix.platform }}" in
-            mac)   pairs=( "Robin-*-mac-arm64.dmg:Robin-mac-arm64.dmg"
-                           "Robin-*-mac-arm64.zip:Robin-mac-arm64.zip" ) ;;
-            win)   pairs=( "Robin-*-win-x64.exe:Robin-win-x64.exe"
-                           "Robin-*-win-x64.msi:Robin-win-x64.msi" ) ;;
-            linux) pairs=( "Robin-*-linux-x86_64.AppImage:Robin-linux-x86_64.AppImage"
-                           "Robin-*-linux-amd64.deb:Robin-linux-amd64.deb"
-                           "Robin-*-linux-x86_64.rpm:Robin-linux-x86_64.rpm" ) ;;
+            mac)   pairs=( "Emmy-*-mac-arm64.dmg:Emmy-mac-arm64.dmg"
+                           "Emmy-*-mac-arm64.zip:Emmy-mac-arm64.zip" ) ;;
+            win)   pairs=( "Emmy-*-win-x64.exe:Emmy-win-x64.exe"
+                           "Emmy-*-win-x64.msi:Emmy-win-x64.msi" ) ;;
+            linux) pairs=( "Emmy-*-linux-x86_64.AppImage:Emmy-linux-x86_64.AppImage"
+                           "Emmy-*-linux-amd64.deb:Emmy-linux-amd64.deb"
+                           "Emmy-*-linux-x86_64.rpm:Emmy-linux-x86_64.rpm" ) ;;
             *)     pairs=() ;;
           esac
           for p in "${pairs[@]}"; do
@@ -174,7 +174,7 @@ jobs:
             if [ -z "$src" ]; then echo "no match for $glob (skip)"; continue; fi
             cp "$src" "$stable"
             for i in 1 2 3 4 5; do
-              if gh release upload "${{ github.ref_name }}" "$stable" --clobber --repo dmjdxb/Robin; then
+              if gh release upload "${{ github.ref_name }}" "$stable" --clobber --repo dmjdxb/Emmy; then
                 echo "uploaded alias $stable (<- $src)"; break
               fi
               echo "release not ready, retrying ($i)..."; sleep 10

@@ -190,17 +190,19 @@ if (INSTALL_STAMP) {
 // HERMES_HOME beneath the throwaway userData dir so a fresh-install run never
 // touches the user's real ~/.hermes / %LOCALAPPDATA%\hermes.
 function resolveRobinHome() {
-  // Emmy keeps its OWN isolated home (~/.robin, %LOCALAPPDATA%\robin) so it
-  // never collides with — or adopts the backend of — a separate upstream
-  // Hermes install on the same machine (PRD §11.4). We deliberately do NOT
-  // honour an inherited HERMES_HOME or fall back to ~/.hermes here, because
-  // that is exactly how Emmy would pick up someone's existing Hermes runtime.
+  // Emmy keeps its OWN isolated home (~/.emmy, %LOCALAPPDATA%\emmy) so it
+  // never collides with — or adopts the backend/sessions of — a separate
+  // Robin or upstream Hermes install on the same machine (PRD §11.4). We
+  // deliberately do NOT honour an inherited HERMES_HOME or fall back to
+  // ~/.hermes / ~/.robin here, because that is exactly how Emmy would pick up
+  // someone's existing Robin or Hermes runtime and history.
+  if (process.env.EMMY_HOME) return path.resolve(process.env.EMMY_HOME)
   if (process.env.ROBIN_HOME) return path.resolve(process.env.ROBIN_HOME)
-  if (USER_DATA_OVERRIDE) return path.join(path.resolve(USER_DATA_OVERRIDE), 'robin-home')
+  if (USER_DATA_OVERRIDE) return path.join(path.resolve(USER_DATA_OVERRIDE), 'emmy-home')
   if (IS_WINDOWS && process.env.LOCALAPPDATA) {
-    return path.join(process.env.LOCALAPPDATA, 'robin')
+    return path.join(process.env.LOCALAPPDATA, 'emmy')
   }
-  return path.join(app.getPath('home'), '.robin')
+  return path.join(app.getPath('home'), '.emmy')
 }
 
 const HERMES_HOME = resolveRobinHome()
@@ -1237,7 +1239,7 @@ async function resolveHealedBranch(updateRoot, branch) {
 // signed dmg/exe and open it for the user to drop into Applications (a drag-
 // install can't atomically replace the running .app, so this is the safe,
 // reliable apply). Dev / source / CLI runs (!IS_PACKAGED) keep the git path.
-const GH_REPO = 'dmjdxb/Robin'
+const GH_REPO = 'dmjdxb/Emmy'
 
 // Numeric semver-ish compare (a > b). Strips a leading "v" and any pre-release
 // suffix; tolerates missing components (release builds only).
@@ -2021,8 +2023,8 @@ async function installBundledBackend() {
     // no Command Line Tools, no pip-at-runtime -- just an HTTPS download +
     // extract. (It is hosted outside the signed app so the bundled Python is
     // not subject to macOS notarization, which recurses into in-app archives.)
-    const asset = `robin-backend-${process.platform}-${process.arch}.tar.gz`
-    const url = `https://github.com/dmjdxb/Robin/releases/download/v${app.getVersion()}/${asset}`
+    const asset = `emmy-backend-${process.platform}-${process.arch}.tar.gz`
+    const url = `https://github.com/dmjdxb/Emmy/releases/download/v${app.getVersion()}/${asset}`
     const tmp = path.join(HERMES_HOME, '.backend-download.tar.gz')
     fs.mkdirSync(HERMES_HOME, { recursive: true })
     rememberLog('[bundle] downloading prebuilt backend: ' + url)
