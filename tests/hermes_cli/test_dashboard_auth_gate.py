@@ -176,7 +176,7 @@ def test_start_server_gate_with_provider_proceeds_and_sets_proxy_headers(monkeyp
     from Fly's TLS terminator is honoured for cookie Secure-flag decisions.
     """
     from robin.dashboard_auth import clear_providers, register_provider
-    from tests.robin.conftest_dashboard_auth import StubAuthProvider
+    from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
 
     clear_providers()
     register_provider(StubAuthProvider())

@@ -18,7 +18,7 @@ from fastapi.testclient import TestClient
 
 from robin import web_server
 from robin.dashboard_auth import clear_providers, register_provider
-from tests.robin.conftest_dashboard_auth import StubAuthProvider
+from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
 
 # These tests mutate ``web_server.app.state.auth_required`` so they share
 # the same xdist group as the other dashboard-auth gated_app tests.

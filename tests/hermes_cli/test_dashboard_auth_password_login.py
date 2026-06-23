@@ -36,7 +36,7 @@ from robin.dashboard_auth import (
 from robin.dashboard_auth.cookies import SESSION_AT_COOKIE, SESSION_RT_COOKIE
 from robin.dashboard_auth.login_page import render_login_html
 from robin.dashboard_auth.routes import _reset_password_rate_limit
-from tests.robin.conftest_dashboard_auth import StubAuthProvider
+from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
 
 
 # ---------------------------------------------------------------------------
