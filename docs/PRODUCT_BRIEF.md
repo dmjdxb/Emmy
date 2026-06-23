@@ -35,11 +35,21 @@ Emmy computes with verified tools and **shows the work + the measurement + the C
 |---|---|---|---|
 | **EnergyIR / AI Models** | Verified LLM-inference cost optimizer (gateway) | Optimize & meter | n/a (is the gateway) |
 | **Robin** | General fidelity desktop coworker | Fidelity, never optimized | Together direct |
-| **Emmy** | Specialised scientific coding agent | Optimization-first, verified | **Through the AI Models gateway** |
+| **Emmy** | Specialised scientific coding agent | Optimization-first, verified, **privacy-first** | **Own provider direct + embedded cost-optimizer**; gateway optional |
 
 Emmy reuses **Robin's desktop frame** (Hermes/Electron shell, tools + chat +
 memory, zero-tooling install) but is a **rebranded fork** with inverted
-philosophy. Emmy dogfoods the AI Models gateway for cost + the promise.
+philosophy.
+
+**Cost optimization is a capability, not a service dependency.** Emmy needs the
+cheap-vs-frontier cascade routing + metering — which already exists as a *library*
+inside `energy.tokens` (the `PolicyRuntime` cascade, categorizer, quality gate),
+separate from the hosted gateway. So by default Emmy **embeds that engine and calls
+the provider directly** (low latency; **prompts never leave the user's machine /
+their own provider** — essential for scientists' confidential work). Routing
+through the hosted **AI Models gateway is an optional "managed billing" mode** for
+users who'd rather not hold a provider key — not the default. This keeps the cost
+savings *and* the privacy posture, without coupling Emmy to a running service.
 
 ## 4. The mathematical reasoning engine (concrete)
 
@@ -55,6 +65,11 @@ as **callable agent tools**:
 - **Roofline + cost-geodesic `schedule_doctor`** — reason compute- vs memory-bound;
   pick the cheaper path; escalate precision only when residual stalls.
 - **Intelligence engine** — learn which optimizations win for which patterns.
+- **graphify (knowledge-graph backbone)** — turn the user's project *and* the
+  Skills corpus into a navigable KG with query / path / explain (GraphRAG). Agents
+  query the graph instead of re-reading files — this is both how Emmy *understands*
+  a codebase and how it *retrieves* skills on demand, and it's a token-efficiency
+  lever (cited, not dumped). Exposed to agents via graphify's MCP server.
 
 Key principle: **never make the LLM hallucinate a hard answer it can't reliably
 produce** (an optimization, a kernel speedup, a numerical equivalence, a proof) —
@@ -122,8 +137,10 @@ A curated, retrievable expertise library — the moat content asset.
     numerical methods, linear algebra, ODE/PDE, stochastic methods, LLM
     training/inference, precision/stability.
 - **Retrieval, not context-stuffing** — always-loaded one-line index + full body
-  fetched on demand (SKILL.md / progressive-disclosure pattern; cf. graphify).
-  Small context = cheap calls = a cost lever, not just an organization choice.
+  fetched on demand (SKILL.md / progressive-disclosure pattern). **graphify is the
+  retrieval substrate**: skills + docs become a KG the agents query/path/explain,
+  rather than a flat dump. Small context = cheap calls = a cost lever, not just an
+  organization choice.
 - **Version-pinned** — tied to EnergyIR's API-change DB (`upgrade-check` /
   `cve-check`): read the user's installed versions, load the right skill, warn on
   breaking changes. Unique tie-in.
@@ -142,19 +159,23 @@ A curated, retrievable expertise library — the moat content asset.
 - Bayesian routing + calibration → `energy/intelligence`.
 - Verified engines (doctors, synthesis, QUBO, roofline, schedule_doctor) → `energy/*`, `src/energyir`.
 - Cross-fleet learning + signed skill/dispatch updates → `energy/federated`, `db_snapshot`.
+- Knowledge-graph understanding + retrieval (codebase + Skills) → **graphify** (KG + query/path/explain + MCP server).
 
-New build: the Skills pipeline, tool-wiring, the scientific agent cast + visible
-UI, the cost-bounded orchestration controller, and the rebrand.
+New build: the Skills pipeline (on a graphify KG), tool-wiring, the scientific
+agent cast + visible UI, the cost-bounded orchestration controller, and the rebrand.
 
 ## 10. Phased build (proposed)
 
-- **Phase 0 — Frame:** fork Robin's shell, rebrand to Emmy, wire LLM calls through
-  the AI Models gateway.
-- **Phase 1 — Engine + cast:** expose the verified engines as tools; manager +
+- **Phase 0 — Frame:** fork Robin's shell, rebrand to Emmy, and **embed the
+  cost-optimization engine (cheap-vs-frontier cascade) calling the provider
+  directly** (privacy-first); hosted gateway as an optional managed mode.
+- **Phase 1 — Engine + cast:** expose the verified engines as tools; **graphify
+  the user's workspace into a KG agents query** (comprehension); manager +
   numerics/performance/verifier cast; visible-debate UI; empirical/combinatorial/
   ε-equivalence verification rungs.
 - **Phase 2 — Skills:** package-doc skill pipeline (version-pinned, cited,
-  on-demand) + first domain-expertise skills; wire to the API-change DB.
+  on-demand) **on a graphify KG** + first domain-expertise skills; wire to the
+  API-change DB.
 - **Phase 3 — Orchestration efficiency:** QUBO-assigned spawn count,
   cost-geodesic debate depth, early-stop gate, semantic-cache rung, structured
   context projection.
@@ -164,6 +185,8 @@ UI, the cost-bounded orchestration controller, and the rebrand.
 
 - Frontier model choice for the Lead (DeepSeek V4 Pro candidate) + the cheap
   worker set.
+- **Provider-key model:** user-provided key (privacy-first default) vs. optional
+  managed/gateway mode.
 - Pricing/packaging (standalone vs. tier alongside AI Models).
 - Domain (name/handle/trademark) availability for "Emmy" + visual identity.
 - Skills maintenance cadence + which packages ship in v1.

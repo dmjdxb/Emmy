@@ -13,6 +13,9 @@ when its gate passes. Check items off as they land.
       verified engines for exact computation.
 - [ ] **Grounded + cited.** Doc-derived answers cite the source at the correct version.
 - [ ] **Self-measuring.** Every model call is metered; the bill is always inspectable.
+- [ ] **Privacy-first.** A scientist's work stays on their machine / their own
+      provider by default — no prompt egress to our servers unless they opt into
+      managed mode. Cost optimization is an embedded capability, not a forced service.
 - [ ] **Niche discipline.** Serve scientific/numerical/ML work — do not drift into
       general-purpose coding.
 
@@ -20,8 +23,8 @@ when its gate passes. Check items off as they land.
 
 ## Phase 0 — Frame (fork Robin → rebrand → wire to the gateway)
 
-**Goal:** an installable Emmy desktop app, rebranded, that makes a chat call
-through the AI Models gateway.
+**Goal:** an installable Emmy desktop app, rebranded, that completes a chat call
+**direct to the provider** with the embedded cost-optimizer metering it.
 
 - [ ] Get access to the Robin repo; create the Emmy fork (separate repo).
 - [ ] Rebrand: app name, bundle id, icons, window/title strings, about box → Emmy.
@@ -29,14 +32,18 @@ through the AI Models gateway.
       replace; remove Robin-specific fidelity copy.
 - [ ] **Decision:** frontier model for the Lead (DeepSeek V4 Pro candidate) + the
       cheap worker model set.
-- [ ] Re-point LLM calls **through the AI Models gateway** (Robin talks to Together
-      direct; Emmy must route through the gateway for cost + the promise).
+- [ ] **Decision:** provider-key model — user-provided (privacy-first default) vs.
+      optional managed/gateway mode.
+- [ ] Embed the cost-optimization engine (`energy.tokens` cascade/router/gate) and
+      call the provider **directly** (prompts stay on the user's machine / their
+      provider). Hosted gateway is an *optional* managed mode, not the default.
+- [ ] Local metering: record cost per call on-device; bill is inspectable.
 - [ ] Preserve the zero-tooling install pipeline (CI-built backend bundle + signed app).
-- [ ] Smoke test: app launches rebranded, one chat round-trip through the gateway,
-      metering recorded.
+- [ ] Smoke test: app launches rebranded, one chat round-trip to the provider,
+      cost metered locally.
 
-**Done when:** Emmy installs clean, launches as Emmy (not Robin), and completes a
-chat call whose cost is recorded by the gateway.
+**Done when:** Emmy installs clean, launches as Emmy (not Robin), completes a chat
+call direct to the provider, and the cost is metered on-device (no prompt egress).
 
 ---
 
@@ -54,7 +61,9 @@ returns a measured win with a CI — shown in a live agent debate.
   - [ ] Roofline + cost-geodesic `schedule_doctor`.
 - [ ] Code-execution sandbox (reuse the synthesis isolation boundary) for running
       user workloads safely.
-- [ ] Workspace understanding: read/understand the user's project + installed env.
+- [ ] **Workspace understanding via graphify:** build a KG of the user's project +
+      installed env; agents query/path/explain it instead of re-reading files
+      (comprehension + token efficiency). Wire graphify's MCP server as a tool.
 - [ ] **Verification rungs 1–3 wired:** empirical (doctor CI), combinatorial (QUBO
       verifier), ε-equivalence (synthesis signature).
 - [ ] **Visible-debate UI:** render Lead + workers debating live; surface each
@@ -74,7 +83,8 @@ warns on breaking version changes.
 - [ ] Skill format spec (SKILL.md-style: name, one-line index, body, version tag,
       citations, applicability).
 - [ ] Retrieval mechanism: always-loaded index + on-demand body fetch
-      (progressive disclosure; evaluate graphify KG vs vector store).
+      (progressive disclosure). **graphify KG is the retrieval substrate** — skills
+      + docs become a queryable graph (query/path/explain), not a flat dump.
 - [ ] Package-doc ingestion pipeline → skill cards:
   - [ ] Compute: NumPy, SciPy, JAX, PyTorch, TensorFlow.
   - [ ] Orchestration: LangChain, LangGraph.
@@ -148,6 +158,8 @@ non-formalizable one degrades gracefully with an honest label.
 ## Open decisions (resolve as phases reach them)
 
 - [ ] Frontier model for the Lead + cheap worker set (blocks Phase 0).
+- [ ] Provider-key model — user-provided (privacy-first default) vs. managed/gateway
+      mode (blocks Phase 0).
 - [ ] Pricing / packaging — standalone vs. a tier alongside AI Models.
 - [ ] "Emmy" domain / handle / trademark availability + visual identity.
 - [ ] v1 Skills coverage + maintenance cadence (blocks Phase 2 scope).
