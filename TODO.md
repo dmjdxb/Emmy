@@ -41,10 +41,11 @@ through the AI Models gateway.
       EnergyIR gateway): endpoint `https://api.deepinfra.com/v1/openai`, auth
       `DEEPINFRA_TOKEN`, slugs `org/model`. The Emmy client must NEVER see DeepInfra,
       its token, or its endpoint — it talks only to `api.energyir.io`.
-- [ ] Add a **server-side, confidential DeepInfra price table** to the cost optimizer
-      (`cache_check` providers in the EnergyIR repo, beside Together's). Never ship it
-      to the client / show it. Used for (a) our COGS/margin, (b) computing the
-      user-facing **savings** (energy/tokens/usage). Needs the real DeepInfra rates.
+- [x] **Server-side, confidential DeepInfra price table** added to the cost optimizer
+      (EnergyIR repo `cache_check/providers/deepinfra.py`, beside Together's; commit
+      75eadd7). Rates (USD/1M tok, snapshot 2026-06-23): V4 Pro 1.30/2.60/0.10 cached;
+      V4 Flash 0.10/0.20/0.02 cached (Flash ~13× cheaper). Internal-only — never shipped
+      to the client / shown. **Confirm rates against the DeepInfra dash** (account rates differ).
 - [ ] Extend `brand-gate` CI to forbid the string **"DeepInfra"** (and any provider
       host) in the shipped UI — confidentiality can't regress.
 - [ ] Subscription model: tiers ≈ **$50 / $100 / $200**/mo (flat; users never pay
