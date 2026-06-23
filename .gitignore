@@ -129,3 +129,6 @@ apps/desktop/backend.tar.gz
 .backend-bundle/
 .emmy/
 skills-cache/
+
+# uv arm/x86 test venv (local only)
+.venv-arm2/
