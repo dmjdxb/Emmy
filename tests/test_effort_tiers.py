@@ -32,8 +32,8 @@ class TestEffortTiers:
     def test_effort_to_model_each_tier(self):
         from robin.models import effort_to_model
         assert effort_to_model("quick") == ("openai/gpt-oss-120b", "auto")
-        assert effort_to_model("balanced") == ("deepseek/deepseek-v4-flash", "auto")
-        assert effort_to_model("max") == ("deepseek/deepseek-v4-pro", "auto")
+        assert effort_to_model("balanced") == ("deepseek-ai/DeepSeek-V4-Flash", "auto")
+        assert effort_to_model("max") == ("deepseek-ai/DeepSeek-V4-Pro", "auto")
 
     def test_unknown_effort_falls_back_to_default(self):
         from robin.models import effort_to_model, get_default_effort, get_effort_tier

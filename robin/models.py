@@ -48,8 +48,8 @@ OPENROUTER_MODELS: list[tuple[str, str]] = [
     # xAI
     ("x-ai/grok-4.3",                          ""),
     # DeepSeek
-    ("deepseek/deepseek-v4-pro",               ""),
-    ("deepseek/deepseek-v4-flash",             ""),
+    ("deepseek-ai/DeepSeek-V4-Pro",               ""),
+    ("deepseek-ai/DeepSeek-V4-Flash",             ""),
     # Qwen
     ("qwen/qwen3.7-max",                       ""),
     ("qwen/qwen3.7-plus",                      ""),
@@ -166,8 +166,8 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         # xAI
         "x-ai/grok-4.3",
         # DeepSeek
-        "deepseek/deepseek-v4-pro",
-        "deepseek/deepseek-v4-flash",
+        "deepseek-ai/DeepSeek-V4-Pro",
+        "deepseek-ai/DeepSeek-V4-Flash",
         # Qwen
         "qwen/qwen3.7-max",
         "qwen/qwen3.7-plus",
@@ -1167,7 +1167,7 @@ _PROVIDER_ALIASES = {
 # in robin/web_server.py and ``partition_nous_models_by_tier`` — which can
 # hit the Portal; this fallback must stay cheap and network-free.
 _PROVIDER_SILENT_DEFAULT_OVERRIDES: dict[str, str] = {
-    "nous": "deepseek/deepseek-v4-flash",
+    "nous": "deepseek-ai/DeepSeek-V4-Flash",
 }
 
 
@@ -1203,9 +1203,9 @@ def get_default_model_for_provider(provider: str) -> str:
 EFFORT_TIERS_FALLBACK: list[dict[str, Any]] = [
     {"id": "quick", "label": "Quick", "model": "openai/gpt-oss-120b",
      "provider": "auto", "blurb": "Fast, low cost — everyday questions", "cost_hint": 1},
-    {"id": "balanced", "label": "Balanced", "model": "deepseek/deepseek-v4-flash",
+    {"id": "balanced", "label": "Balanced", "model": "deepseek-ai/DeepSeek-V4-Flash",
      "provider": "auto", "blurb": "Great for docs & writing", "cost_hint": 2},
-    {"id": "max", "label": "Max effort", "model": "deepseek/deepseek-v4-pro",
+    {"id": "max", "label": "Max effort", "model": "deepseek-ai/DeepSeek-V4-Pro",
      "provider": "auto", "blurb": "Deep reasoning — uses your limits faster", "cost_hint": 3},
 ]
 _DEFAULT_EFFORT_FALLBACK = "balanced"

@@ -90,15 +90,17 @@ class TestConfigParsing:
 
 class TestClassification:
     def test_core_tools_never_defer(self):
-        """The critical invariant from the OpenClaw report."""
+        """The critical invariant: the lean never-defer set is never deferrable.
+
+        (Decoupled from _HERMES_CORE_TOOLS: heavier/occasional tools like browser_*,
+        delegate_task, session_search, send_message ARE deferrable now — that's the
+        whole point of the tool-trim. Only _TOOL_SEARCH_NEVER_DEFER is guaranteed core.)
+        """
         from tools.tool_search import is_deferrable_tool_name
-        # Sample of core tools from _HERMES_CORE_TOOLS.
-        for core_name in ["terminal", "read_file", "write_file", "patch",
-                          "search_files", "todo", "memory", "browser_navigate",
-                          "web_search", "session_search", "clarify",
-                          "execute_code", "delegate_task", "send_message"]:
+        from toolsets import _TOOL_SEARCH_NEVER_DEFER
+        for core_name in _TOOL_SEARCH_NEVER_DEFER:
             assert not is_deferrable_tool_name(core_name), (
-                f"Core tool '{core_name}' must NEVER be deferrable"
+                f"Never-defer tool '{core_name}' must NEVER be deferrable"
             )
 
     def test_bridge_tools_never_defer(self):

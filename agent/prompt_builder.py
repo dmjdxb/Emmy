@@ -146,6 +146,29 @@ SCIENTIFIC_RIGOR_GUIDANCE = (
     "- When you run code, show it and its output, and make results reproducible (fixed seeds, explicit inputs)."
 )
 
+# Injected per-turn (appended to the ephemeral system prompt) ONLY when the user picks the
+# Max effort tier — turns a single answer into a visible, cost-aware team: cheap parallel
+# solvers + adversarial verification + a strong synthesis. The parallel subagents stream into
+# the desktop "agents working" panel, so the user watches the work happen.
+HEAVY_GUIDANCE = (
+    "HEAVY MODE (the user selected Max effort). For any non-trivial scientific or technical "
+    "problem, do NOT answer single-pass — run a small team and show its working:\n"
+    "1. FRAME: state the problem precisely, the assumptions, and what a correct answer must satisfy.\n"
+    "2. EXPLORE IN PARALLEL (cheap): use delegate_task ONCE with 2-3 tasks to spawn subagents "
+    "concurrently, each pursuing a DISTINCT approach or method (e.g. analytical vs numerical, or two "
+    "independent formulations). Run them on the fast model by passing "
+    "model='deepseek-ai/DeepSeek-V4-Flash' so parallel exploration stays affordable. Each returns its "
+    "method, result, and how it self-checked.\n"
+    "3. VERIFY ADVERSARIALLY: for every candidate answer, actively try to REFUTE it — re-derive or "
+    "cross-check with your verification tools (symbolic_check, numeric_verify, units_check), test "
+    "limiting/edge cases, and check dimensions. Discard candidates that fail; record the verdict for each.\n"
+    "4. SYNTHESIZE (you are the manager, on the strong model): reconcile the surviving candidates into ONE "
+    "answer. Where they agree, state the consensus and why it is trustworthy; where they disagree, surface "
+    "it, say which you trust and why. Label every final claim [computed]/[proved]/[cited]/[assumed].\n"
+    "Be efficient: parallel CHEAP exploration, rigorous verification, a single strong synthesis. For a "
+    "genuinely trivial question you may skip the parallel step, but still verify before you assert."
+)
+
 HERMES_AGENT_HELP_GUIDANCE = (
     "You run on Emmy (by EnergyIR). When the user needs help with "
     "Emmy itself — configuring, setting up, using, extending, or troubleshooting "

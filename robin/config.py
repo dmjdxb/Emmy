@@ -1364,7 +1364,7 @@ DEFAULT_CONFIG = {
             {
                 "id": "balanced",
                 "label": "Balanced",
-                "model": "deepseek/deepseek-v4-flash",
+                "model": "deepseek-ai/DeepSeek-V4-Flash",
                 "provider": "auto",
                 "blurb": "Great for docs & writing",
                 "cost_hint": 2,
@@ -1372,7 +1372,7 @@ DEFAULT_CONFIG = {
             {
                 "id": "max",
                 "label": "Max effort",
-                "model": "deepseek/deepseek-v4-pro",
+                "model": "deepseek-ai/DeepSeek-V4-Pro",
                 "provider": "auto",
                 "blurb": "Deep reasoning — uses your limits faster",
                 "cost_hint": 3,
@@ -1710,7 +1710,7 @@ DEFAULT_CONFIG = {
         # enough for real multi-step tool work — avoid the cheapest tier here,
         # since underpowered subagents can loop/retry and cost MORE. Set to ""
         # to inherit the parent model instead.
-        "model": "deepseek/deepseek-v4-flash",
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
         "provider": "",    # empty = inherit parent provider + credentials (same endpoint as the swapped-in model)
         "base_url": "",    # direct OpenAI-compatible endpoint for subagents
         "api_key": "",     # API key for delegation.base_url (falls back to OPENAI_API_KEY)

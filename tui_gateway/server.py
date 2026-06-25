@@ -2522,8 +2522,26 @@ def _apply_effort_to_agent(session: dict) -> None:
     effort = session.get("effort")
     if agent is None or not effort:
         return
-    if (getattr(agent, "provider", "") or "").strip().lower() != "nous":
+    # Emmy runs on the EnergyIR gateway via the "together" provider (DeepInfra upstream
+    # serves all tier models). "nous" is the legacy id kept for back-compat. Without
+    # "together" here the effort selector is cosmetic (never swaps the model).
+    if (getattr(agent, "provider", "") or "").strip().lower() not in ("nous", "together"):
         return
+
+    # --- Heavy mode: Max tier runs a visible cheap-parallel + verify + synthesize team ---
+    # Append HEAVY_GUIDANCE to the ephemeral system prompt on Max, remove it otherwise.
+    # Idempotent (marker-delimited) and preserves any personality prompt already in the slot.
+    try:
+        from agent.prompt_builder import HEAVY_GUIDANCE
+
+        _HEAVY_MARK = "\n\n<<<EMMY_HEAVY_MODE>>>\n"
+        _base = (getattr(agent, "ephemeral_system_prompt", None) or "").split(_HEAVY_MARK)[0]
+        agent.ephemeral_system_prompt = (
+            (_base + _HEAVY_MARK + HEAVY_GUIDANCE) if effort == "max" else (_base or None)
+        ) or None
+    except Exception:
+        pass
+
     try:
         from robin.models import effort_to_model
         target_model, _ = effort_to_model(effort)
