@@ -2542,6 +2542,38 @@ def _apply_effort_to_agent(session: dict) -> None:
     except Exception:
         pass
 
+    # --- Heavy-mode cost cascade: route delegated workers by effort tier ---
+    # In Max mode the manager runs on the EXPENSIVE model. Without this, every
+    # subagent it spawns inherits that expensive model (the cause of the ~36:5
+    # Pro:Flash inversion). So in Max we (a) install a resolver that maps the
+    # semantic tiers the manager uses ('fast'/'deep') to concrete tier models —
+    # keeping the model identity out of the prompt — and (b) set a CHEAP default
+    # so even an un-tagged delegate spawns a cheap worker. Outside Max we clear
+    # both, restoring stock delegate behavior (children inherit the parent).
+    try:
+        if effort == "max":
+            from robin.models import effort_to_model
+
+            _fast, _ = effort_to_model("balanced")   # cheap parallel worker
+            _deep, _ = effort_to_model("max")         # strong, on-demand only
+            _TIER_SLUGS = {
+                "fast": _fast, "cheap": _fast, "flash": _fast, "balanced": _fast,
+                "quick": _fast, "routine": _fast,
+                "deep": _deep, "hard": _deep, "pro": _deep, "max": _deep,
+                "strong": _deep, "reasoning": _deep,
+            }
+
+            def _resolve(alias, _m=_TIER_SLUGS):
+                return _m.get(str(alias or "").strip().lower())
+
+            agent._delegate_model_resolver = _resolve
+            agent._delegate_default_model = _fast
+        else:
+            agent._delegate_model_resolver = None
+            agent._delegate_default_model = None
+    except Exception:
+        pass
+
     try:
         from robin.models import effort_to_model
         target_model, _ = effort_to_model(effort)

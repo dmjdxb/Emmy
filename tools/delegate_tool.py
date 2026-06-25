@@ -1934,6 +1934,41 @@ def _recover_tasks_from_json_string(
     return parsed, None
 
 
+def _resolve_delegate_model(parent_agent, requested, creds_model):
+    """Resolve the model a delegated child should run on.
+
+    Precedence:
+      1. An explicit per-task / top-level ``model`` the caller passed. If the
+         parent exposes a ``_delegate_model_resolver`` (the gateway installs one
+         to map semantic tiers like ``"fast"``/``"deep"`` to concrete models
+         without leaking model identity into the prompt), the request is mapped
+         through it; an unmapped value is passed through verbatim (raw slug).
+      2. No explicit request → the parent's ``_delegate_default_model`` if set.
+         This is the cost guardrail: in Heavy/Max mode the gateway sets it to the
+         CHEAP model so a manager running on the expensive model that simply
+         delegates (without naming a model) still spawns cheap workers by default,
+         instead of every child silently inheriting the expensive parent model.
+      3. Otherwise ``creds_model`` (delegation.model config) — the prior behavior,
+         which is ``None`` when unset, meaning the child inherits the parent.
+    """
+    # Guard every read on isinstance(str): parent_agent may be a MagicMock in
+    # tests (auto-vivifies truthy attributes) — only a real model string counts.
+    if isinstance(requested, str) and requested.strip():
+        resolver = getattr(parent_agent, "_delegate_model_resolver", None)
+        if callable(resolver):
+            try:
+                mapped = resolver(requested)
+            except Exception:
+                mapped = None
+            if isinstance(mapped, str) and mapped.strip():
+                return mapped
+        return requested
+    default = getattr(parent_agent, "_delegate_default_model", None)
+    if isinstance(default, str) and default.strip():
+        return default
+    return creds_model
+
+
 def delegate_task(
     goal: Optional[str] = None,
     context: Optional[str] = None,
@@ -1943,6 +1978,7 @@ def delegate_task(
     acp_command: Optional[str] = None,
     acp_args: Optional[List[str]] = None,
     role: Optional[str] = None,
+    model: Optional[str] = None,
     parent_agent=None,
 ) -> str:
     """
@@ -2083,7 +2119,9 @@ def delegate_task(
                 goal=t["goal"],
                 context=t.get("context"),
                 toolsets=t.get("toolsets") or toolsets,
-                model=creds["model"],
+                model=_resolve_delegate_model(
+                    parent_agent, t.get("model") or model, creds["model"]
+                ),
                 max_iterations=effective_max_iter,
                 task_count=n_tasks,
                 parent_agent=parent_agent,
@@ -2764,6 +2802,21 @@ DELEGATE_TASK_SCHEMA = {
                             "enum": ["leaf", "orchestrator"],
                             "description": "Per-task role override. See top-level 'role' for semantics.",
                         },
+                        "model": {
+                            "type": "string",
+                            "description": (
+                                "Effort tier for THIS subtask. 'fast' = the cheap, "
+                                "quick worker (use for routine execution: data "
+                                "wrangling, writing/running code, plotting, lookups, "
+                                "drafting — the default and the vast majority of "
+                                "work). 'deep' = the strong, expensive worker (use "
+                                "ONLY for a subtask that genuinely needs hard "
+                                "reasoning: a novel derivation, a subtle proof, a "
+                                "tricky algorithm). Omit to use the session default. "
+                                "Routing every routine piece to 'fast' is what keeps "
+                                "a job affordable."
+                            ),
+                        },
                     },
                     "required": ["goal"],
                 },
@@ -2776,6 +2829,15 @@ DELEGATE_TASK_SCHEMA = {
                 "type": "string",
                 "enum": ["leaf", "orchestrator"],
                 "description": "(rebuilt at get_definitions() time)",
+            },
+            "model": {
+                "type": "string",
+                "description": (
+                    "Default effort tier for the spawned worker(s): 'fast' (cheap, "
+                    "for routine execution) or 'deep' (strong/expensive, only when "
+                    "hard reasoning is truly required). A per-task 'model' overrides "
+                    "this. Omit to use the session default."
+                ),
             },
             "acp_command": {
                 "type": "string",

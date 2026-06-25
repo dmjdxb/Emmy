@@ -5764,7 +5764,79 @@ ipcMain.handle('hermes:version', async () => ({
   hermesRoot: resolveUpdateRoot()
 }))
 
+// On macOS, refuse to keep running from inside the mounted .dmg (or any
+// non-Applications location). Running off the disk image is the cause of the
+// "Install Emmy disk on the desktop + ejecting it force-quits Emmy" trap: the
+// app never actually gets installed, it just runs off the read-only image.
+// Offer to move it to /Applications (Electron copies, relaunches from there,
+// and deletes the original), so the next launch is a real installed app.
+function ensureInstalledToApplications() {
+  if (!IS_MAC || !IS_PACKAGED) return false
+  try {
+    if (app.isInApplicationsFolder()) return false
+  } catch (_) {
+    return false // API unavailable (older Electron / non-mac) — do nothing
+  }
+
+  const choice = dialog.showMessageBoxSync({
+    type: 'question',
+    buttons: ['Move to Applications', 'Quit'],
+    defaultId: 0,
+    cancelId: 1,
+    title: 'Move Emmy to Applications',
+    message: 'Emmy is running from a disk image, not installed.',
+    detail:
+      'To install Emmy properly, it needs to live in your Applications folder. ' +
+      'Otherwise the "Install Emmy" disk stays on your desktop and ejecting it ' +
+      'will quit Emmy.\n\nMove Emmy to Applications now? It will reopen automatically.',
+  })
+
+  if (choice !== 0) {
+    app.quit() // user chose Quit — don't keep running off the image
+    return true
+  }
+
+  try {
+    // Copies into /Applications, relaunches from there, offers to bin the
+    // original, then terminates this (disk-image) instance. Returns false only
+    // if the move didn't happen; true means this process is on its way out.
+    const moved = app.moveToApplicationsFolder({
+      conflictHandler: (conflictType) => {
+        if (conflictType === 'existing') {
+          return (
+            dialog.showMessageBoxSync({
+              type: 'question',
+              buttons: ['Replace', 'Quit'],
+              defaultId: 0,
+              cancelId: 1,
+              title: 'Emmy already in Applications',
+              message: 'A copy of Emmy is already in your Applications folder.',
+              detail: 'Replace it with this version?',
+            }) === 0
+          )
+        }
+        return true
+      },
+    })
+    if (moved) return true // relaunching from /Applications; stop here
+  } catch (error) {
+    rememberLog(`moveToApplicationsFolder failed: ${error.message}`)
+    dialog.showMessageBoxSync({
+      type: 'warning',
+      buttons: ['OK'],
+      title: 'Could not move Emmy',
+      message: 'Emmy could not move itself to Applications.',
+      detail:
+        'Please quit Emmy, drag it from the "Install Emmy" window onto the ' +
+        'Applications folder shortcut, eject the disk image, then open Emmy ' +
+        'from Applications.',
+    })
+  }
+  return false
+}
+
 app.whenReady().then(() => {
+  if (ensureInstalledToApplications()) return // moving/quitting — bail before we build a window
   if (IS_MAC) {
     Menu.setApplicationMenu(buildApplicationMenu())
   } else {
