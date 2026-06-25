@@ -78,6 +78,36 @@ _HERMES_CORE_TOOLS = [
     "roofline_classify", "arxiv_search",
 ]
 
+# Progressive-tool-disclosure never-defer set (used ONLY by tools/tool_search.py).
+#
+# A SMALL subset of _HERMES_CORE_TOOLS, NOT the whole list. Historically tool_search
+# treated every _HERMES_CORE_TOOLS entry as never-defer — but the hermes-cli toolset IS
+# _HERMES_CORE_TOOLS, so that made every enabled tool non-deferrable and tool_search a
+# guaranteed no-op (the whole tool block re-sent verbatim every turn). Decoupling keeps the
+# turn-by-turn essentials loaded while heavier/occasional tools (browser_*, kanban_*, ha_*,
+# delegate_task, session_search, skill_*, ask_document, vision, tts, send_message, qubo_solve,
+# roofline_classify, arxiv_search, web_extract, …) collapse behind tool_search/describe/call and
+# surface on demand. Availability is unchanged — deferred tools are still callable; the model just
+# discovers them via a search round-trip instead of paying their full schema every turn.
+#
+# Emmy keeps the LIGHTWEIGHT verifiers (symbolic_check/numeric_verify/units_check) in the core: it
+# verifies constantly, so a discovery round-trip for those would be a net loss. The heavier, rarer
+# science tools (qubo_solve/roofline_classify/arxiv_search) defer.
+_TOOL_SEARCH_NEVER_DEFER = [
+    # File manipulation — touched constantly
+    "read_file", "write_file", "patch", "search_files",
+    # Shell + long-running processes
+    "terminal", "process",
+    # Code/science execution
+    "execute_code",
+    # Memory, planning, conversational control (cheap + frequent)
+    "memory", "todo", "clarify",
+    # Web search is the common research entrypoint (web_extract defers)
+    "web_search",
+    # Everyday verification — Emmy's core loop, kept instant
+    "symbolic_check", "numeric_verify", "units_check",
+]
+
 # Webhook events may originate from untrusted third-party content (for example,
 # public PR titles/comments). Keep the default webhook toolset intentionally
 # constrained to avoid local file/system execution by prompt injection.

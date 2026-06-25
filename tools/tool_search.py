@@ -154,8 +154,16 @@ def _core_tool_names() -> frozenset[str]:
     and we don't want a hard cycle.
     """
     try:
-        from toolsets import _HERMES_CORE_TOOLS
-        return frozenset(_HERMES_CORE_TOOLS)
+        # Use the dedicated never-defer subset, NOT the full _HERMES_CORE_TOOLS
+        # (which equals the hermes-cli toolset — treating every enabled tool as
+        # core makes tool_search a no-op). Fall back to the legacy full list if
+        # the subset is unavailable, preserving old behaviour on import error.
+        try:
+            from toolsets import _TOOL_SEARCH_NEVER_DEFER
+            return frozenset(_TOOL_SEARCH_NEVER_DEFER)
+        except Exception:
+            from toolsets import _HERMES_CORE_TOOLS
+            return frozenset(_HERMES_CORE_TOOLS)
     except Exception:
         return frozenset()
 

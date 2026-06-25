@@ -2145,7 +2145,11 @@ DEFAULT_CONFIG = {
             #   tool. Use when you have many MCP servers and want maximum
             #   token reduction unconditionally.
             # "off" — disable entirely. Tools-array assembly is a pass-through.
-            "enabled": "auto",
+            # Emmy ships "on": the deferrable set (heavy/rare tools) is below the
+            # 10% auto-threshold on a large-context model, so "auto" would never
+            # fire — "on" guarantees the ~per-turn token trim that keeps a flat
+            # subscription affordable. Lightweight verifiers stay in the never-defer core.
+            "enabled": "on",
             # Percentage of context length at which "auto" mode kicks in.
             # 10 matches the Claude Code default. Range 0..100.
             "threshold_pct": 10,
