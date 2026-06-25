@@ -97,16 +97,48 @@ def test_all_science_tools_registered():
 
 # --- export_notebook (M4 reproducibility) ---
 
-def test_export_notebook_writes_valid_ipynb(tmp_path):
+def test_export_notebook_executes_and_embeds_output(tmp_path):
+    pytest.importorskip("sympy")
     import json as _json
     out = tmp_path / "deriv.ipynb"
     d = _v(st.export_notebook(
         "Steady-state derivation",
-        [{"type": "markdown", "source": "# Derivation\nWe solve dy/dt=0."},
+        [{"type": "markdown", "source": "# Derivation"},
          {"type": "code", "source": "import sympy as sp\nx=sp.Symbol('x')\nprint(sp.integrate(2*x,x))"}],
         path=str(out),
     ))
-    assert d["verified"] == "computed" and d["cells"] == 2
+    assert d["verified"] == "computed" and d["executed"] is True and d["errors"] == []
     nb = _json.loads(out.read_text())
     assert nb["nbformat"] == 4 and len(nb["cells"]) == 2
-    assert nb["cells"][1]["cell_type"] == "code" and nb["cells"][1]["execution_count"] is None
+    code = nb["cells"][1]
+    assert code["cell_type"] == "code" and code["execution_count"] == 1  # executed in-process
+    streams = [o for o in code["outputs"] if o["output_type"] == "stream"]
+    assert streams and "x**2" in "".join(streams[0]["text"])  # print output embedded
+
+
+def test_export_notebook_embeds_matplotlib_figure(tmp_path):
+    pytest.importorskip("matplotlib")
+    import json as _json
+    out = tmp_path / "plot.ipynb"
+    st.export_notebook(
+        "Plot",
+        [{"type": "code", "source": "import matplotlib.pyplot as plt\nplt.plot([0,1,2],[0,1,4])"}],
+        path=str(out),
+    )
+    nb = _json.loads(out.read_text())
+    outs = nb["cells"][0]["outputs"]
+    assert any(o["output_type"] == "display_data" and "image/png" in o.get("data", {}) for o in outs)
+
+
+def test_export_notebook_surfaces_cell_errors(tmp_path):
+    out = tmp_path / "bad.ipynb"
+    d = _v(st.export_notebook("Bad", [{"type": "code", "source": "1/0"}], path=str(out)))
+    assert d["errors"] and "ZeroDivisionError" in d["errors"][0]
+
+
+def test_export_notebook_code_only_when_execute_false(tmp_path):
+    import json as _json
+    out = tmp_path / "raw.ipynb"
+    d = _v(st.export_notebook("Raw", [{"type": "code", "source": "print(1)"}], path=str(out), execute=False))
+    nb = _json.loads(out.read_text())
+    assert nb["cells"][0]["execution_count"] is None and d["executed"] is False

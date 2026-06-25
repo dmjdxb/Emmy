@@ -445,10 +445,14 @@ def arxiv_search(query: str, max_results: int = 5) -> str:
 EXPORT_NOTEBOOK_SCHEMA = {
     "name": "export_notebook",
     "description": (
-        "Export the work as a runnable Jupyter notebook (.ipynb) so the result is reproducible — "
-        "the researcher can open it and re-run every step. Provide ordered cells (markdown for "
-        "explanation/derivation, code for the computation). Use this to hand back a hard analysis as a "
-        "self-contained artifact. Returns the saved file path (it appears in the artifacts panel)."
+        "Export the work as a Jupyter notebook (.ipynb) AND execute it — runs every code cell in your "
+        "OWN bundled environment (numpy/scipy/pandas/matplotlib are already installed) and embeds the "
+        "outputs (printed text, results, and matplotlib figures as inline images) directly in the "
+        "notebook, so it opens already-run and reproduces anywhere. This is the ONE step for delivering a "
+        "notebook — do NOT use jupyter / nbconvert / ipykernel / kernel registration (they point at a "
+        "different Python that lacks the scientific stack). Provide ordered cells (markdown for "
+        "explanation, code for computation). Returns the saved file path (it appears in the artifacts "
+        "panel) plus any cell errors so you can fix and re-export."
     ),
     "parameters": {
         "type": "object",
@@ -456,7 +460,7 @@ EXPORT_NOTEBOOK_SCHEMA = {
             "title": {"type": "string", "description": "Notebook title (also the default filename)."},
             "cells": {
                 "type": "array",
-                "description": "Ordered cells.",
+                "description": "Ordered cells. Code cells share one namespace top-to-bottom (like a real notebook).",
                 "items": {
                     "type": "object",
                     "properties": {
@@ -467,13 +471,82 @@ EXPORT_NOTEBOOK_SCHEMA = {
                 },
             },
             "path": {"type": "string", "description": "Optional output path; defaults to <title>.ipynb in the cwd."},
+            "execute": {
+                "type": "boolean",
+                "description": "Run the code cells in Emmy's environment and embed outputs/figures (default true). "
+                               "Set false only to write code-only cells without running them.",
+            },
         },
         "required": ["title", "cells"],
     },
 }
 
 
-def export_notebook(title: str, cells: list, path: str = "") -> str:
+def _execute_notebook_cells(nb_cells: list) -> list:
+    """Run code cells in-process (Emmy's venv HAS numpy/scipy/pandas/matplotlib) and embed
+    their outputs — stdout as a stream, matplotlib figures as inline PNGs, exceptions as error
+    outputs. Cells share one namespace top-to-bottom, like a real notebook. Returns the list of
+    per-cell error strings (empty when everything ran clean). No Jupyter/nbconvert involved."""
+    import base64
+    import contextlib
+    import io
+    import traceback as _tb
+
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")  # headless: figures captured, never displayed
+        import matplotlib.pyplot as plt
+
+        have_mpl = True
+    except Exception:
+        have_mpl = False
+
+    ns: dict = {"__name__": "__main__"}
+    errors: list = []
+    n = 0
+    for cell in nb_cells:
+        if cell.get("cell_type") != "code":
+            continue
+        n += 1
+        cell["execution_count"] = n
+        src = "".join(cell.get("source", []))
+        outputs: list = []
+        buf = io.StringIO()
+        if have_mpl:
+            plt.close("all")
+        try:
+            with contextlib.redirect_stdout(buf):
+                exec(compile(src, f"<cell {n}>", "exec"), ns)  # noqa: S102 — agent's own analysis code
+        except Exception as exc:
+            outputs.append({
+                "output_type": "error",
+                "ename": type(exc).__name__,
+                "evalue": str(exc),
+                "traceback": _tb.format_exc().splitlines(),
+            })
+            errors.append(f"cell {n}: {type(exc).__name__}: {exc}")
+        text = buf.getvalue()
+        if text:
+            outputs.append({"output_type": "stream", "name": "stdout", "text": text.splitlines(keepends=True)})
+        if have_mpl:
+            for fignum in plt.get_fignums():
+                try:
+                    imgbuf = io.BytesIO()
+                    plt.figure(fignum).savefig(imgbuf, format="png", bbox_inches="tight", dpi=110)
+                    outputs.append({
+                        "output_type": "display_data",
+                        "data": {"image/png": base64.b64encode(imgbuf.getvalue()).decode("ascii")},
+                        "metadata": {},
+                    })
+                except Exception:
+                    pass
+            plt.close("all")
+        cell["outputs"] = outputs
+    return errors
+
+
+def export_notebook(title: str, cells: list, path: str = "", execute: bool = True) -> str:
     import os
     import re
 
@@ -486,6 +559,14 @@ def export_notebook(title: str, cells: list, path: str = "") -> str:
             cell["execution_count"] = None
         return cell
 
+    nb_cells = [_nb_cell(c) for c in (cells or [])]
+    errors: list = []
+    if execute:
+        try:
+            errors = _execute_notebook_cells(nb_cells)
+        except Exception as exc:
+            errors = [f"execution harness error: {type(exc).__name__}: {exc}"]
+
     nb = {
         "nbformat": 4,
         "nbformat_minor": 5,
@@ -495,7 +576,7 @@ def export_notebook(title: str, cells: list, path: str = "") -> str:
             "title": title,
             "generated_by": "Emmy (EnergyIR)",
         },
-        "cells": [_nb_cell(c) for c in (cells or [])],
+        "cells": nb_cells,
     }
     if not path.strip():
         safe = re.sub(r"[^A-Za-z0-9._-]+", "_", title).strip("_") or "emmy_notebook"
@@ -506,8 +587,17 @@ def export_notebook(title: str, cells: list, path: str = "") -> str:
             json.dump(nb, f, indent=1)
     except Exception as exc:
         return _err(f"write failed: {type(exc).__name__}: {exc}")
-    return _result("computed", f"wrote reproducible notebook ({len(nb['cells'])} cells) to {path}",
-                   path=path, cells=len(nb["cells"]))
+
+    code_cells = sum(1 for c in nb_cells if c["cell_type"] == "code")
+    if errors:
+        return _result(
+            "computed",
+            f"wrote notebook to {path} ({code_cells} code cells run; {len(errors)} had errors — fix and re-export)",
+            path=path, cells=len(nb_cells), executed=execute, errors=errors,
+        )
+    ran = "executed, outputs + figures embedded" if execute else "code-only (not executed)"
+    return _result("computed", f"wrote reproducible notebook ({len(nb_cells)} cells, {ran}) to {path}",
+                   path=path, cells=len(nb_cells), executed=execute, errors=[])
 
 
 # ---------------------------------------------------------------------------
@@ -552,6 +642,8 @@ registry.register(
 )
 registry.register(
     name="export_notebook", toolset="science", schema=EXPORT_NOTEBOOK_SCHEMA, emoji="📓",
-    handler=lambda args, **kw: export_notebook(args["title"], args.get("cells", []), args.get("path", "")),
-    description="Export the work as a reproducible Jupyter notebook.",
+    handler=lambda args, **kw: export_notebook(
+        args["title"], args.get("cells", []), args.get("path", ""), args.get("execute", True)
+    ),
+    description="Write + execute a reproducible Jupyter notebook (outputs/figures embedded).",
 )
