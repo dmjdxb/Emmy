@@ -146,6 +146,57 @@ function leadingStatus(isPending: boolean, status: ToolStatus): ToolStatus | und
   return status === 'success' ? undefined : status
 }
 
+// Verified-claim badge — Emmy's moat made visible. The verified scientific tools
+// (symbolic_check, numeric_verify, units_check, qubo_solve, ...) return a `verified`
+// tag in their JSON result; we surface it as a colored chip so the reader sees at a
+// glance whether a claim was proved/computed (upheld), cited, refuted (caught false),
+// or only assumed — rather than reading it out of the prose.
+const VERIFIED_STYLE: Record<string, { label: string; cls: string }> = {
+  proved: { label: '✓ proved', cls: 'border-emerald-600/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' },
+  computed: { label: '✓ computed', cls: 'border-emerald-600/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' },
+  cited: { label: '◆ cited', cls: 'border-sky-600/30 bg-sky-500/10 text-sky-700 dark:text-sky-400' },
+  refuted: { label: '✗ refuted', cls: 'border-destructive/30 bg-destructive/10 text-destructive' },
+  assumed: { label: '~ assumed', cls: 'border-amber-600/30 bg-amber-500/10 text-amber-700 dark:text-amber-400' }
+}
+
+function verifiedTag(result: unknown): string | null {
+  if (result == null) {
+    return null
+  }
+
+  let obj: unknown = result
+  if (typeof result === 'string') {
+    try {
+      obj = JSON.parse(result)
+    } catch {
+      return null
+    }
+  }
+
+  const tag = obj && typeof obj === 'object' ? (obj as { verified?: unknown }).verified : null
+
+  return typeof tag === 'string' && tag in VERIFIED_STYLE ? tag : null
+}
+
+function VerifiedBadge({ tag }: { tag: string }) {
+  const style = VERIFIED_STYLE[tag]
+  if (!style) {
+    return null
+  }
+
+  return (
+    <span
+      className={cn(
+        'shrink-0 rounded-full border px-1.5 py-px text-[0.6rem] font-medium leading-none tracking-tight',
+        style.cls
+      )}
+      title="Verification status of this tool result"
+    >
+      {style.label}
+    </span>
+  )
+}
+
 function SearchResultsList({ hits }: { hits: SearchResultRow[] }) {
   return (
     <ol className="m-0 grid list-none gap-2.5 p-0">
@@ -269,6 +320,8 @@ function ToolEntry({ part }: ToolEntryProps) {
   )
 
   const copyAction = useMemo(() => toolCopyPayload(part, view), [part, view])
+  // Verified-claim tag from the tool result (science tools emit one); shown as a chip.
+  const vTag = useMemo(() => verifiedTag(part.result), [part.result])
 
   const trailing =
     isPending && !embedded ? (
@@ -304,6 +357,7 @@ function ToolEntry({ part }: ToolEntryProps) {
             >
               {view.title}
             </FadeText>
+            {!isPending && vTag && <VerifiedBadge tag={vTag} />}
             {!isPending && view.countLabel && <span className={TOOL_HEADER_DURATION_CLASS}>{view.countLabel}</span>}
             {!isPending && view.durationLabel && (
               <span className={TOOL_HEADER_DURATION_CLASS}>{view.durationLabel}</span>
