@@ -22,16 +22,16 @@ const nousTintTransparent = (pct: number) => `color-mix(in srgb, ${NOUS_BLUE} ${
 /**
  * Emmy — the EnergyIR brand identity and Emmy's default theme.
  * `colors` is the light ("white") interface; `darkColors` is the dark
- * interface. Both are Emmy-violet (#7C3AED) accented. Users switch between
+ * interface. Both are EnergyIR-green (#3aa676) accented. Users switch between
  * light and dark from the theme toggle — Emmy ships with both, not just dark.
  */
-const EMMY_VIOLET = '#7C3AED'
-const EMMY_VIOLET_LIGHT = '#A78BFA'
+const EMMY_GREEN = '#3aa676'
+const EMMY_GREEN_LIGHT = '#7fcfa9'
 
 export const robinTheme: DesktopTheme = {
   name: 'robin',
   label: 'Emmy',
-  description: 'EnergyIR brand — violet on white (light) or deep slate (dark)',
+  description: 'EnergyIR brand — green on white (light) or deep slate (dark)',
   colors: {
     background: '#ffffff',
     foreground: '#0f1115',
@@ -41,7 +41,7 @@ export const robinTheme: DesktopTheme = {
     mutedForeground: '#5b5f57',
     popover: '#ffffff',
     popoverForeground: '#0f1115',
-    primary: EMMY_VIOLET,
+    primary: EMMY_GREEN,
     primaryForeground: '#ffffff',
     secondary: '#f4f2eb',
     secondaryForeground: '#0f1115',
@@ -49,9 +49,9 @@ export const robinTheme: DesktopTheme = {
     accentForeground: '#2e1065',
     border: '#e2e0d6',
     input: '#e2e0d6',
-    ring: EMMY_VIOLET,
-    midground: EMMY_VIOLET,
-    composerRing: EMMY_VIOLET,
+    ring: EMMY_GREEN,
+    midground: EMMY_GREEN,
+    composerRing: EMMY_GREEN,
     destructive: '#c7382f',
     destructiveForeground: '#ffffff',
     sidebarBackground: '#f6f5f0',
@@ -68,17 +68,17 @@ export const robinTheme: DesktopTheme = {
     mutedForeground: '#b9b6ac',
     popover: '#1d1f26',
     popoverForeground: '#f4f2eb',
-    primary: EMMY_VIOLET,
+    primary: EMMY_GREEN,
     primaryForeground: '#ffffff',
     secondary: '#1d1f26',
     secondaryForeground: '#f4f2eb',
     accent: '#2e1065',
-    accentForeground: EMMY_VIOLET_LIGHT,
+    accentForeground: EMMY_GREEN_LIGHT,
     border: '#24272d',
     input: '#24272d',
-    ring: EMMY_VIOLET,
-    midground: EMMY_VIOLET,
-    composerRing: EMMY_VIOLET,
+    ring: EMMY_GREEN,
+    midground: EMMY_GREEN,
+    composerRing: EMMY_GREEN,
     destructive: '#e06c75',
     destructiveForeground: '#0f1115',
     sidebarBackground: '#0c0e12',

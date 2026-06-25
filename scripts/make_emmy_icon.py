@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate Emmy's app icon: a 4-fold-symmetric quatrefoil (Noether symmetry /
-conservation motif) on a deep indigo->violet tile. Pure procedural render so the
-geometry is exactly symmetric and crisp at every size. Builds .icns/.ico/.png.
+conservation motif) on a deep-green -> EnergyIR-green tile. Pure procedural render
+so the geometry is exactly symmetric and crisp at every size. Builds .icns/.ico/.png.
 
 Run: .venv-arm2/bin/python scripts/make_emmy_icon.py
 """
@@ -18,9 +18,9 @@ SS = 4                      # supersample factor
 S = 1024                    # final master size
 N = S * SS                  # working canvas
 
-TOP = (49, 46, 129)         # indigo-800  #312E81
-BOT = (124, 58, 237)        # violet-600  #7C3AED
-INK = (245, 243, 255)       # near-white  #F5F3FF
+TOP = (16, 45, 34)          # deep green   #102d22  (EnergyIR)
+BOT = (58, 166, 118)        # energy green #3aa676  (EnergyIR)
+INK = (236, 253, 245)       # emerald-white #ECFDF5
 
 
 def rounded_mask(size: int, radius: int) -> Image.Image:
