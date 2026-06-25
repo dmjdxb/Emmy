@@ -91,8 +91,10 @@ _HERMES_CORE_TOOLS = [
 # discovers them via a search round-trip instead of paying their full schema every turn.
 #
 # Emmy keeps the LIGHTWEIGHT verifiers (symbolic_check/numeric_verify/units_check) in the core: it
-# verifies constantly, so a discovery round-trip for those would be a net loss. The heavier, rarer
-# science tools (qubo_solve/roofline_classify/arxiv_search) defer.
+# verifies constantly, so a discovery round-trip for those would be a net loss. export_notebook is
+# ALSO core: the rigor prompt directs the agent to call it by name for any notebook deliverable, so
+# deferring it makes the agent search for a tool the prompt already promised — which loops. The
+# heavier, rarer science tools (qubo_solve/roofline_classify/arxiv_search) defer.
 _TOOL_SEARCH_NEVER_DEFER = [
     # File manipulation — touched constantly
     "read_file", "write_file", "patch", "search_files",
@@ -106,6 +108,8 @@ _TOOL_SEARCH_NEVER_DEFER = [
     "web_search",
     # Everyday verification — Emmy's core loop, kept instant
     "symbolic_check", "numeric_verify", "units_check",
+    # Notebook delivery — the rigor prompt names this tool, so it must always be present
+    "export_notebook",
 ]
 
 # Webhook events may originate from untrusted third-party content (for example,
