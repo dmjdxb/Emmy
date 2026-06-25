@@ -11,11 +11,37 @@ Provides subcommands for:
 - hermes cron          - Manage cron jobs
 """
 
+import logging as _logging
 import os
 import sys
 
-__version__ = "0.16.13"
+__version__ = "0.16.14"
 __release_date__ = "2026.6.23"
+
+
+def _install_emmy_log_branding() -> None:
+    """Display log records under the ``emmy`` name, not the internal package name.
+
+    The Python package is still called ``robin`` (a clean rename would touch 200+
+    imports), so module loggers are named ``robin.*`` via ``getLogger(__name__)``.
+    Rewriting the record's ``name`` at creation time relabels every log line (files,
+    the desktop System-logs view, the gateway feed) to ``emmy.*`` without renaming the
+    package. Level/config-by-logger-name still keys off the real logger, so this is
+    display-only and functionally inert.
+    """
+    _prev = _logging.getLogRecordFactory()
+
+    def _factory(*args, **kwargs):
+        record = _prev(*args, **kwargs)
+        name = record.name
+        if name == "robin" or (isinstance(name, str) and name.startswith("robin.")):
+            record.name = "emmy" + name[len("robin"):]
+        return record
+
+    _logging.setLogRecordFactory(_factory)
+
+
+_install_emmy_log_branding()
 
 
 def _ensure_utf8():
