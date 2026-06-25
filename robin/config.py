@@ -2171,8 +2171,11 @@ DEFAULT_CONFIG = {
     # update model picker lists without shipping a hermes-agent release.
     # The default URL is served by the docs site GitHub Pages deploy.
     "model_catalog": {
-        "enabled": True,
-        "url": "https://robin.energyir.com/docs/api/model-catalog.json",
+        # OFF: Emmy's models (V4-Flash / V4-Pro) come from effort_tiers, not a remote
+        # catalog. The old robin.energyir.com host is dead and fetching it on every init
+        # cost latency (a cause of "agent initialization timed out") + log noise.
+        "enabled": False,
+        "url": "https://energyir.io/api/model-catalog.json",
         # Disk cache TTL in hours.  Beyond this, the CLI refetches on the
         # next /model or `hermes model` invocation; network failures
         # silently fall back to the stale cache.

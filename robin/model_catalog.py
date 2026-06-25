@@ -101,15 +101,21 @@ def _load_catalog_config() -> dict[str, Any]:
     if not isinstance(raw, dict):
         raw = {}
 
-    return {
-        # Emmy ships a single fixed model (DeepSeek V4 Pro), so the multi-model
-        # catalog is unnecessary. Default OFF so init never eats a fetch/DNS-timeout
-        # for a catalog the picker doesn't use. Opt in via config if ever needed.
+    result = {
+        # Emmy's models (V4-Flash / V4-Pro) come from effort_tiers, not a remote
+        # catalog, so the multi-model catalog adds nothing. Default OFF so init never
+        # eats a fetch/DNS-timeout. Opt in via config if a curated list is ever hosted.
         "enabled": bool(raw.get("enabled", False)),
         "url": str(raw.get("url") or DEFAULT_CATALOG_URL),
         "ttl_hours": float(raw.get("ttl_hours") or DEFAULT_TTL_HOURS),
         "providers": raw.get("providers") if isinstance(raw.get("providers"), dict) else {},
     }
+    # The Robin-era catalog host (robin.energyir.com) is dead (DNS-fail). A config
+    # seeded before this change still points at it; never fetch it — it only added
+    # init latency + log noise, and Emmy's models don't depend on it.
+    if "robin.energyir.com" in result["url"]:
+        result["enabled"] = False
+    return result
 
 
 def _cache_path() -> Path:
