@@ -62,7 +62,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 DEFAULT_CATALOG_URL = (
-    "https://robin.energyir.com/docs/api/model-catalog.json"
+    "https://energyir.io/api/model-catalog.json"
 )
 # Fallback fetch chain. The Docusaurus site is served through Vercel, which
 # occasionally returns HTTP 403 + x-vercel-mitigated: challenge for non-
@@ -70,9 +70,7 @@ DEFAULT_CATALOG_URL = (
 # stale and new model releases never reach the picker. The raw GitHub URL
 # is the same manifest published from the same repo and is not bot-gated,
 # so we fall through to it whenever the primary URL fails.
-DEFAULT_CATALOG_FALLBACK_URLS: tuple[str, ...] = (
-    "https://raw.githubusercontent.com/dmjdxb/Robin/main/website/static/api/model-catalog.json",
-)
+DEFAULT_CATALOG_FALLBACK_URLS: tuple[str, ...] = ()
 DEFAULT_TTL_HOURS = 1
 DEFAULT_FETCH_TIMEOUT = 8.0
 SUPPORTED_SCHEMA_VERSION = 1
@@ -104,7 +102,10 @@ def _load_catalog_config() -> dict[str, Any]:
         raw = {}
 
     return {
-        "enabled": bool(raw.get("enabled", True)),
+        # Emmy ships a single fixed model (DeepSeek V4 Pro), so the multi-model
+        # catalog is unnecessary. Default OFF so init never eats a fetch/DNS-timeout
+        # for a catalog the picker doesn't use. Opt in via config if ever needed.
+        "enabled": bool(raw.get("enabled", False)),
         "url": str(raw.get("url") or DEFAULT_CATALOG_URL),
         "ttl_hours": float(raw.get("ttl_hours") or DEFAULT_TTL_HOURS),
         "providers": raw.get("providers") if isinstance(raw.get("providers"), dict) else {},
