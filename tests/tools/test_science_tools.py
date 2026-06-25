@@ -93,3 +93,20 @@ def test_all_science_tools_registered():
         entry = registry.get_entry(name)
         assert entry is not None, f"{name} not registered"
         assert entry.toolset == "science"
+
+
+# --- export_notebook (M4 reproducibility) ---
+
+def test_export_notebook_writes_valid_ipynb(tmp_path):
+    import json as _json
+    out = tmp_path / "deriv.ipynb"
+    d = _v(st.export_notebook(
+        "Steady-state derivation",
+        [{"type": "markdown", "source": "# Derivation\nWe solve dy/dt=0."},
+         {"type": "code", "source": "import sympy as sp\nx=sp.Symbol('x')\nprint(sp.integrate(2*x,x))"}],
+        path=str(out),
+    ))
+    assert d["verified"] == "computed" and d["cells"] == 2
+    nb = _json.loads(out.read_text())
+    assert nb["nbformat"] == 4 and len(nb["cells"]) == 2
+    assert nb["cells"][1]["cell_type"] == "code" and nb["cells"][1]["execution_count"] is None

@@ -75,7 +75,7 @@ _HERMES_CORE_TOOLS = [
     # Verified scientific tools (Emmy's moat) — each returns a `verified` tag.
     # symbolic_check/units_check/qubo_solve gate on sympy/pint/dimod via check_fn.
     "symbolic_check", "numeric_verify", "units_check", "qubo_solve",
-    "roofline_classify", "arxiv_search",
+    "roofline_classify", "arxiv_search", "export_notebook",
 ]
 
 # Progressive-tool-disclosure never-defer set (used ONLY by tools/tool_search.py).

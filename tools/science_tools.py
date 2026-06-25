@@ -439,6 +439,78 @@ def arxiv_search(query: str, max_results: int = 5) -> str:
 
 
 # ---------------------------------------------------------------------------
+# export_notebook — reproducible research artifact (a rerunnable Jupyter .ipynb)
+# ---------------------------------------------------------------------------
+
+EXPORT_NOTEBOOK_SCHEMA = {
+    "name": "export_notebook",
+    "description": (
+        "Export the work as a runnable Jupyter notebook (.ipynb) so the result is reproducible — "
+        "the researcher can open it and re-run every step. Provide ordered cells (markdown for "
+        "explanation/derivation, code for the computation). Use this to hand back a hard analysis as a "
+        "self-contained artifact. Returns the saved file path (it appears in the artifacts panel)."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string", "description": "Notebook title (also the default filename)."},
+            "cells": {
+                "type": "array",
+                "description": "Ordered cells.",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "type": {"type": "string", "enum": ["markdown", "code"]},
+                        "source": {"type": "string", "description": "Cell content."},
+                    },
+                    "required": ["type", "source"],
+                },
+            },
+            "path": {"type": "string", "description": "Optional output path; defaults to <title>.ipynb in the cwd."},
+        },
+        "required": ["title", "cells"],
+    },
+}
+
+
+def export_notebook(title: str, cells: list, path: str = "") -> str:
+    import os
+    import re
+
+    def _nb_cell(c):
+        ctype = "code" if c.get("type") == "code" else "markdown"
+        src = str(c.get("source", ""))
+        cell = {"cell_type": ctype, "metadata": {}, "source": src.splitlines(keepends=True)}
+        if ctype == "code":
+            cell["outputs"] = []
+            cell["execution_count"] = None
+        return cell
+
+    nb = {
+        "nbformat": 4,
+        "nbformat_minor": 5,
+        "metadata": {
+            "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+            "language_info": {"name": "python"},
+            "title": title,
+            "generated_by": "Emmy (EnergyIR)",
+        },
+        "cells": [_nb_cell(c) for c in (cells or [])],
+    }
+    if not path.strip():
+        safe = re.sub(r"[^A-Za-z0-9._-]+", "_", title).strip("_") or "emmy_notebook"
+        path = f"{safe}.ipynb"
+    try:
+        path = os.path.abspath(os.path.expanduser(path))
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(nb, f, indent=1)
+    except Exception as exc:
+        return _err(f"write failed: {type(exc).__name__}: {exc}")
+    return _result("computed", f"wrote reproducible notebook ({len(nb['cells'])} cells) to {path}",
+                   path=path, cells=len(nb["cells"]))
+
+
+# ---------------------------------------------------------------------------
 # Registration — a "science" toolset, auto-discovered by tools/registry.py
 # ---------------------------------------------------------------------------
 
@@ -477,4 +549,9 @@ registry.register(
     name="arxiv_search", toolset="science", schema=ARXIV_SCHEMA, emoji="📚",
     handler=lambda args, **kw: arxiv_search(args["query"], args.get("max_results", 5)),
     description="Search arXiv for real citable papers.",
+)
+registry.register(
+    name="export_notebook", toolset="science", schema=EXPORT_NOTEBOOK_SCHEMA, emoji="📓",
+    handler=lambda args, **kw: export_notebook(args["title"], args.get("cells", []), args.get("path", "")),
+    description="Export the work as a reproducible Jupyter notebook.",
 )

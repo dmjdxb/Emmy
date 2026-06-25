@@ -143,7 +143,10 @@ SCIENTIFIC_RIGOR_GUIDANCE = (
     "(e.g. symbolic_check, numeric_verify, units_check) when available. Prefer a verified answer to a "
     "merely plausible one.\n"
     "- Cite real sources for empirical or literature claims; never fabricate references, datasets, or numbers.\n"
-    "- When you run code, show it and its output, and make results reproducible (fixed seeds, explicit inputs)."
+    "- When you run code, show it and its output, and make results reproducible (fixed seeds, explicit inputs).\n"
+    "- After a substantial analysis, close with a one-line TRUST SUMMARY of your key claims — how many were "
+    "[computed]/[proved], how many [cited], and what remains [assumed] — so the reader sees at a glance how "
+    "much rests on verification vs. assumption. Offer export_notebook for a reproducible artifact when useful."
 )
 
 # Injected per-turn (appended to the ephemeral system prompt) ONLY when the user picks the
