@@ -242,6 +242,9 @@ science = [
   "matplotlib>=3.8,<4",
   "pandas>=2.1,<3",
   "pint>=0.23,<1",
+  # Notebook data model so `import nbformat` works + cells can read/validate an .ipynb.
+  # export_notebook needs no jupyter; deliberately NOT adding jupyter/nbconvert/ipykernel.
+  "nbformat>=5.9,<6",
 ]
 # QUBO/Ising backend for the qubo_solve verified tool. Wheel-available on
 # mac-arm64 + linux-x64 (CI targets). Kept separate from [science] so the native
