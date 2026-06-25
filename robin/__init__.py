@@ -15,7 +15,7 @@ import logging as _logging
 import os
 import sys
 
-__version__ = "0.16.15"
+__version__ = "0.16.16"
 __release_date__ = "2026.6.23"
 
 

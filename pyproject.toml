@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hermes-agent"
-version = "0.16.15"
+version = "0.16.16"
 description = "The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere"
 readme = "README.md"
 # Upper bound is load-bearing, not cosmetic. uv resolves the project's
@@ -230,6 +230,20 @@ youtube = [
 # starlette==1.0.1 pinned for CVE-2026-48710 (BadHost) — fastapi pulls Starlette
 # transitively and pre-1.0.1 is the vulnerable range. See the mcp extra above.
 web = ["fastapi==0.133.1", "uvicorn[standard]==0.41.0", "starlette==1.0.1"]
+# Scientific computing stack — Emmy's reason to exist. Bundled (in [all]) so
+# execute_code and the verified tools do real numerical/symbolic work offline,
+# from first launch. All wheel-available on mac-arm64 + linux-x64 (CI targets).
+# (QUBO deps openjij/dimod live in the separate [qubo] extra, added when the
+# qubo_solve tool lands, so their native build is gated to that change.)
+science = [
+  "numpy>=1.26,<3",
+  "scipy>=1.11,<2",
+  "sympy>=1.12,<2",
+  "matplotlib>=3.8,<4",
+  "pandas>=2.1,<3",
+  "pint>=0.23,<1",
+]
+
 all = [
   # Policy (2026-05-12): `[all]` includes only extras that genuinely
   # CAN'T be lazy-installed via `tools/lazy_deps.py` — i.e. things every
@@ -262,6 +276,7 @@ all = [
   "hermes-agent[google]",
   "hermes-agent[web]",
   "hermes-agent[youtube]",
+  "hermes-agent[science]",
 ]
 
 [project.scripts]

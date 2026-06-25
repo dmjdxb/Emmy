@@ -34,6 +34,7 @@ from agent.prompt_builder import (
     MEMORY_GUIDANCE,
     OPENAI_MODEL_EXECUTION_GUIDANCE,
     PLATFORM_HINTS,
+    SCIENTIFIC_RIGOR_GUIDANCE,
     SESSION_SEARCH_GUIDANCE,
     SKILLS_GUIDANCE,
     TASK_COMPLETION_GUIDANCE,
@@ -100,6 +101,11 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
 
     # Pointer to the robin-agent skill + docs for user questions about Emmy itself.
     stable_parts.append(HERMES_AGENT_HELP_GUIDANCE)
+
+    # Emmy's core operating standard: behave like a rigorous scientist, not a chatbot that
+    # sounds like one. Always on (Emmy is a scientific agent) — this is what makes the
+    # show-your-working / verify-before-claiming behaviour real rather than marketing.
+    stable_parts.append(SCIENTIFIC_RIGOR_GUIDANCE)
 
     # Universal task-completion / no-fabrication guidance.  Applied to ALL
     # models regardless of tool_use_enforcement gating — the failure modes

@@ -500,7 +500,9 @@ class TestBuildContextFilesPrompt:
         with patch("pathlib.Path.home", return_value=fake_home):
             result = build_context_files_prompt(cwd=str(tmp_path))
         assert "Project Context" in result
-        assert "Emmy Agent" in result
+        # The seeded global SOUL carries Emmy's identity (was a stale "Emmy Agent"
+        # string that no longer appears in the SOUL; assert durable identity markers).
+        assert "Emmy" in result and "EnergyIR" in result
 
     def test_loads_agents_md(self, tmp_path):
         (tmp_path / "AGENTS.md").write_text("Use Ruff for linting.")
