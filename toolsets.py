@@ -85,6 +85,10 @@ _HERMES_CORE_TOOLS = [
     # on Lean being installed, and discovered via tool_search only when a proof is
     # actually needed — so it costs zero tokens on ordinary turns.
     "lean_check",
+    # Verified knowledge base — record/recall durable verified findings + flag
+    # contradictions. Enabled but DEFERRED (not in never-defer below): discovered
+    # via tool_search only when recording/recalling, so zero per-turn token cost.
+    "kb_record", "kb_recall",
 ]
 
 # Progressive-tool-disclosure never-defer set (used ONLY by tools/tool_search.py).
