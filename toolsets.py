@@ -76,6 +76,8 @@ _HERMES_CORE_TOOLS = [
     # symbolic_check/units_check/qubo_solve gate on sympy/pint/dimod via check_fn.
     "symbolic_check", "numeric_verify", "units_check", "qubo_solve",
     "roofline_classify", "arxiv_search", "export_notebook",
+    # Rigorous numerics (guaranteed error bounds) + assumption-aware statistics.
+    "interval_verify", "stats_test",
 ]
 
 # Progressive-tool-disclosure never-defer set (used ONLY by tools/tool_search.py).
@@ -108,6 +110,9 @@ _TOOL_SEARCH_NEVER_DEFER = [
     "web_search",
     # Everyday verification — Emmy's core loop, kept instant
     "symbolic_check", "numeric_verify", "units_check",
+    # Rigorous numerics + statistics — the rigor prompt names these by tool name,
+    # so (like export_notebook) they must stay present or the agent loops searching.
+    "interval_verify", "stats_test",
     # Notebook delivery — the rigor prompt names this tool, so it must always be present
     "export_notebook",
 ]

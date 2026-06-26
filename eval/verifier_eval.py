@@ -49,6 +49,16 @@ CASES: list[Case] = [
     # --- qubo feasibility ---
     Case("knapsack stays under cap (true)", lambda: st.qubo_solve("knapsack", values=[3, 4, 5, 6], weights=[2, 3, 4, 5], capacity=7), True),
     Case("vertex cover covers edges (true)", lambda: st.qubo_solve("vertex_cover", num_nodes=4, edges=[[0, 1], [1, 2], [2, 3]]), True),
+
+    # --- interval_verify (mpmath) — rigorous numerics with a guaranteed bound ---
+    Case("√2 = 1.41421356…  (true)",       lambda: st.interval_verify("sqrt(2)", claim=1.4142135623730951), True),
+    Case("√2 = 1.41  (FALSE)",             lambda: st.interval_verify("sqrt(2)", claim=1.41), False),
+    Case("√π = 1.7724538…  (true)",        lambda: st.interval_verify("sqrt(pi)", claim=1.7724538509055159), True),
+    Case("∫₀¹ x² = 0.5  (FALSE, =1/3)",    lambda: st.interval_verify("1/3", claim=0.5), False),
+
+    # --- stats_test (scipy) — assumption-aware; a real difference vs a non-effect ---
+    Case("clear group difference  (true)", lambda: st.stats_test("ttest", a=[5.1, 4.9, 5.0, 5.2, 4.8], b=[6.0, 6.1, 5.9, 6.2, 5.8]), True),
+    Case("FDR kills inflated count (true)", lambda: st.stats_test("correct", pvalues=[0.01, 0.04, 0.03, 0.045, 0.2], method="bh"), True),
 ]
 
 

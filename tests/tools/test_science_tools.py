@@ -83,13 +83,87 @@ def test_qubo_set_cover():
     assert d["verified"] == "proved" and d["feasible"] is True
 
 
-# --- registration: all six tools land in the registry under the science toolset ---
+# --- interval_verify (mpmath) — RIGOROUS numerics with a guaranteed bound ---
+
+def test_interval_verify_encloses_constant():
+    pytest.importorskip("mpmath")
+    d = _v(st.interval_verify("pi/4"))
+    assert d["verified"] == "computed"
+    assert d["low"] <= 0.7853981633974483 <= d["high"]  # true pi/4 inside the proven bracket
+
+
+def test_interval_verify_accepts_correct_float64_claim():
+    # A correctly-computed float64 value must pass (not be refused for lacking 30 digits).
+    pytest.importorskip("mpmath")
+    assert _v(st.interval_verify("sqrt(2)", claim=1.4142135623730951))["verified"] == "computed"
+    assert _v(st.interval_verify("sqrt(pi)", claim=1.7724538509055159))["passed"] is True
+
+
+def test_interval_verify_refutes_wrong_claim():
+    # The headline guarantee: a provably-wrong value is REFUTED, not waved through.
+    pytest.importorskip("mpmath")
+    bad = _v(st.interval_verify("sqrt(2)", claim=1.41))
+    assert bad["verified"] == "refuted" and bad["passed"] is False
+    # ∫₀¹ x² = 1/3, not 0.5 — the classic wrong answer must be caught.
+    assert _v(st.interval_verify("1/3", claim=0.5))["verified"] == "refuted"
+
+
+def test_interval_verify_width_below_float64():
+    pytest.importorskip("mpmath")
+    d = _v(st.interval_verify("exp(1)", dps=40))
+    assert d["verified"] == "computed" and 0 <= d["width"] < 1e-25  # honest sub-float64 enclosure
+
+
+# --- stats_test (scipy) — assumption-aware, effect sizes, anti-p-hacking ---
+
+def test_stats_ttest_reports_effect_and_ci():
+    pytest.importorskip("scipy")
+    d = _v(st.stats_test("ttest", a=[5.1, 4.9, 5.0, 5.2, 4.8], b=[6.0, 6.1, 5.9, 6.2, 5.8]))
+    assert d["verified"] == "computed"
+    assert d["significant"] is True
+    assert "cohens_d" in d and abs(d["cohens_d"]) > 0.8  # large effect
+    assert len(d["ci95"]) == 2 and d["ci95"][0] < d["ci95"][1]
+
+
+def test_stats_ttest_flags_trivial_effect_at_significance():
+    # Significant p but negligible effect (huge n) must be warned about — anti-p-hacking.
+    pytest.importorskip("scipy")
+    import numpy as np  # noqa: F401
+    a = [0.0] * 200 + [1.0] * 200
+    b = [0.0] * 195 + [1.0] * 205
+    d = _v(st.stats_test("ttest", a=a, b=b))
+    assert d["verified"] == "computed"
+    assert any("CI includes zero" in w or "negligible" in w for w in d["warnings"])
+
+
+def test_stats_anova_reports_eta_squared():
+    pytest.importorskip("scipy")
+    d = _v(st.stats_test("anova", groups=[[1, 2, 3, 2], [4, 5, 6, 5], [7, 8, 9, 8]]))
+    assert d["verified"] == "computed" and d["eta_squared"] > 0.1
+
+
+def test_stats_multiple_comparison_correction():
+    # Four "significant" p-values, but after FDR correction the inflated count must drop.
+    pytest.importorskip("scipy")
+    d = _v(st.stats_test("correct", pvalues=[0.01, 0.04, 0.03, 0.045, 0.2], method="bh"))
+    assert d["verified"] == "computed"
+    assert d["n_significant"] < 4  # uncorrected naive count was inflated
+    assert d["warnings"]
+
+
+def test_stats_normality():
+    pytest.importorskip("scipy")
+    d = _v(st.stats_test("normality", data=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+    assert d["verified"] == "computed" and "normal" in d
+
+
+# --- registration: all tools land in the registry under the science toolset ---
 
 def test_all_science_tools_registered():
     from tools.registry import registry
 
-    for name in ["symbolic_check", "numeric_verify", "units_check", "qubo_solve",
-                 "roofline_classify", "arxiv_search"]:
+    for name in ["symbolic_check", "numeric_verify", "interval_verify", "stats_test",
+                 "units_check", "qubo_solve", "roofline_classify", "arxiv_search"]:
         entry = registry.get_entry(name)
         assert entry is not None, f"{name} not registered"
         assert entry.toolset == "science"
