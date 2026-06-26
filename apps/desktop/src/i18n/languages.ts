@@ -37,6 +37,26 @@ export const LOCALE_OPTIONS = [
     id: 'de',
     name: 'Deutsch',
     configValue: 'de'
+  },
+  {
+    id: 'it',
+    name: 'Italiano',
+    configValue: 'it'
+  },
+  {
+    id: 'pt',
+    name: 'Português',
+    configValue: 'pt'
+  },
+  {
+    id: 'nl',
+    name: 'Nederlands',
+    configValue: 'nl'
+  },
+  {
+    id: 'ja',
+    name: '日本語',
+    configValue: 'ja'
   }
 ] as const satisfies readonly { configValue: string; id: Locale; name: string }[]
 
@@ -82,7 +102,23 @@ const LOCALE_ALIASES: Record<string, Locale> = {
   de_de: 'de',
   'de-at': 'de',
   de_at: 'de',
-  'de-ch': 'de'
+  'de-ch': 'de',
+  it: 'it',
+  'it-it': 'it',
+  it_it: 'it',
+  pt: 'pt',
+  'pt-pt': 'pt',
+  pt_pt: 'pt',
+  'pt-br': 'pt',
+  pt_br: 'pt',
+  nl: 'nl',
+  'nl-nl': 'nl',
+  nl_nl: 'nl',
+  'nl-be': 'nl',
+  nl_be: 'nl',
+  ja: 'ja',
+  'ja-jp': 'ja',
+  ja_jp: 'ja'
 }
 
 export function isLocale(value: unknown): value is Locale {

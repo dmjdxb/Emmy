@@ -5,7 +5,7 @@
 // so a missing key is a compile error — that's the completeness guard for
 // "full" coverage as more surfaces are migrated off hardcoded English.
 
-export type Locale = 'ar' | 'de' | 'en' | 'es' | 'fr' | 'hi' | 'zh'
+export type Locale = 'ar' | 'de' | 'en' | 'es' | 'fr' | 'hi' | 'it' | 'ja' | 'nl' | 'pt' | 'zh'
 
 interface ModeOptionCopy {
   label: string

@@ -96,7 +96,7 @@ describe('I18nProvider', () => {
 
   it('does not overwrite unsupported configured languages', async () => {
     const configClient: I18nConfigClient = {
-      getConfig: vi.fn().mockResolvedValue({ display: { language: 'ja' } }),
+      getConfig: vi.fn().mockResolvedValue({ display: { language: 'ko' } }),
       saveConfig: vi.fn()
     }
 
