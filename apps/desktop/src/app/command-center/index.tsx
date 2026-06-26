@@ -687,22 +687,37 @@ function formatTokens(value: null | number | undefined): string {
   return num.toLocaleString()
 }
 
-function formatCost(value: null | number | undefined): string {
-  const num = Number(value || 0)
-
-  if (num === 0) {
-    return '$0.00'
-  }
-
-  if (num < 0.01) {
-    return '<$0.01'
-  }
-
-  return `$${num.toFixed(2)}`
-}
-
 function formatInteger(value: null | number | undefined): string {
   return Number(value ?? 0).toLocaleString()
+}
+
+// Emmy ships a single, fixed model by design and never exposes the underlying
+// model identity to users (same principle as the status bar — see
+// use-statusbar-items.tsx). The analytics backend reports raw upstream model
+// ids, so map them to the user-facing EFFORT TIER instead of leaking the slug.
+// Unknown ids collapse to the product name rather than ever showing a raw model.
+function publicModelLabel(model: null | string | undefined): string {
+  const id = (model ?? '').toLowerCase()
+
+  if (!id) {
+    return 'Emmy'
+  }
+
+  if (id.includes('flash')) {
+    return 'Balanced'
+  }
+
+  // gpt-oss powers the Quick tier and auxiliary calls (title-gen etc.).
+  if (id.includes('oss') || id.includes('gpt-')) {
+    return 'Quick'
+  }
+
+  // Heavier reasoning models (…-Pro and friends) back the Max tier.
+  if (id.includes('pro') || id.includes('deepseek') || id.includes('reason')) {
+    return 'Max effort'
+  }
+
+  return 'Emmy'
 }
 
 interface UsagePanelProps {
@@ -719,8 +734,24 @@ function UsagePanel({ error, loading, onPeriodChange, onRefresh, period, usage }
   const cc = t.commandCenter
   const daily = useMemo(() => usage?.daily ?? [], [usage])
   const totals = usage?.totals
-  const byModel = usage?.by_model ?? []
   const topSkills = usage?.skills?.top_skills ?? []
+
+  // Aggregate raw upstream models into user-facing effort tiers, so the panel
+  // shows "Max effort / Balanced / Quick" (never a raw model slug) and a tier
+  // backed by several model ids collapses to one row.
+  const byTier = useMemo(() => {
+    const totalsByLabel = new Map<string, number>()
+
+    for (const entry of usage?.by_model ?? []) {
+      const label = publicModelLabel(entry.model)
+      const tokens = (entry.input_tokens || 0) + (entry.output_tokens || 0)
+      totalsByLabel.set(label, (totalsByLabel.get(label) ?? 0) + tokens)
+    }
+
+    return [...totalsByLabel.entries()]
+      .map(([label, tokens]) => ({ label, tokens }))
+      .sort((a, b) => b.tokens - a.tokens)
+  }, [usage])
 
   const maxTokens = useMemo(() => {
     if (!daily.length) {
@@ -758,19 +789,18 @@ function UsagePanel({ error, loading, onPeriodChange, onRefresh, period, usage }
         )}
       </OverlayCard>
 
+      {/* No dollar-cost stat: Emmy is a subscription product, so per-token dollar
+          cost is internal COGS, not what the user pays — surfacing it (and showing
+          a placeholder $0.00) is misleading. Usage is expressed in tokens; the
+          allowance lives in the web dashboard. */}
       <OverlayCard className="p-3">
         {totals ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-3 gap-3">
             <UsageStat label={cc.statSessions} value={formatInteger(totals.total_sessions)} />
             <UsageStat label={cc.statApiCalls} value={formatInteger(totals.total_api_calls)} />
             <UsageStat
               label={cc.statTokens}
               value={`${formatTokens(totals.total_input)} / ${formatTokens(totals.total_output)}`}
-            />
-            <UsageStat
-              hint={totals.total_actual_cost > 0 ? cc.actualCost(formatCost(totals.total_actual_cost)) : undefined}
-              label={cc.statCost}
-              value={formatCost(totals.total_estimated_cost)}
             />
           </div>
         ) : loading ? (
@@ -840,19 +870,18 @@ function UsagePanel({ error, loading, onPeriodChange, onRefresh, period, usage }
               <div className="mb-1.5 text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
                 {cc.topModels}
               </div>
-              {byModel.length === 0 ? (
+              {byTier.length === 0 ? (
                 <div className="text-xs text-muted-foreground">{cc.noModelUsage}</div>
               ) : (
                 <ul className="space-y-1">
-                  {byModel.slice(0, 6).map(entry => (
+                  {byTier.slice(0, 6).map(entry => (
                     <li
                       className="flex items-center justify-between gap-2 rounded px-1.5 py-1 text-xs hover:bg-muted/40"
-                      key={entry.model}
+                      key={entry.label}
                     >
-                      <span className="min-w-0 truncate font-mono text-[0.7rem] text-foreground">{entry.model}</span>
+                      <span className="min-w-0 truncate text-[0.72rem] text-foreground">{entry.label}</span>
                       <span className="shrink-0 text-[0.65rem] text-muted-foreground">
-                        {formatTokens((entry.input_tokens || 0) + (entry.output_tokens || 0))} ·{' '}
-                        {formatCost(entry.estimated_cost)}
+                        {formatTokens(entry.tokens)}
                       </span>
                     </li>
                   ))}

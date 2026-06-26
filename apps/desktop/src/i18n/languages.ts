@@ -22,6 +22,21 @@ export const LOCALE_OPTIONS = [
     id: 'hi',
     name: 'हिन्दी',
     configValue: 'hi'
+  },
+  {
+    id: 'fr',
+    name: 'Français',
+    configValue: 'fr'
+  },
+  {
+    id: 'es',
+    name: 'Español',
+    configValue: 'es'
+  },
+  {
+    id: 'de',
+    name: 'Deutsch',
+    configValue: 'de'
   }
 ] as const satisfies readonly { configValue: string; id: Locale; name: string }[]
 
@@ -50,7 +65,24 @@ const LOCALE_ALIASES: Record<string, Locale> = {
   ar_ae: 'ar',
   hi: 'hi',
   'hi-in': 'hi',
-  hi_in: 'hi'
+  hi_in: 'hi',
+  fr: 'fr',
+  'fr-fr': 'fr',
+  fr_fr: 'fr',
+  'fr-ca': 'fr',
+  fr_ca: 'fr',
+  es: 'es',
+  'es-es': 'es',
+  es_es: 'es',
+  'es-mx': 'es',
+  es_mx: 'es',
+  'es-419': 'es',
+  de: 'de',
+  'de-de': 'de',
+  de_de: 'de',
+  'de-at': 'de',
+  de_at: 'de',
+  'de-ch': 'de'
 }
 
 export function isLocale(value: unknown): value is Locale {
