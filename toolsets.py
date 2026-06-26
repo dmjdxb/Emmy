@@ -117,14 +117,18 @@ _TOOL_SEARCH_NEVER_DEFER = [
     "web_search",
     # Everyday verification — Emmy's core loop, kept instant
     "symbolic_check", "numeric_verify", "units_check",
-    # Rigorous numerics + statistics — the rigor prompt names these by tool name,
-    # so (like export_notebook) they must stay present or the agent loops searching.
-    "interval_verify", "stats_test",
-    # Verifiable citations — named in the rigor prompt; keep present so "cite your
-    # sources" resolves to a real fetch+check instead of a tool-search loop.
-    "literature_search", "cite_check",
+    # Rigorous numeric enclosure — a lightweight verifier reached whenever a numeric
+    # result needs a guaranteed bound; named in the rigor prompt, so kept present.
+    "interval_verify",
     # Notebook delivery — the rigor prompt names this tool, so it must always be present
     "export_notebook",
+    # NOTE: stats_test, literature_search and cite_check are intentionally NOT here.
+    # They are occasional (a given turn rarely does a hypothesis test or a citation),
+    # and each carries a chunky schema (~900 tok combined). They stay enabled in
+    # _HERMES_CORE_TOOLS but DEFER — discovered via tool_search only when needed. The
+    # rigor prompt therefore describes their CAPABILITY generically (never the exact
+    # tool name) so the agent finds them on demand without the export_notebook-style
+    # search loop (which was caused specifically by hard-naming a deferred tool).
 ]
 
 # Webhook events may originate from untrusted third-party content (for example,
