@@ -78,6 +78,8 @@ _HERMES_CORE_TOOLS = [
     "roofline_classify", "arxiv_search", "export_notebook",
     # Rigorous numerics (guaranteed error bounds) + assumption-aware statistics.
     "interval_verify", "stats_test",
+    # Verifiable citations — find real papers + check a claim against the source text.
+    "literature_search", "cite_check",
 ]
 
 # Progressive-tool-disclosure never-defer set (used ONLY by tools/tool_search.py).
@@ -113,6 +115,9 @@ _TOOL_SEARCH_NEVER_DEFER = [
     # Rigorous numerics + statistics — the rigor prompt names these by tool name,
     # so (like export_notebook) they must stay present or the agent loops searching.
     "interval_verify", "stats_test",
+    # Verifiable citations — named in the rigor prompt; keep present so "cite your
+    # sources" resolves to a real fetch+check instead of a tool-search loop.
+    "literature_search", "cite_check",
     # Notebook delivery — the rigor prompt names this tool, so it must always be present
     "export_notebook",
 ]

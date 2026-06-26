@@ -157,13 +157,65 @@ def test_stats_normality():
     assert d["verified"] == "computed" and "normal" in d
 
 
+# --- verifiable citations: source detection + passage matching (no network) ---
+
+def test_cite_source_detection():
+    assert st._detect_source("1706.03762") == ("arxiv", "1706.03762")
+    assert st._detect_source("arXiv:1706.03762") == ("arxiv", "1706.03762")
+    assert st._detect_source("10.1038/nature14539") == ("doi", "10.1038/nature14539")
+    assert st._detect_source("doi:10.1038/nature14539") == ("doi", "10.1038/nature14539")
+    assert st._detect_source("33495535") == ("pmid", "33495535")
+    assert st._detect_source("transformer attention models") == ("query", "transformer attention models")
+
+
+def test_cite_best_passage_ranks_supporting_sentence():
+    passage, score = st._best_passage(
+        "transformers use self-attention for sequence modeling",
+        "Intro sentence about widgets. The Transformer uses self-attention to relate sequence positions.",
+    )
+    assert score >= 0.5 and "self-attention" in passage
+
+
+def test_cite_best_passage_zero_for_unrelated():
+    _, score = st._best_passage("photosynthesis in plants", "Quantum chromodynamics and gluon fields.")
+    assert score == 0.0
+
+
+def test_cite_check_requires_both_args():
+    assert _v(st.cite_check("", "1706.03762"))["verified"] == "assumed"  # _err envelope
+
+
+# --- live citation checks (network) — skip cleanly when offline/rate-limited ---
+
+def _online(fn):
+    try:
+        return fn()
+    except Exception:
+        pytest.skip("network unavailable")
+
+
+def test_cite_check_verifies_real_source_live():
+    out = _online(lambda: st.cite_check("The Transformer relies entirely on attention mechanisms", "1706.03762"))
+    d = _v(out)
+    if not d.get("found"):
+        pytest.skip("arXiv unreachable")
+    assert d["verified"] == "cited" and d["support_score"] >= 0.34
+    assert "arXiv" in (d["citation"] or "") or "1706.03762" in (d["citation"] or "")
+
+
+def test_cite_check_refutes_fabricated_source_live():
+    d = _v(_online(lambda: st.cite_check("Cats photosynthesize", "2999.99999")))
+    assert d["verified"] == "refuted" and d["found"] is False
+
+
 # --- registration: all tools land in the registry under the science toolset ---
 
 def test_all_science_tools_registered():
     from tools.registry import registry
 
     for name in ["symbolic_check", "numeric_verify", "interval_verify", "stats_test",
-                 "units_check", "qubo_solve", "roofline_classify", "arxiv_search"]:
+                 "units_check", "qubo_solve", "roofline_classify", "arxiv_search",
+                 "literature_search", "cite_check"]:
         entry = registry.get_entry(name)
         assert entry is not None, f"{name} not registered"
         assert entry.toolset == "science"

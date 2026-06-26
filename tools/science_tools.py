@@ -20,6 +20,7 @@ the [science] bundle; roofline_classify and arxiv_search need no extra deps.
 from __future__ import annotations
 
 import json
+import re
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -436,6 +437,299 @@ def arxiv_search(query: str, max_results: int = 5) -> str:
     if not papers:
         return _result("cited", f"no arXiv results for '{query}'", papers=[])
     return _result("cited", f"{len(papers)} arXiv papers for '{query}'", papers=papers)
+
+
+# ---------------------------------------------------------------------------
+# literature_search + cite_check — REAL, verifiable citations
+# ---------------------------------------------------------------------------
+# arxiv_search finds papers; these make the [cited] tag honest. literature_search
+# queries multiple public scholarly APIs (arXiv, PubMed, Crossref) and returns
+# papers with VERIFIABLE ids (DOI / arXiv id / PMID). cite_check goes further: it
+# fetches the actual source text for a specific reference and surfaces the passage
+# most relevant to your claim — so a citation can never be fabricated (a source
+# that doesn't exist is refuted) and is always grounded in the source's real words.
+
+_UA = {"User-Agent": "Emmy/cite-check (mailto:hello@energyir.io)"}
+_NCBI = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+
+_STOPWORDS = set(
+    "a an the of to in on for and or is are was were be been being with by as at from that this "
+    "these those it its which who whom whose we our you your they their he she his her not no "
+    "than then so such can may might will would should could have has had do does did but if into "
+    "over under about above between within across using use used based via per also more most "
+    "however therefore thus while when where what how why all any each both either neither".split()
+)
+
+
+def _http_get(url: str, timeout: int = 20) -> str:
+    req = urllib.request.Request(url, headers=_UA)
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def _content_words(text: str) -> list:
+    return [w for w in re.findall(r"[a-z0-9][a-z0-9\-]{2,}", (text or "").lower()) if w not in _STOPWORDS]
+
+
+def _split_sentences(text: str) -> list:
+    return [s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", text or "") if s.strip()]
+
+
+def _best_passage(claim: str, text: str):
+    """Best-matching sentence in `text` for `claim` + the fraction of claim keywords it covers."""
+    kws = set(_content_words(claim))
+    if not kws or not text:
+        return None, 0.0
+    best, best_score = None, 0.0
+    for sent in _split_sentences(text):
+        sw = set(_content_words(sent))
+        if not sw:
+            continue
+        score = len(kws & sw) / len(kws)
+        if score > best_score:
+            best, best_score = sent, score
+    return best, round(best_score, 3)
+
+
+def _detect_source(s: str):
+    """Classify a source string -> ('arxiv'|'pmid'|'doi'|'query', normalized)."""
+    t = (s or "").strip()
+    low = t.lower()
+    m = re.search(r"10\.\d{4,9}/[^\s\"'<>]+", t)
+    if low.startswith("doi:") or (m and ("doi" in low or low.startswith("10.") or "/" in t and "10." in t)):
+        return "doi", (m.group(0) if m else t.split(":", 1)[-1]).rstrip(".,;")
+    m = re.search(r"(\d{4}\.\d{4,5})(v\d+)?", t)
+    if "arxiv" in low or (m and low.startswith(("arxiv", "http")) and "arxiv" in low):
+        return "arxiv", m.group(1) if m else t
+    if re.fullmatch(r"\d{4}\.\d{4,5}(v\d+)?", t):
+        return "arxiv", re.match(r"(\d{4}\.\d{4,5})", t).group(1)
+    if low.startswith("pmid:") or re.fullmatch(r"\d{1,9}", t):
+        return "pmid", re.sub(r"\D", "", t)
+    if m:  # a bare DOI without scheme
+        return "doi", m.group(0).rstrip(".,;")
+    return "query", t
+
+
+def _fetch_arxiv(aid: str):
+    try:
+        url = "http://export.arxiv.org/api/query?" + urllib.parse.urlencode({"id_list": aid, "max_results": 1})
+        root = ET.fromstring(_http_get(url).encode())
+        e = root.find(f"{_ATOM}entry")
+        if e is None:
+            return None
+        return {
+            "source": "arXiv", "id": aid, "arxiv_id": aid,
+            "title": (e.findtext(f"{_ATOM}title") or "").strip().replace("\n", " "),
+            "abstract": (e.findtext(f"{_ATOM}summary") or "").strip().replace("\n", " "),
+            "authors": [a.findtext(f"{_ATOM}name") for a in e.findall(f"{_ATOM}author")][:8],
+            "year": (e.findtext(f"{_ATOM}published") or "")[:4],
+            "url": (e.findtext(f"{_ATOM}id") or "").strip(),
+        }
+    except Exception:
+        return None
+
+
+def _fetch_pubmed(pmid: str):
+    try:
+        xml = _http_get(f"{_NCBI}/efetch.fcgi?db=pubmed&retmode=xml&id={pmid}")
+        root = ET.fromstring(xml.encode())
+        art = root.find(".//PubmedArticle")
+        if art is None:
+            return None
+        title = "".join(art.find(".//ArticleTitle").itertext()) if art.find(".//ArticleTitle") is not None else ""
+        abstract = " ".join("".join(n.itertext()) for n in art.findall(".//Abstract/AbstractText")).strip()
+        authors = []
+        for au in art.findall(".//Author"):
+            ln, fn = au.findtext("LastName"), au.findtext("ForeName")
+            if ln:
+                authors.append(f"{fn} {ln}".strip() if fn else ln)
+        doi = next((i.text for i in art.findall(".//ArticleId") if i.get("IdType") == "doi"), None)
+        return {
+            "source": "PubMed", "id": pmid, "pmid": pmid, "doi": doi,
+            "title": title.strip(), "abstract": abstract, "authors": authors[:8],
+            "year": (art.findtext(".//PubDate/Year") or art.findtext(".//PubDate/MedlineDate") or "")[:4],
+            "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+        }
+    except Exception:
+        return None
+
+
+def _strip_jats(text: str) -> str:
+    return re.sub(r"<[^>]+>", " ", text or "").strip()
+
+
+def _fetch_crossref(doi: str):
+    try:
+        m = json.loads(_http_get("https://api.crossref.org/works/" + urllib.parse.quote(doi)))["message"]
+        authors = [f'{a.get("given","")} {a.get("family","")}'.strip() for a in m.get("author", [])]
+        year = ""
+        for k in ("published-print", "published-online", "issued"):
+            parts = (m.get(k) or {}).get("date-parts") or [[None]]
+            if parts and parts[0] and parts[0][0]:
+                year = str(parts[0][0])
+                break
+        return {
+            "source": "Crossref", "id": doi, "doi": doi,
+            "title": (m.get("title") or [""])[0],
+            "abstract": _strip_jats(m.get("abstract", "")),
+            "authors": [a for a in authors if a][:8], "year": year,
+            "url": m.get("URL", f"https://doi.org/{doi}"),
+        }
+    except Exception:
+        return None
+
+
+def _resolve_source(source: str):
+    """Resolve a source string to a real fetched paper dict, or None."""
+    kind, val = _detect_source(source)
+    if kind == "arxiv":
+        return _fetch_arxiv(val)
+    if kind == "pmid":
+        return _fetch_pubmed(val)
+    if kind == "doi":
+        return _fetch_crossref(val)
+    # query: search for the single best paper
+    hits = _search_sources(val, 1)
+    return hits[0] if hits else None
+
+
+def _citation_string(p: dict) -> str:
+    a = p.get("authors") or []
+    who = a[0].split()[-1] if a else "Anon"
+    if len(a) > 1:
+        who += " et al."
+    ident = p.get("doi") or (f"arXiv:{p['arxiv_id']}" if p.get("arxiv_id") else "") or (f"PMID:{p['pmid']}" if p.get("pmid") else "")
+    return f'{who} ({p.get("year") or "n.d."}). {p.get("title","").strip()}. {ident}'.strip()
+
+
+def _search_sources(query: str, n: int) -> list:
+    """Search arXiv + PubMed + Crossref; return up to n real papers with verifiable ids."""
+    out: list = []
+    # arXiv
+    try:
+        url = "http://export.arxiv.org/api/query?" + urllib.parse.urlencode(
+            {"search_query": f"all:{query}", "start": 0, "max_results": n}
+        )
+        root = ET.fromstring(_http_get(url).encode())
+        for e in root.findall(f"{_ATOM}entry"):
+            link = (e.findtext(f"{_ATOM}id") or "").strip()
+            out.append({
+                "source": "arXiv", "arxiv_id": link.rsplit("/", 1)[-1],
+                "title": (e.findtext(f"{_ATOM}title") or "").strip().replace("\n", " "),
+                "abstract": (e.findtext(f"{_ATOM}summary") or "").strip().replace("\n", " "),
+                "authors": [a.findtext(f"{_ATOM}name") for a in e.findall(f"{_ATOM}author")][:8],
+                "year": (e.findtext(f"{_ATOM}published") or "")[:4], "url": link,
+            })
+    except Exception:
+        pass
+    # PubMed (ids -> summaries)
+    try:
+        ids = json.loads(_http_get(
+            f"{_NCBI}/esearch.fcgi?db=pubmed&retmode=json&retmax={n}&term=" + urllib.parse.quote(query)
+        ))["esearchresult"]["idlist"]
+        for pid in ids:
+            p = _fetch_pubmed(pid)
+            if p:
+                out.append(p)
+    except Exception:
+        pass
+    return out[: max(1, n)]
+
+
+LITERATURE_SEARCH_SCHEMA = {
+    "name": "literature_search",
+    "description": (
+        "Find REAL, citable papers across scholarly databases (arXiv + PubMed) for a topic or claim. "
+        "Returns each paper's title, authors, year, a verifiable identifier (DOI / arXiv id / PMID), URL, "
+        "and abstract — so every reference can be checked and none is fabricated. Use to gather literature; "
+        "use cite_check to verify a specific paper actually supports a specific claim. verified=cited."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "query": {"type": "string", "description": "Topic, claim, title, or keywords to search for."},
+            "max_results": {"type": "integer", "description": "How many papers (default 5, max 20)."},
+        },
+        "required": ["query"],
+    },
+}
+
+
+def literature_search(query: str, max_results: int = 5) -> str:
+    n = max(1, min(20, int(max_results or 5)))
+    papers = _search_sources(query, n)
+    for p in papers:
+        p["citation"] = _citation_string(p)
+        if p.get("abstract"):
+            p["abstract"] = p["abstract"][:600]
+    if not papers:
+        return _result("assumed", f"no papers found for '{query}' (do not cite anything unverified)", papers=[])
+    return _result("cited", f"{len(papers)} real papers for '{query}' (verifiable ids)", papers=papers)
+
+
+CITE_CHECK_SCHEMA = {
+    "name": "cite_check",
+    "description": (
+        "Verify a citation against the ACTUAL source text before you cite it. Give the claim and a source "
+        "(a DOI, arXiv id, PMID, URL, or a search query). The tool fetches the real source, confirms it "
+        "EXISTS (a fabricated/incorrect reference is refuted), and returns the passage from the source most "
+        "relevant to your claim plus a support score, so the citation is grounded in the source's real words "
+        "— not invented. verified=cited if a real source with a supporting passage is found; assumed if the "
+        "source is real but does not clearly support the claim (do not cite it there); refuted if no such "
+        "source exists. Always cite the returned 'citation' string, never a reference you have not checked."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "claim": {"type": "string", "description": "The specific statement you want to support with a citation."},
+            "source": {"type": "string", "description": "DOI, arXiv id, PMID, URL, or a search query identifying the source."},
+        },
+        "required": ["claim", "source"],
+    },
+}
+
+
+def cite_check(claim: str, source: str) -> str:
+    if not (claim or "").strip() or not (source or "").strip():
+        return _err("cite_check needs both a 'claim' and a 'source'")
+    try:
+        paper = _resolve_source(source)
+    except Exception as exc:
+        return _err(f"source lookup failed: {type(exc).__name__}: {exc}")
+    if not paper or not (paper.get("title") or paper.get("abstract")):
+        return _result(
+            "refuted",
+            f"no real source found for '{source}' — citation appears fabricated; do NOT cite it",
+            source=source, found=False,
+        )
+    text = " ".join(filter(None, [paper.get("title", ""), paper.get("abstract", "")]))
+    passage, score = _best_passage(claim, text)
+    citation = _citation_string(paper)
+    common = {
+        "citation": citation, "title": paper.get("title"), "authors": paper.get("authors"),
+        "year": paper.get("year"), "url": paper.get("url"),
+        "identifier": paper.get("doi") or paper.get("arxiv_id") or paper.get("pmid"),
+        "supporting_passage": passage, "support_score": score, "found": True,
+        "has_abstract": bool(paper.get("abstract")),
+    }
+    if not paper.get("abstract"):
+        return _result(
+            "assumed",
+            f"source EXISTS but no abstract text was available to check support — verify manually: {citation}",
+            **common,
+        )
+    if score >= 0.34:
+        return _result(
+            "cited",
+            f"supported (score {score}): “{(passage or '')[:240]}” — {citation}",
+            **common,
+        )
+    return _result(
+        "assumed",
+        f"source is real but its text does NOT clearly support the claim (best overlap {score}); "
+        f"do not cite it here — read it yourself: {citation}",
+        **common,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -998,6 +1292,16 @@ registry.register(
     name="arxiv_search", toolset="science", schema=ARXIV_SCHEMA, emoji="📚",
     handler=lambda args, **kw: arxiv_search(args["query"], args.get("max_results", 5)),
     description="Search arXiv for real citable papers.",
+)
+registry.register(
+    name="literature_search", toolset="science", schema=LITERATURE_SEARCH_SCHEMA, emoji="🔎",
+    handler=lambda args, **kw: literature_search(args["query"], args.get("max_results", 5)),
+    description="Find real citable papers (arXiv+PubMed) with verifiable DOI/arXiv/PMID ids.",
+)
+registry.register(
+    name="cite_check", toolset="science", schema=CITE_CHECK_SCHEMA, emoji="✅",
+    handler=lambda args, **kw: cite_check(args["claim"], args["source"]),
+    description="Verify a citation against the real source text (refutes fabricated/unsupported references).",
 )
 registry.register(
     name="export_notebook", toolset="science", schema=EXPORT_NOTEBOOK_SCHEMA, emoji="📓",
