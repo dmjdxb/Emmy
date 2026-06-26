@@ -126,6 +126,14 @@ _TOOL_SEARCH_NEVER_DEFER = [
     "interval_verify",
     # Notebook delivery — the rigor prompt names this tool, so it must always be present
     "export_notebook",
+    # Formal proof (Lean) — kept VISIBLE here rather than deferred, BUT it is also
+    # check_fn-gated on Lean being installed. So: users without Lean (≈ everyone) get
+    # zero schema/zero tokens because the gate drops it from the tool list entirely;
+    # users WITH Lean get it always-present so the model invokes it directly instead of
+    # failing the discover-then-invoke handshake (weaker models gave up after finding it
+    # via tool_search and wrongly concluded "no Lean checker available"). A check_fn-gated
+    # heavy tool is strictly better visible-when-available than deferred.
+    "lean_check",
     # NOTE: stats_test, literature_search and cite_check are intentionally NOT here.
     # They are occasional (a given turn rarely does a hypothesis test or a citation),
     # and each carries a chunky schema (~900 tok combined). They stay enabled in
