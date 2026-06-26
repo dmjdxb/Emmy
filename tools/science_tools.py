@@ -1242,6 +1242,127 @@ def stats_test(test: str, **kw: Any) -> str:
 
 
 # ---------------------------------------------------------------------------
+# lean_check — MACHINE-CHECKED proofs (Lean 4). The flagship of the [proved] tag.
+# ---------------------------------------------------------------------------
+# symbolic_check uses sympy simplification; that's strong but it's still a CAS, not
+# a proof. lean_check runs the actual Lean 4 kernel: a theorem + proof either
+# type-checks (formally proved, machine-verified) or it does not. No LLM is in the
+# verification loop. Lean is an EXTERNAL toolchain (not bundled), so this tool is
+# check_fn-gated on Lean being installed — on machines without it the tool simply
+# doesn't appear (zero cost), and it is DEFERRED (discovered via tool_search only
+# when a proof is actually needed), never loaded on ordinary turns.
+
+# A "proof" that contains any of these is not a proof — sorry/admit leave the goal
+# unproven; #eval/unsafe/IO/extern execute code rather than prove. Reject them so
+# the [proved] tag can never be faked.
+_LEAN_FORBIDDEN = [
+    (re.compile(r"\bsorry\b"), "sorry"),
+    (re.compile(r"\badmit\b"), "admit"),
+    (re.compile(r"#eval"), "#eval"),
+    (re.compile(r"#exit"), "#exit"),
+    (re.compile(r"\bunsafe\b"), "unsafe"),
+    (re.compile(r"\bIO\b"), "IO"),
+    (re.compile(r"\bextern\b"), "extern"),
+    (re.compile(r"\bopaque\b"), "opaque"),
+    (re.compile(r"implemented_by"), "implemented_by"),
+]
+
+
+def _find_lean():
+    import os
+    import shutil
+
+    p = shutil.which("lean")
+    if p:
+        return p
+    cand = os.path.expanduser("~/.elan/bin/lean")
+    return cand if os.path.exists(cand) else None
+
+
+LEAN_CHECK_SCHEMA = {
+    "name": "lean_check",
+    "description": (
+        "Formally PROVE a mathematical statement by machine-checking a Lean 4 proof — the strongest "
+        "possible [proved] verdict (the Lean kernel verifies it; no AI is trusted). Provide a complete Lean 4 "
+        "theorem WITH its proof, e.g. 'theorem t : 2 + 2 = 4 := by decide' or "
+        "'example (n : Nat) : n + 0 = n := by simp'. Core tactics available without mathlib: decide, rfl, simp, "
+        "omega, Nat/Int arithmetic. Returns verified=proved if Lean accepts it, refuted if Lean proves it FALSE, "
+        "assumed if the proof does not check (fix and retry). 'sorry'/'admit'/'#eval'/'unsafe' are rejected — "
+        "they would fake a proof. Use for claims that admit a rigorous proof (identities, inequalities, "
+        "arithmetic, basic logic); for heavier numeric/symbolic work use interval_verify / symbolic_check."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "theorem": {"type": "string", "description": "A complete Lean 4 theorem/example WITH proof (the part after ':=')."},
+            "imports": {"type": "string", "description": "Optional import lines (e.g. 'import Mathlib') if that toolchain is set up."},
+            "timeout": {"type": "integer", "description": "Seconds to allow Lean to run (default 30, max 120)."},
+        },
+        "required": ["theorem"],
+    },
+}
+
+
+def lean_check(theorem: str, imports: str = "", timeout: int = 30) -> str:
+    import os
+    import subprocess
+    import tempfile
+
+    lean = _find_lean()
+    if not lean:
+        return _err("Lean 4 is not installed (install elan + lean from https://leanprover.github.io)")
+    src = (theorem or "").strip()
+    if not src:
+        return _err("provide a Lean 4 theorem with its proof")
+    for rx, name in _LEAN_FORBIDDEN:
+        if rx.search(src):
+            return _result(
+                "assumed",
+                f"rejected: the proof contains '{name}', which bypasses real verification — a proof with "
+                f"{name} is NOT proved. Remove it and supply a genuine proof.",
+                rejected=name,
+            )
+    t = max(2, min(120, int(timeout or 30)))
+    code = ((imports.strip() + "\n") if imports.strip() else "") + src + "\n"
+    env = dict(os.environ)
+    env["PATH"] = os.path.expanduser("~/.elan/bin") + os.pathsep + env.get("PATH", "")
+    tmp = None
+    try:
+        with tempfile.NamedTemporaryFile("w", suffix=".lean", delete=False, encoding="utf-8") as f:
+            f.write(code)
+            tmp = f.name
+        proc = subprocess.run([lean, tmp], capture_output=True, text=True, timeout=t, env=env)
+    except subprocess.TimeoutExpired:
+        return _result("assumed", f"Lean did not finish within {t}s — not proved (try a simpler proof or raise timeout).", timed_out=True)
+    except Exception as exc:
+        return _err(f"failed to run Lean: {type(exc).__name__}: {exc}")
+    finally:
+        if tmp and os.path.exists(tmp):
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
+
+    out = (proc.stdout or "") + ("\n" + proc.stderr if proc.stderr else "")
+    out = out.replace(tmp or "", "proof.lean").strip()
+    has_error = proc.returncode != 0 or "error:" in out
+
+    if not has_error:
+        return _result("proved", f"machine-checked by Lean 4 — formally proved: {src.splitlines()[0][:120]}", lean_output=out[:400] or "(no diagnostics)")
+    if "is false" in out or "is false." in out:
+        return _result("refuted", "Lean proved the statement is FALSE", lean_output=out[:600])
+    # Any other failure: unsolved goals, syntax/type error, unknown identifier (e.g. a
+    # mathlib tactic without mathlib). Not proved — but not necessarily false.
+    first = next((ln for ln in out.splitlines() if "error:" in ln), out.splitlines()[0] if out else "unknown error")
+    return _result(
+        "assumed",
+        f"proof did NOT check (not proved): {first[:200]}. Fix the Lean proof and retry; "
+        f"if a tactic is missing it may need mathlib.",
+        lean_output=out[:600],
+    )
+
+
+# ---------------------------------------------------------------------------
 # Registration — a "science" toolset, auto-discovered by tools/registry.py
 # ---------------------------------------------------------------------------
 
@@ -1264,6 +1385,12 @@ registry.register(
     handler=lambda args, **kw: interval_verify(args["expression"], args.get("claim"), args.get("dps", 30), args.get("rtol", 1e-9)),
     check_fn=lambda: _have("mpmath"),
     description="Rigorous numeric enclosure with a guaranteed error bound (mpmath interval arithmetic).",
+)
+registry.register(
+    name="lean_check", toolset="science", schema=LEAN_CHECK_SCHEMA, emoji="🛡️",
+    handler=lambda args, **kw: lean_check(args["theorem"], args.get("imports", ""), args.get("timeout", 30)),
+    check_fn=lambda: _find_lean() is not None,  # only exists when Lean 4 is installed
+    description="Machine-check a Lean 4 proof — the strongest [proved] verdict (no AI in the loop).",
 )
 registry.register(
     name="stats_test", toolset="science", schema=STATS_TEST_SCHEMA, emoji="📈",

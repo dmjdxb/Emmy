@@ -208,6 +208,42 @@ def test_cite_check_refutes_fabricated_source_live():
     assert d["verified"] == "refuted" and d["found"] is False
 
 
+# --- lean_check (Lean 4) — machine-checked proofs; skip when Lean isn't installed ---
+
+def _need_lean():
+    if st._find_lean() is None:
+        pytest.skip("Lean 4 not installed")
+
+
+def test_lean_proves_true_theorem():
+    _need_lean()
+    d = _v(st.lean_check("theorem t : 2 + 2 = 4 := by decide"))
+    assert d["verified"] == "proved"
+
+
+def test_lean_refutes_false_theorem():
+    _need_lean()
+    d = _v(st.lean_check("theorem bad : 2 + 2 = 5 := by decide"))
+    assert d["verified"] == "refuted"
+
+
+def test_lean_rejects_sorry_cheat():
+    # Integrity: a 'proof' that uses sorry is NOT proved and must be rejected up front.
+    d = _v(st.lean_check("theorem x : 2 + 2 = 5 := by sorry"))
+    assert d["verified"] == "assumed" and d.get("rejected") == "sorry"
+
+
+def test_lean_rejects_eval_codeexec():
+    d = _v(st.lean_check("#eval (2+2)\ntheorem t : True := trivial"))
+    assert d["verified"] == "assumed" and d.get("rejected") == "#eval"
+
+
+def test_lean_failed_proof_is_not_proved():
+    _need_lean()
+    d = _v(st.lean_check("theorem t : 1 = 1 := by omega_wrong"))
+    assert d["verified"] == "assumed"  # didn't check -> not proved (but not false)
+
+
 # --- registration: all tools land in the registry under the science toolset ---
 
 def test_all_science_tools_registered():
@@ -215,7 +251,7 @@ def test_all_science_tools_registered():
 
     for name in ["symbolic_check", "numeric_verify", "interval_verify", "stats_test",
                  "units_check", "qubo_solve", "roofline_classify", "arxiv_search",
-                 "literature_search", "cite_check"]:
+                 "literature_search", "cite_check", "lean_check"]:
         entry = registry.get_entry(name)
         assert entry is not None, f"{name} not registered"
         assert entry.toolset == "science"

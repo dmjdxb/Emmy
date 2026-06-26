@@ -80,6 +80,11 @@ _HERMES_CORE_TOOLS = [
     "interval_verify", "stats_test",
     # Verifiable citations — find real papers + check a claim against the source text.
     "literature_search", "cite_check",
+    # Formal proof (Lean 4) — machine-checked [proved]. Enabled but DELIBERATELY
+    # left out of _TOOL_SEARCH_NEVER_DEFER below: it is heavy + rare, check_fn-gated
+    # on Lean being installed, and discovered via tool_search only when a proof is
+    # actually needed — so it costs zero tokens on ordinary turns.
+    "lean_check",
 ]
 
 # Progressive-tool-disclosure never-defer set (used ONLY by tools/tool_search.py).
