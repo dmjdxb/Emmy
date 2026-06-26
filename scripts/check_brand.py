@@ -90,6 +90,31 @@ ALLOW_REGEXES = (
 # (any spacing/casing) is a leak.
 PATTERN = re.compile(r"\b(hermes|nous)\b|together[\s-]*ai", re.IGNORECASE)
 
+# Non-English UI translation files legitimately contain the common French word
+# "nous" (we/us) — e.g. "Nous n'avons pas pu joindre le serveur". Those are not
+# the upstream "Nous" brand. For those files we drop the bare "nous" word from
+# the gate while STILL catching "hermes" and "Together AI" (which are not common
+# words in any of our locales). en.ts is fully gated by PATTERN, so no English
+# brand leak slips through, and translators keep real brand names verbatim.
+PATTERN_NO_NOUS = re.compile(r"\bhermes\b|together[\s-]*ai", re.IGNORECASE)
+
+# A UI translation file is `src/i18n/<locale>.ts` with a two-letter stem (fr, es,
+# de, ar, hi, zh, …). Infrastructure files in the same dir (catalog, types,
+# languages, runtime, index, context) have longer stems and stay on PATTERN.
+_I18N_DIR = (REPO / "apps/desktop/src/i18n").resolve()
+
+
+def _pattern_for(f: Path) -> re.Pattern:
+    try:
+        is_translation = (
+            f.resolve().parent == _I18N_DIR
+            and re.fullmatch(r"[a-z]{2}", f.stem) is not None
+            and f.stem != "en"
+        )
+    except OSError:
+        is_translation = False
+    return PATTERN_NO_NOUS if is_translation else PATTERN
+
 
 def _iter_files():
     for root in SHIPPED_ROOTS:
@@ -108,9 +133,10 @@ def _iter_files():
 def scan() -> list[tuple[Path, int, str]]:
     leaks: list[tuple[Path, int, str]] = []
     for f in _iter_files():
+        pattern = _pattern_for(f)
         try:
             for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
-                if not PATTERN.search(line):
+                if not pattern.search(line):
                     continue
                 if any(tok in line for tok in ALLOW_SUBSTRINGS):
                     continue
