@@ -37,6 +37,10 @@ _HERMES_CORE_TOOLS = [
     "read_file", "write_file", "patch", "search_files",
     # Ask your document — grounded Q&A over PDF/DOCX/PPTX/XLSX
     "ask_document",
+    # deliver_artifact: universal file delivery — every agent that produces a file needs it,
+    # and it is the anti-hallucination guard. Must be ALWAYS available (a web user has no other
+    # way to download), so it lives in core, not the (sometimes-disabled) office toolset.
+    "deliver_artifact",
     # Vision + image generation
     "vision_analyze", "image_generate",
     # Skills
@@ -119,6 +123,9 @@ _TOOL_SEARCH_NEVER_DEFER = [
     "memory", "todo", "clarify",
     # Web search is the common research entrypoint (web_extract defers)
     "web_search",
+    # deliver_artifact: the only way a web user can download a produced file + the
+    # anti-hallucination guard (agent reports the URL it returns, never a fabricated path).
+    "deliver_artifact",
     # Everyday verification — Emmy's core loop, kept instant
     "symbolic_check", "numeric_verify", "units_check",
     # Rigorous numeric enclosure — a lightweight verifier reached whenever a numeric

@@ -1380,6 +1380,21 @@ DEFAULT_CONFIG = {
         ],
     },
 
+    # Capability manifest — tools that MUST be live for this product to do its job.
+    # The capability check (tools/capability_check.py) fails LOUDLY if any are MISSING
+    # (not registered → a registration/discovery bug) or, in prod-availability mode,
+    # GATED OFF (registered but their backend/key/service isn't provisioned). Emmy is a
+    # verifiable scientific agent, so code execution and live web + literature search
+    # are reason-for-being. NOTE: web_search/web_extract will show GATED in the
+    # prod-availability check until a search backend is wired — that is intended; it
+    # surfaces the silent gap instead of hiding it.
+    "required_tools": [
+        "read_file", "write_file", "terminal", "execute_code",
+        "web_search", "web_extract", "arxiv_search", "literature_search",
+    
+        "deliver_artifact",  # every product must be able to hand a produced file to the user
+    ],
+
     "display": {
         "compact": False,
         "personality": "",

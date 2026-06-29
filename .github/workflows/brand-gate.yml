@@ -63,3 +63,23 @@ jobs:
         run: pip install -e .
       - name: Run document tool tests
         run: python -m pytest tests/tools/test_document_tools.py -q
+
+  capability-check:
+    # Guard against silently shipping a dead capability: every tool the product
+    # declares as required (config `required_tools`) MUST be registered/callable.
+    # Registration-level only (no keys); the prod-availability check runs post-deploy
+    # (python scripts/capability_check.py) and would flag e.g. web_search with no backend.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install (base, for tool registry imports)
+        run: pip install -e .
+      - name: Required tools are registered (capability gate)
+        run: python scripts/capability_check.py --registration-only
+      - name: Capability-check unit tests
+        run: |
+          pip install pytest pytest-asyncio pytest-timeout
+          python -m pytest tests/tools/test_capability_check.py -q
