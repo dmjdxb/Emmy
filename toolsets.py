@@ -119,6 +119,9 @@ _TOOL_SEARCH_NEVER_DEFER = [
     "memory", "todo", "clarify",
     # Web search is the common research entrypoint (web_extract defers)
     "web_search",
+    # deliver_artifact: the only way a web user can download a produced file + the
+    # anti-hallucination guard (agent reports the URL it returns, never a fabricated path).
+    "deliver_artifact",
     # Everyday verification — Emmy's core loop, kept instant
     "symbolic_check", "numeric_verify", "units_check",
     # Rigorous numeric enclosure — a lightweight verifier reached whenever a numeric
