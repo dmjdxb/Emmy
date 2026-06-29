@@ -41,20 +41,26 @@ class CapabilityError(RuntimeError):
 class CapabilityReport:
     required: list[str]
     available: list[str] = field(default_factory=list)
-    gated: list[str] = field(default_factory=list)    # registered but check_fn False (backend/key missing)
-    missing: list[str] = field(default_factory=list)  # not registered at all (registration/discovery bug)
+    gated: list[str] = field(default_factory=list)      # registered but check_fn False (backend/key missing)
+    invisible: list[str] = field(default_factory=list)  # registered + working but NOT core (model can't see it)
+    missing: list[str] = field(default_factory=list)    # not registered at all (registration/discovery bug)
 
     @property
     def ok(self) -> bool:
-        return not self.gated and not self.missing
+        return not self.gated and not self.missing and not self.invisible
 
     def summary(self) -> str:
         if self.ok:
-            return f"capability check OK — all {len(self.required)} required tools present and available"
-        parts = ["‼ CAPABILITY CHECK FAILED — a required tool is not usable:"]
+            return f"capability check OK — all {len(self.required)} required tools present, available, and visible"
+        parts = ["‼ CAPABILITY CHECK FAILED — a required tool is not usable by the model:"]
         if self.missing:
             parts.append(
                 f"  MISSING (not registered — registration/discovery bug): {', '.join(sorted(self.missing))}"
+            )
+        if self.invisible:
+            parts.append(
+                f"  INVISIBLE (registered + working but NOT in the core toolset, so the model never "
+                f"sees it): {', '.join(sorted(self.invisible))}"
             )
         if self.gated:
             parts.append(
@@ -69,20 +75,38 @@ def _registered_entries() -> dict:
     return {e.name: e for e in registry._snapshot_entries()}
 
 
+def _model_visible(name: str) -> bool:
+    """True when the model is actually allowed to SEE this tool — i.e. it is in the
+    always-available core set. A tool can be registered AND pass its check_fn yet be
+    invisible because it lives in a toolset that isn't enabled (exactly how
+    deliver_artifact slipped through: registered + working, but not core)."""
+    try:
+        from toolsets import _HERMES_CORE_TOOLS
+        return name in _HERMES_CORE_TOOLS
+    except Exception:
+        return True  # can't determine → don't false-alarm
+
+
 def tool_status(name: str) -> str:
-    """Return 'available' | 'gated' | 'missing' for one tool, using the same
-    availability logic as the model-facing toolset filter (registry.get_definitions)."""
+    """Return 'available' | 'gated' | 'invisible' | 'missing' for one tool.
+
+    available  — registered, check_fn passes, AND in the model's core toolset.
+    invisible  — registered + working but NOT core (the model can't see it; the
+                 deliver_artifact bug class).
+    gated      — registered but check_fn False (backend/key not provisioned).
+    missing    — not registered at all (registration/discovery bug)."""
     entries = _registered_entries()
     entry = entries.get(name)
     if entry is None:
         return "missing"
-    if getattr(entry, "check_fn", None) is None:
-        return "available"
-    from tools.registry import _check_fn_cached
-    try:
-        return "available" if _check_fn_cached(entry.check_fn) else "gated"
-    except Exception:
-        return "gated"
+    if getattr(entry, "check_fn", None) is not None:
+        from tools.registry import _check_fn_cached
+        try:
+            if not _check_fn_cached(entry.check_fn):
+                return "gated"
+        except Exception:
+            return "gated"
+    return "available" if _model_visible(name) else "invisible"
 
 
 def audit_required_tools(required, *, check_availability: bool = True) -> CapabilityReport:
@@ -96,11 +120,17 @@ def audit_required_tools(required, *, check_availability: bool = True) -> Capabi
     for name in rep.required:
         if name not in entries:
             rep.missing.append(name)
+        elif not _model_visible(name):
+            # core-membership is environment-independent — catch this even in CI (no keys),
+            # so 'registered but the model can't see it' fails the build, not prod.
+            rep.invisible.append(name)
         elif not check_availability:
-            rep.available.append(name)
+            rep.available.append(name)  # registration mode: skip only the backend probe
         else:
             st = tool_status(name)
-            (rep.available if st == "available" else rep.gated if st == "gated" else rep.missing).append(name)
+            bucket = {"available": rep.available, "gated": rep.gated,
+                      "invisible": rep.invisible, "missing": rep.missing}[st]
+            bucket.append(name)
     return rep
 
 

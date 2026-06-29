@@ -1391,6 +1391,8 @@ DEFAULT_CONFIG = {
     "required_tools": [
         "read_file", "write_file", "terminal", "execute_code",
         "web_search", "web_extract", "arxiv_search", "literature_search",
+    
+        "deliver_artifact",  # every product must be able to hand a produced file to the user
     ],
 
     "display": {
